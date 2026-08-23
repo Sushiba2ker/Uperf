@@ -4,8 +4,9 @@
 # Integrated into Uperf Sushiba
 #
 
-# 1. Block Device / Flash Storage Queue Optimizations (UFS 3.1)
-for queue in /sys/block/*/queue; do
+# 1. Block Device / Flash Storage Queue Optimizations (UFS / eMMC / NVMe only)
+for dev in /sys/block/sd* /sys/block/nvme* /sys/block/mmcblk* /sys/block/dm-*; do
+    queue="$dev/queue"
     [ -d "$queue" ] || continue
     chmod 644 "$queue/read_ahead_kb" 2>/dev/null && echo 128 > "$queue/read_ahead_kb" 2>/dev/null
     chmod 644 "$queue/nr_requests" 2>/dev/null && echo 64 > "$queue/nr_requests" 2>/dev/null

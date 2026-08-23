@@ -589,7 +589,7 @@
             <div class="mode-icon">🍃</div>
             <div class="mode-text">
               <h3>Powersave (Siêu mát)</h3>
-              <p>Ghim Sweet Freq 1.74GHz, GPU 580MHz, triệt nhiệt 5G</p>
+              <p>Ghim Sweet Freq 1.74GHz, GPU 580MHz, RAM 2288MHz</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -637,7 +637,7 @@
             <div class="mode-icon">🔥</div>
             <div class="mode-text">
               <h3>Fast / Turbo (Gaming)</h3>
-              <p>Cấp tối đa xung CPU và GPU 890MHz cho Game nặng</p>
+              <p>Cấp tối đa xung CPU, GPU 890MHz và RAM 3744MHz</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -716,7 +716,7 @@
 
       <div class="actions-grid">
         <button class="btn-action" onclick="restartDaemon()">🔄 Khởi động lại Uperf</button>
-        <button class="btn-action" onclick="reloadRules()">📥 Nạp lại Per-App</button>
+        <button class="btn-action" onclick="loadPerAppFromFile()">📥 Nạp lại Per-App</button>
       </div>
     </div>
 
@@ -779,7 +779,7 @@
 
     function showToast(msg) {
       const toast = document.getElementById("toast");
-      toast.innerText = msg;
+      toast.textContent = msg;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 1800);
     }
@@ -808,7 +808,7 @@
       });
     }
 
-    // 1-Shot Batch Telemetry Query (Only 1 root process fork instead of 6)
+    // 1-Shot Batch Telemetry Query (Only 1 root process fork)
     async function refreshTelemetry() {
       if (isPollingBusy) return;
       isPollingBusy = true;
@@ -841,19 +841,19 @@
           else if (temp > 100) temp = temp / 10;
 
           if (f0 > 0) {
-            document.getElementById("freq-c0").innerText = `${Math.round(f0 / 1000)}M`;
+            document.getElementById("freq-c0").textContent = `${Math.round(f0 / 1000)}M`;
             document.getElementById("bar-c0").style.width = `${Math.min(100, Math.round((f0 / 1704000) * 100))}%`;
           }
           if (f1 > 0) {
-            document.getElementById("freq-c1").innerText = `${Math.round(f1 / 1000)}M`;
+            document.getElementById("freq-c1").textContent = `${Math.round(f1 / 1000)}M`;
             document.getElementById("bar-c1").style.width = `${Math.min(100, Math.round((f1 / 2367000) * 100))}%`;
           }
           if (f2 > 0) {
-            document.getElementById("freq-c2").innerText = `${Math.round(f2 / 1000)}M`;
+            document.getElementById("freq-c2").textContent = `${Math.round(f2 / 1000)}M`;
             document.getElementById("bar-c2").style.width = `${Math.min(100, Math.round((f2 / 2914000) * 100))}%`;
           }
           if (fgpu > 0 || temp > 0) {
-            document.getElementById("freq-gpu").innerText = `${Math.round(fgpu / 1000)}M | ${temp > 0 ? temp.toFixed(0) : '--'}°C`;
+            document.getElementById("freq-gpu").textContent = `${Math.round(fgpu / 1000)}M | ${temp > 0 ? temp.toFixed(0) : '--'}°C`;
             document.getElementById("bar-gpu").style.width = `${Math.min(100, Math.round((fgpu / 890000) * 100))}%`;
           }
 
@@ -904,24 +904,50 @@
       plot(chartHistory.temp, "#f59e0b");
     }
 
+    // Safe DOM Rendering for Per-App Manager (No innerHTML XSS vulnerabilities)
     function renderPerAppList() {
       const container = document.getElementById("perapp-list");
-      container.innerHTML = "";
+      container.textContent = "";
       appRules.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "app-card";
-        div.innerHTML = `
-          <div class="app-name-box">
-            <h4>${item.name}</h4>
-            <p>${item.pkg}</p>
-          </div>
-          <div class="app-mode-chips">
-            <span class="mode-chip ${item.mode === 'powersave' ? 'active-powersave' : ''}" onclick="setAppRule(${index}, 'powersave')">🍃 Mát</span>
-            <span class="mode-chip ${item.mode === 'balance' ? 'active-balance' : ''}" onclick="setAppRule(${index}, 'balance')">⚖️ Vừa</span>
-            <span class="mode-chip ${item.mode === 'fast' ? 'active-fast' : ''}" onclick="setAppRule(${index}, 'fast')">🔥 Game</span>
-          </div>
-        `;
-        container.appendChild(div);
+        const card = document.createElement("div");
+        card.className = "app-card";
+
+        const nameBox = document.createElement("div");
+        nameBox.className = "app-name-box";
+
+        const title = document.createElement("h4");
+        title.textContent = item.name;
+        const subtitle = document.createElement("p");
+        subtitle.textContent = item.pkg;
+
+        nameBox.appendChild(title);
+        nameBox.appendChild(subtitle);
+
+        const chips = document.createElement("div");
+        chips.className = "app-mode-chips";
+
+        const chipSave = document.createElement("span");
+        chipSave.className = `mode-chip ${item.mode === 'powersave' ? 'active-powersave' : ''}`;
+        chipSave.textContent = "🍃 Mát";
+        chipSave.onclick = () => setAppRule(index, 'powersave');
+
+        const chipBal = document.createElement("span");
+        chipBal.className = `mode-chip ${item.mode === 'balance' ? 'active-balance' : ''}`;
+        chipBal.textContent = "⚖️ Vừa";
+        chipBal.onclick = () => setAppRule(index, 'balance');
+
+        const chipFast = document.createElement("span");
+        chipFast.className = `mode-chip ${item.mode === 'fast' ? 'active-fast' : ''}`;
+        chipFast.textContent = "🔥 Game";
+        chipFast.onclick = () => setAppRule(index, 'fast');
+
+        chips.appendChild(chipSave);
+        chips.appendChild(chipBal);
+        chips.appendChild(chipFast);
+
+        card.appendChild(nameBox);
+        card.appendChild(chips);
+        container.appendChild(card);
       });
     }
 
@@ -932,50 +958,94 @@
       showToast(`${appRules[index].name} -> ${mode.toUpperCase()}`);
     }
 
+    // Strictly Sanitized Custom Rule Addition
     async function addCustomRule() {
-      const pkg = document.getElementById("custom-pkg").value.trim();
+      const inputEl = document.getElementById("custom-pkg");
+      const rawPkg = inputEl.value.trim();
       const mode = document.getElementById("custom-mode").value;
-      if (!pkg) return;
-      appRules.unshift({ name: pkg.split('.').pop(), pkg: pkg, mode: mode });
-      document.getElementById("custom-pkg").value = "";
+
+      // Strict validation: Only allow valid package characters
+      if (!rawPkg || !/^[a-zA-Z0-9._]+$/.test(rawPkg)) {
+        showToast("Lỗi: Package name không hợp lệ!");
+        return;
+      }
+
+      // Check if duplicate
+      const existing = appRules.find(r => r.pkg === rawPkg);
+      if (existing) {
+        existing.mode = mode;
+      } else {
+        const shortName = rawPkg.split('.').pop();
+        appRules.unshift({ name: shortName, pkg: rawPkg, mode: mode });
+      }
+
+      inputEl.value = "";
       renderPerAppList();
       await savePerAppToFile();
-      showToast(`Đã thêm ${pkg}`);
+      showToast(`Đã thêm: ${rawPkg}`);
     }
 
+    // Secure File Writing via Base64 Encoding
     async function savePerAppToFile() {
       let content = "# Per-app dynamic power mode rule\n- powersave\n* balance\n";
       appRules.forEach(item => {
-        content += `${item.pkg} ${item.mode}\n`;
+        if (/^[a-zA-Z0-9._]+$/.test(item.pkg) && ["powersave", "balance", "fast", "performance"].includes(item.mode)) {
+          content += `${item.pkg} ${item.mode}\n`;
+        }
       });
-      await exec(`echo "${content}" > /sdcard/Android/yc/uperf/perapp_powermode.txt`);
+      const b64 = btoa(unescape(encodeURIComponent(content)));
+      await exec(`echo "${b64}" | base64 -d > /sdcard/Android/yc/uperf/perapp_powermode.txt`);
+    }
+
+    async function loadPerAppFromFile() {
+      try {
+        const text = await exec("cat /sdcard/Android/yc/uperf/perapp_powermode.txt 2>/dev/null");
+        if (text) {
+          const lines = text.split("\n");
+          const loaded = [];
+          lines.forEach(line => {
+            line = line.trim();
+            if (!line || line.startsWith("#") || line.startsWith("-") || line.startsWith("*")) return;
+            const parts = line.split(/\s+/);
+            if (parts.length >= 2) {
+              const pkg = parts[0];
+              const mode = parts[1];
+              if (/^[a-zA-Z0-9._]+$/.test(pkg)) {
+                loaded.push({ name: pkg.split('.').pop(), pkg: pkg, mode: mode });
+              }
+            }
+          });
+          if (loaded.length > 0) {
+            appRules = loaded;
+            renderPerAppList();
+            showToast("Đã tải danh sách từ bộ nhớ!");
+            return;
+          }
+        }
+      } catch (e) {}
+      renderPerAppList();
     }
 
     async function fetchLogs() {
       const el = document.getElementById("log-text");
-      el.innerText = "Đang tải...";
+      el.textContent = "Đang tải...";
       const log = await exec("tail -n 40 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || echo 'Chưa có nhật ký.'");
-      el.innerText = log || "Nhật ký trống.";
+      el.textContent = log || "Nhật ký trống.";
     }
 
     function clearLogs() {
-      document.getElementById("log-text").innerText = "";
+      document.getElementById("log-text").textContent = "";
     }
 
     async function restartDaemon() {
       showToast("Khởi động lại Uperf...");
-      await exec("killall -9 uperf 2>/dev/null || true");
+      await exec("killall -9 uperf 2>/dev/null; /data/adb/modules/uperf/bin/uperf /sdcard/Android/yc/uperf/uperf.json >/dev/null 2>&1 &");
       await exec("sh /data/powercfg.sh auto 2>/dev/null || true");
-      showToast("Đã khởi động lại!");
-    }
-
-    function reloadRules() {
-      savePerAppToFile();
-      showToast("Đã nạp lại Per-App!");
+      showToast("Đã khởi động lại Uperf!");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      renderPerAppList();
+      loadPerAppFromFile();
       updateUI();
       refreshTelemetry();
       setInterval(refreshTelemetry, 2500);

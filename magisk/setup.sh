@@ -66,6 +66,11 @@ install_uperf() {
     mv -f $USER_PATH/uperf.json $USER_PATH/uperf.json.bak
     cp -f $MODULE_PATH/config/$cfgname.json $USER_PATH/uperf.json
     [ ! -e "$USER_PATH/perapp_powermode.txt" ] && cp $MODULE_PATH/config/perapp_powermode.txt $USER_PATH/perapp_powermode.txt
+    # Clean vendor thermal overlay if device is not Google Tensor G3
+    if [ "$cfgname" != "gs301" ]; then
+        rm -f "$MODULE_PATH/system/vendor/etc/thermal_info_config.json" "$MODULE_PATH/system/vendor/etc/thermal_info_config_charge.json" 2>/dev/null
+    fi
+
     rm -rf $MODULE_PATH/config
     set_perm_recursive $BIN_PATH 0 0 0755 0755 u:object_r:system_file:s0
 }

@@ -57,7 +57,7 @@ mutate() {
 # $1:file path
 lock() {
     if [ -f "$1" ]; then
-        chown root:root "$p"
+        chown root:root "$1"
         chmod 0444 "$1"
     fi
 }

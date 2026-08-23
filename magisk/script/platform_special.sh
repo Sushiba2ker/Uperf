@@ -63,6 +63,7 @@ if [ "$(is_mtk)" = "true" ]; then
         # Enable CPU7 for MTK, MT6893 and before(need modify powerhal)
         mask_val "" /sys/devices/system/cpu/sched/cpu_prefer
         mask_val "" /sys/devices/system/cpu/sched/set_sched_isolation
+        CPU="/sys/devices/system/cpu"
         for i in $(seq 0 9); do
             mask_val "0" "$CPU"/cpu"$i"/sched_load_boost
             mask_val "$i" /sys/devices/system/cpu/sched/set_sched_deisolation
