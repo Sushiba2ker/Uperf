@@ -36,4 +36,5 @@ wait_until_login
 sh $SCRIPT_PATH/powercfg_once.sh
 sh $SCRIPT_PATH/platform_special.sh
 sh $SCRIPT_PATH/miui_migt.sh
+sh $SCRIPT_PATH/thermal_guard.sh &
 uperf_start

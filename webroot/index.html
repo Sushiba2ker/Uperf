@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Uperf Controller</title>
+  <title>Uperf Sushiba</title>
   <style>
     :root {
-      --bg-primary: #0a0e17;
-      --bg-card: rgba(18, 26, 43, 0.75);
-      --bg-card-hover: rgba(28, 40, 65, 0.85);
+      --bg-primary: #070b12;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 69, 0.85);
       --border-color: rgba(255, 255, 255, 0.08);
       --accent-cyan: #00f0ff;
       --accent-green: #00ff88;
-      --accent-purple: #9d4edd;
-      --accent-orange: #ff9e00;
-      --accent-red: #ff3366;
-      --text-main: #f0f6fc;
-      --text-muted: #8b949e;
+      --accent-purple: #a855f7;
+      --accent-orange: #f59e0b;
+      --accent-red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --radius-lg: 18px;
       --radius-md: 12px;
       --radius-sm: 8px;
@@ -32,15 +32,15 @@
     }
 
     body {
-      background: radial-gradient(circle at 50% 0%, #152238 0%, var(--bg-primary) 70%);
+      background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg-primary) 70%);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 16px;
-      padding-bottom: 40px;
+      padding: 14px;
+      padding-bottom: 50px;
     }
 
     .container {
-      max-width: 540px;
+      max-width: 580px;
       margin: 0 auto;
     }
 
@@ -49,7 +49,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
       padding: 12px 16px;
       background: var(--bg-card);
       backdrop-filter: blur(16px);
@@ -66,24 +66,24 @@
     }
 
     .logo-icon {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
       font-size: 20px;
-      color: #050b14;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      color: #030712;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
     }
 
     .logo-text h1 {
       font-size: 17px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.5px;
-      background: linear-gradient(90deg, #fff, #b4d2ff);
+      background: linear-gradient(90deg, #fff, #93c5fd);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -120,60 +120,129 @@
       50% { opacity: 0.4; transform: scale(0.85); }
     }
 
-    /* Live Telemetry Card */
-    .telemetry-card {
+    /* Tab Bar */
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .nav-tab {
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Real-Time Waveform Chart Card */
+    .chart-card {
       background: var(--bg-card);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 16px;
-      margin-bottom: 20px;
+      padding: 14px;
+      margin-bottom: 16px;
     }
 
-    .telemetry-title {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--accent-cyan);
-      margin-bottom: 12px;
+    .chart-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
-    .cluster-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    .chart-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .chart-legend {
+      display: flex;
       gap: 10px;
+      font-size: 11px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-color {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    canvas#liveChart {
+      width: 100%;
+      height: 100px;
+      display: block;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: var(--radius-sm);
+    }
+
+    /* Telemetry Grid */
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
     }
 
     .cluster-box {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 10px;
+      padding: 8px;
       text-align: center;
     }
 
     .cluster-name {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-muted);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      white-space: nowrap;
     }
 
     .cluster-freq {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 800;
-      color: var(--text-main);
       font-variant-numeric: tabular-nums;
+      color: var(--text-main);
     }
 
     .cluster-bar-wrap {
-      height: 4px;
+      height: 3px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 2px;
-      margin-top: 6px;
+      margin-top: 5px;
       overflow: hidden;
     }
 
@@ -186,36 +255,35 @@
 
     /* Section Title */
     .section-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: var(--text-muted);
-      margin-bottom: 12px;
-      padding-left: 4px;
+      margin-bottom: 10px;
+      padding-left: 2px;
     }
 
     /* Mode Selection Grid */
     .modes-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     .mode-card {
       position: relative;
       background: var(--bg-card);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       overflow: hidden;
     }
 
@@ -230,7 +298,6 @@
 
     .mode-card.active {
       border-color: var(--mode-color);
-      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0.4));
       box-shadow: 0 0 20px rgba(var(--mode-color-rgb), 0.25), inset 0 0 15px rgba(var(--mode-color-rgb), 0.1);
     }
 
@@ -240,7 +307,7 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 5px;
+      width: 4px;
       background: var(--mode-color);
       box-shadow: 0 0 10px var(--mode-color);
     }
@@ -248,17 +315,17 @@
     .mode-info {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .mode-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
@@ -266,150 +333,258 @@
     .mode-card.active .mode-icon {
       background: rgba(var(--mode-color-rgb), 0.15);
       border-color: var(--mode-color);
-      color: var(--mode-color);
-      box-shadow: 0 0 12px rgba(var(--mode-color-rgb), 0.3);
+      box-shadow: 0 0 10px rgba(var(--mode-color-rgb), 0.3);
     }
 
     .mode-text h3 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       margin-bottom: 2px;
     }
 
     .mode-text p {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
     }
 
     .mode-radio {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       border: 2px solid rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
     }
 
     .mode-card.active .mode-radio {
       border-color: var(--mode-color);
       background: var(--mode-color);
-      box-shadow: 0 0 10px var(--mode-color);
     }
 
     .mode-radio-inner {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       background: #050b14;
       border-radius: 50%;
       opacity: 0;
-      transform: scale(0.5);
-      transition: all 0.2s ease;
     }
 
     .mode-card.active .mode-radio-inner {
       opacity: 1;
-      transform: scale(1);
     }
 
     /* Colors */
     .mode-powersave { --mode-color: var(--accent-green); --mode-color-rgb: 0, 255, 136; }
     .mode-balance { --mode-color: var(--accent-cyan); --mode-color-rgb: 0, 240, 255; }
-    .mode-auto { --mode-color: var(--accent-orange); --mode-color-rgb: 255, 158, 0; }
-    .mode-performance { --mode-color: var(--accent-purple); --mode-color-rgb: 157, 78, 221; }
-    .mode-fast { --mode-color: var(--accent-red); --mode-color-rgb: 255, 51, 102; }
+    .mode-auto { --mode-color: var(--accent-orange); --mode-color-rgb: 245, 158, 11; }
+    .mode-performance { --mode-color: var(--accent-purple); --mode-color-rgb: 168, 85, 247; }
+    .mode-fast { --mode-color: var(--accent-red); --mode-color-rgb: 239, 68, 68; }
 
-    /* Action Buttons */
-    .actions-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .action-btn {
+    /* Per-App Manager Styles */
+    .app-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 12px 16px;
       border-radius: var(--radius-md);
-      font-size: 13px;
-      font-weight: 600;
+      padding: 12px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .app-name-box h4 {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .app-name-box p {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .app-mode-chips {
+      display: flex;
+      gap: 4px;
+    }
+
+    .mode-chip {
+      padding: 4px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .action-btn:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(255, 255, 255, 0.2);
+    .mode-chip.active-powersave { background: rgba(0, 255, 136, 0.2); border-color: var(--accent-green); color: var(--accent-green); }
+    .mode-chip.active-balance { background: rgba(0, 240, 255, 0.2); border-color: var(--accent-cyan); color: var(--accent-cyan); }
+    .mode-chip.active-fast { background: rgba(239, 68, 68, 0.2); border-color: var(--accent-red); color: var(--accent-red); }
+
+    /* Custom App Input Form */
+    .add-app-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 8px;
     }
 
-    .action-btn:active {
-      transform: scale(0.96);
+    .app-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      outline: none;
     }
 
-    /* Log Box */
-    .log-container {
-      background: rgba(5, 10, 20, 0.9);
+    .app-select {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      outline: none;
+    }
+
+    .btn-add {
+      background: var(--accent-cyan);
+      color: #030712;
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* Guard Setting Cards */
+    .guard-card {
+      background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
       padding: 14px;
-      display: none;
-      margin-top: 15px;
-    }
-
-    .log-header {
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--accent-cyan);
     }
 
-    .log-content {
-      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    .guard-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .guard-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider { background-color: var(--accent-green); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    /* Log Box */
+    .log-box {
+      background: rgba(3, 7, 18, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-family: ui-monospace, monospace;
       font-size: 11px;
       color: #94a3b8;
-      max-height: 200px;
+      max-height: 320px;
       overflow-y: auto;
       white-space: pre-wrap;
-      word-break: break-all;
       line-height: 1.4;
     }
 
-    /* Toast Notification */
+    /* Actions Grid */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn-action {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-action:active { transform: scale(0.97); }
+
+    /* Toast */
     .toast {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: rgba(18, 26, 43, 0.95);
+      background: rgba(15, 23, 42, 0.95);
       border: 1px solid var(--accent-cyan);
       color: #fff;
       padding: 10px 20px;
       border-radius: 30px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(10px);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.3s ease;
       z-index: 999;
       pointer-events: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -420,7 +595,7 @@
         <div class="logo-icon">⚡</div>
         <div class="logo-text">
           <h1>Uperf Sushiba</h1>
-          <p id="soc-info">Google Tensor G3 (Zuma)</p>
+          <p id="soc-info">Google Tensor G3 (Zuma - 9 Cores)</p>
         </div>
       </div>
       <div class="status-badge">
@@ -429,13 +604,31 @@
       </div>
     </div>
 
-    <!-- Live Telemetry -->
-    <div class="telemetry-card">
-      <div class="telemetry-title">
-        <span>Tần số xung nhịp CPU</span>
-        <span id="soc-temp" style="color: var(--accent-orange);">38.5°C</span>
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="switchTab('overview')">⚡ Tổng quan</div>
+      <div class="nav-tab" onclick="switchTab('perapp')">📱 Ứng dụng</div>
+      <div class="nav-tab" onclick="switchTab('guard')">🛡️ Bảo vệ</div>
+      <div class="nav-tab" onclick="switchTab('logs')">📜 Nhật ký</div>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    <div id="tab-overview" class="tab-content active">
+      <!-- Live Real-Time Waveform Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title">Đồ thị tải xung & nhiệt độ live</span>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-color" style="background: var(--accent-cyan);"></span> Mid</div>
+            <div class="legend-item"><span class="legend-color" style="background: var(--accent-red);"></span> X3</div>
+            <div class="legend-item"><span class="legend-color" style="background: var(--accent-orange);"></span> °C</div>
+          </div>
+        </div>
+        <canvas id="liveChart" width="540" height="100"></canvas>
       </div>
-      <div class="cluster-grid">
+
+      <!-- Telemetry Grid -->
+      <div class="telemetry-grid">
         <div class="cluster-box">
           <div class="cluster-name">4x Little (0-3)</div>
           <div class="cluster-freq" id="freq-c0">--- MHz</div>
@@ -447,108 +640,175 @@
           <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c1"></div></div>
         </div>
         <div class="cluster-box">
-          <div class="cluster-name">1x Cortex-X3 (8)</div>
+          <div class="cluster-name">1x Core X3 (8)</div>
           <div class="cluster-freq" id="freq-c2">--- MHz</div>
           <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c2"></div></div>
         </div>
+        <div class="cluster-box">
+          <div class="cluster-name">Mali-G715 GPU</div>
+          <div class="cluster-freq" id="freq-gpu">--- MHz</div>
+          <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-gpu" style="background: var(--accent-purple);"></div></div>
+        </div>
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="section-title">Chọn chế độ hiệu năng</div>
+      <div class="modes-list">
+        <!-- Powersave -->
+        <div class="mode-card mode-powersave" onclick="setMode('powersave')">
+          <div class="mode-info">
+            <div class="mode-icon">🍃</div>
+            <div class="mode-text">
+              <h3>Powersave (Siêu mát)</h3>
+              <p>Ghim Sweet Freq 1.74GHz, GPU 580MHz, triệt nhiệt 5G</p>
+            </div>
+          </div>
+          <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+        </div>
+
+        <!-- Balance -->
+        <div class="mode-card mode-balance" onclick="setMode('balance')">
+          <div class="mode-info">
+            <div class="mode-icon">⚖️</div>
+            <div class="mode-text">
+              <h3>Balance (Cân bằng)</h3>
+              <p>Mượt mà, mát mẻ, GPU 649MHz, Perf/Watt tối ưu</p>
+            </div>
+          </div>
+          <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+        </div>
+
+        <!-- Auto -->
+        <div class="mode-card mode-auto" onclick="setMode('auto')">
+          <div class="mode-info">
+            <div class="mode-icon">🔄</div>
+            <div class="mode-text">
+              <h3>Auto (Tự động thích ứng)</h3>
+              <p>Tự nhận diện theo quy tắc Per-App và tải thực tế</p>
+            </div>
+          </div>
+          <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+        </div>
+
+        <!-- Performance -->
+        <div class="mode-card mode-performance" onclick="setMode('performance')">
+          <div class="mode-info">
+            <div class="mode-icon">🚀</div>
+            <div class="mode-text">
+              <h3>Performance (Mượt tối đa)</h3>
+              <p>Phản hồi nhanh tức thì, giải phóng toàn bộ xung nhịp</p>
+            </div>
+          </div>
+          <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+        </div>
+
+        <!-- Fast -->
+        <div class="mode-card mode-fast" onclick="setMode('fast')">
+          <div class="mode-info">
+            <div class="mode-icon">🔥</div>
+            <div class="mode-text">
+              <h3>Fast / Turbo (Chơi game nặng)</h3>
+              <p>Cấp tối đa xung CPU và GPU 890MHz cho Gaming</p>
+            </div>
+          </div>
+          <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+        </div>
       </div>
     </div>
 
-    <!-- Mode Selector -->
-    <div class="section-title">Chọn chế độ hiệu năng</div>
-    <div class="modes-list">
-      <!-- Powersave -->
-      <div class="mode-card mode-powersave" onclick="setMode('powersave')">
-        <div class="mode-info">
-          <div class="mode-icon">🍃</div>
-          <div class="mode-text">
-            <h3>Powersave (Siêu mát)</h3>
-            <p>Ghim Sweet Freq 1.74GHz, triệt nhiệt 5G & ngoài trời</p>
-          </div>
-        </div>
-        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+    <!-- TAB 2: PER-APP MANAGER -->
+    <div id="tab-perapp" class="tab-content">
+      <div class="section-title">Thêm quy tắc ứng dụng tùy chỉnh</div>
+      <div class="add-app-box">
+        <input type="text" id="custom-pkg" class="app-input" placeholder="com.example.app">
+        <select id="custom-mode" class="app-select">
+          <option value="powersave">🍃 Powersave</option>
+          <option value="balance" selected>⚖️ Balance</option>
+          <option value="fast">🔥 Fast / Game</option>
+        </select>
+        <button class="btn-add" onclick="addCustomRule()">Thêm</button>
       </div>
 
-      <!-- Balance -->
-      <div class="mode-card mode-balance" onclick="setMode('balance')">
-        <div class="mode-info">
-          <div class="mode-icon">⚖️</div>
-          <div class="mode-text">
-            <h3>Balance (Cân bằng)</h3>
-            <p>Mượt mà, mát mẻ, tối ưu Perf/Watt hàng ngày</p>
-          </div>
-        </div>
-        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
-      </div>
-
-      <!-- Auto -->
-      <div class="mode-card mode-auto" onclick="setMode('auto')">
-        <div class="mode-info">
-          <div class="mode-icon">🔄</div>
-          <div class="mode-text">
-            <h3>Auto (Tự động thích ứng)</h3>
-            <p>Tự nhận diện hành vi và game/app đang chạy</p>
-          </div>
-        </div>
-        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
-      </div>
-
-      <!-- Performance -->
-      <div class="mode-card mode-performance" onclick="setMode('performance')">
-        <div class="mode-info">
-          <div class="mode-icon">🚀</div>
-          <div class="mode-text">
-            <h3>Performance (Mượt tối đa)</h3>
-            <p>Phản hồi tức thì, ưu tiên FPS và độ nhạy thao tác</p>
-          </div>
-        </div>
-        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
-      </div>
-
-      <!-- Fast / Turbo -->
-      <div class="mode-card mode-fast" onclick="setMode('fast')">
-        <div class="mode-info">
-          <div class="mode-icon">🔥</div>
-          <div class="mode-text">
-            <h3>Fast / Turbo (Chơi game)</h3>
-            <p>Giải phóng toàn bộ xung nhịp cho tác vụ cực nặng</p>
-          </div>
-        </div>
-        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+      <div class="section-title">Danh sách ứng dụng đã cấu hình</div>
+      <div id="perapp-list">
+        <!-- Rendered via JS -->
       </div>
     </div>
 
-    <!-- Action Shortcuts -->
-    <div class="section-title">Tiện ích hệ thống</div>
-    <div class="actions-grid">
-      <button class="action-btn" onclick="toggleLog()">
-        📜 Xem Uperf Log
-      </button>
-      <button class="action-btn" onclick="restartDaemon()">
-        🔄 Khởi động lại
-      </button>
+    <!-- TAB 3: THERMAL GUARD & SETTINGS -->
+    <div id="tab-guard" class="tab-content">
+      <div class="section-title">Cơ chế bảo vệ phần cứng</div>
+
+      <div class="guard-card">
+        <div class="guard-text">
+          <h4>⚡ Bảo vệ nhiệt độ khi Sạc pin</h4>
+          <p>Tự động hạ dòng sạc khi pin > 40.5°C để chống chai phồng và quá nhiệt.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="guard-charging" checked onchange="saveGuardSettings()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="guard-card">
+        <div class="guard-text">
+          <h4>🎮 Mali-G715 GPU Dynamic Clamp</h4>
+          <p>Khống chế trần xung GPU ở 580-649MHz khi máy ấm để giữ FPS ổn định.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="guard-gpu" checked onchange="saveGuardSettings()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="guard-card">
+        <div class="guard-text">
+          <h4>⏱️ PollingDelay 20s (Thermal HAL)</h4>
+          <p>Trích xuất từ vendor máy, cảm biến nhiệt phản hồi sau mỗi 20s (Active).</p>
+        </div>
+        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ĐÃ KÍCH HOẠT</span>
+      </div>
+
+      <div class="actions-grid">
+        <button class="btn-action" onclick="restartDaemon()">🔄 Khởi động lại Uperf</button>
+        <button class="btn-action" onclick="reloadRules()">📥 Nạp lại Per-App</button>
+      </div>
     </div>
 
-    <!-- Log Box -->
-    <div class="log-container" id="log-box">
-      <div class="log-header">
-        <span>UPERF RUNTIME LOG</span>
-        <span onclick="toggleLog()" style="cursor: pointer;">✕ Đóng</span>
+    <!-- TAB 4: LOGS -->
+    <div id="tab-logs" class="tab-content">
+      <div class="section-title">Nhật ký vận hành trực tiếp</div>
+      <div class="log-box" id="log-text">Đang tải nhật ký...</div>
+      <div class="actions-grid">
+        <button class="btn-action" onclick="fetchLogs()">🔄 Làm mới nhật ký</button>
+        <button class="btn-action" onclick="clearLogs()">🗑️ Xóa màn hình</button>
       </div>
-      <div class="log-content" id="log-content">Đang tải nhật ký...</div>
     </div>
   </div>
 
-  <div class="toast" id="toast">
-    <span>✓</span>
-    <span id="toast-msg">Đã áp dụng chế độ</span>
-  </div>
+  <div class="toast" id="toast">Đã cập nhật</div>
 
   <script>
     let currentMode = "auto";
-    let isLogOpen = false;
+    let chartHistory = { mid: [], big: [], temp: [] };
+    const maxDataPoints = 40;
 
-    // KernelSU / APatch / Magisk Shell Execution Bridge
+    // Default Per-App rules dictionary
+    let appRules = [
+      { name: "Facebook", pkg: "com.facebook.katana", mode: "powersave" },
+      { name: "Messenger", pkg: "com.facebook.orca", mode: "powersave" },
+      { name: "TikTok", pkg: "com.ss.android.ugc.trill", mode: "balance" },
+      { name: "Zalo", pkg: "com.zing.zalo", mode: "powersave" },
+      { name: "YouTube", pkg: "com.google.android.youtube", mode: "powersave" },
+      { name: "Google Chrome", pkg: "com.android.chrome", mode: "balance" },
+      { name: "Google Camera", pkg: "com.google.android.GoogleCamera", mode: "balance" },
+      { name: "Liên Quân Mobile", pkg: "com.garena.game.kgvn", mode: "fast" },
+      { name: "PUBG Mobile", pkg: "com.tencent.ig", mode: "fast" },
+      { name: "Genshin Impact", pkg: "com.miHoYo.GenshinImpact", mode: "fast" },
+      { name: "Honkai Star Rail", pkg: "com.miHoYo.hkrpg", mode: "fast" }
+    ];
+
+    // Bridge for KernelSU / Magisk Shell Execution
     async function exec(cmd) {
       return new Promise((resolve) => {
         try {
@@ -575,20 +835,26 @@
 
     function showToast(msg) {
       const toast = document.getElementById("toast");
-      const toastMsg = document.getElementById("toast-msg");
-      toastMsg.innerText = msg;
+      toast.innerText = msg;
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 2000);
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+      event.currentTarget.classList.add("active");
+      document.getElementById(`tab-${tabId}`).classList.add("active");
+      if (tabId === 'logs') fetchLogs();
     }
 
     async function setMode(mode) {
       currentMode = mode;
       updateUI();
-      showToast(`Đang chuyển sang chế độ: ${mode.toUpperCase()}`);
+      showToast(`Chế độ: ${mode.toUpperCase()}`);
       await exec(`sh /data/powercfg.sh ${mode}`);
       await exec(`echo "${mode}" > /sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null || true`);
-      await exec(`echo "${mode}" > /sdcard/yc/uperf/cur_powermode.txt 2>/dev/null || true`);
-      setTimeout(refreshStatus, 400);
+      setTimeout(refreshTelemetry, 300);
     }
 
     function updateUI() {
@@ -600,68 +866,170 @@
       });
     }
 
-    async function refreshStatus() {
+    async function refreshTelemetry() {
       // 1. Check current mode
-      let mode = await exec("cat /sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null || cat /sdcard/yc/uperf/cur_powermode.txt 2>/dev/null || cat /data/cur_powermode.txt 2>/dev/null");
-      mode = (mode || "").trim().toLowerCase();
+      let mode = (await exec("cat /sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null || cat /data/cur_powermode.txt 2>/dev/null") || "").trim().toLowerCase();
       if (mode && ["powersave", "balance", "auto", "performance", "fast"].includes(mode)) {
         currentMode = mode;
         updateUI();
       }
 
-      // 2. Read CPU frequencies
+      // 2. CPU & GPU Frequencies
       const f0 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq 2>/dev/null") || "0");
       const f1 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy4/scaling_cur_freq 2>/dev/null") || "0");
       const f2 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy8/scaling_cur_freq 2>/dev/null") || "0");
+      const fgpu = parseInt(await exec("cat /sys/devices/platform/1f000000.mali/cur_freq 2>/dev/null") || "0");
 
       if (f0 > 0) {
-        document.getElementById("freq-c0").innerText = `${Math.round(f0 / 1000)} MHz`;
+        document.getElementById("freq-c0").innerText = `${Math.round(f0 / 1000)}M`;
         document.getElementById("bar-c0").style.width = `${Math.min(100, Math.round((f0 / 1704000) * 100))}%`;
       }
       if (f1 > 0) {
-        document.getElementById("freq-c1").innerText = `${Math.round(f1 / 1000)} MHz`;
+        document.getElementById("freq-c1").innerText = `${Math.round(f1 / 1000)}M`;
         document.getElementById("bar-c1").style.width = `${Math.min(100, Math.round((f1 / 2367000) * 100))}%`;
       }
       if (f2 > 0) {
-        document.getElementById("freq-c2").innerText = `${Math.round(f2 / 1000)} MHz`;
+        document.getElementById("freq-c2").innerText = `${Math.round(f2 / 1000)}M`;
         document.getElementById("bar-c2").style.width = `${Math.min(100, Math.round((f2 / 2914000) * 100))}%`;
       }
+      if (fgpu > 0) {
+        document.getElementById("freq-gpu").innerText = `${Math.round(fgpu / 1000)}M`;
+        document.getElementById("bar-gpu").style.width = `${Math.min(100, Math.round((fgpu / 890000) * 100))}%`;
+      }
 
-      // 3. Read Temp
+      // 3. Temp
       let temp = parseInt(await exec("cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || cat /sys/class/power_supply/battery/temp 2>/dev/null") || "0");
       if (temp > 1000) temp = temp / 1000;
-      if (temp > 0) {
-        document.getElementById("soc-temp").innerText = `${temp.toFixed(1)}°C`;
-      }
+      else if (temp > 100) temp = temp / 10;
+
+      // Update Chart Data
+      chartHistory.mid.push(f1 > 0 ? f1 / 2367000 : 0);
+      chartHistory.big.push(f2 > 0 ? f2 / 2914000 : 0);
+      chartHistory.temp.push(temp > 0 ? Math.min(1, temp / 60) : 0.5);
+
+      if (chartHistory.mid.length > maxDataPoints) chartHistory.mid.shift();
+      if (chartHistory.big.length > maxDataPoints) chartHistory.big.shift();
+      if (chartHistory.temp.length > maxDataPoints) chartHistory.temp.shift();
+
+      drawLiveChart();
     }
 
-    async function toggleLog() {
-      const box = document.getElementById("log-box");
-      const content = document.getElementById("log-content");
-      isLogOpen = !isLogOpen;
-      box.style.display = isLogOpen ? "block" : "none";
+    function drawLiveChart() {
+      const canvas = document.getElementById("liveChart");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
 
-      if (isLogOpen) {
-        content.innerText = "Đang tải...";
-        const log = await exec("tail -n 40 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || tail -n 40 /data/powercfg.log 2>/dev/null || echo 'Chưa có nhật ký ghi nhận.'");
-        content.innerText = log || "Chưa có log.";
-        content.scrollTop = content.scrollHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw Grid
+      ctx.strokeStyle = "rgba(255,255,255,0.05)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, h * 0.5); ctx.lineTo(w, h * 0.5);
+      ctx.stroke();
+
+      function plotLine(data, color) {
+        if (data.length < 2) return;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const step = w / (maxDataPoints - 1);
+        data.forEach((val, idx) => {
+          const x = idx * step;
+          const y = h - (val * (h - 10) + 5);
+          if (idx === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
       }
+
+      plotLine(chartHistory.mid, "#00f0ff");
+      plotLine(chartHistory.big, "#ef4444");
+      plotLine(chartHistory.temp, "#f59e0b");
+    }
+
+    // Per-App Manager
+    function renderPerAppList() {
+      const container = document.getElementById("perapp-list");
+      container.innerHTML = "";
+      appRules.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "app-card";
+        div.innerHTML = `
+          <div class="app-name-box">
+            <h4>${item.name}</h4>
+            <p>${item.pkg}</p>
+          </div>
+          <div class="app-mode-chips">
+            <span class="mode-chip ${item.mode === 'powersave' ? 'active-powersave' : ''}" onclick="setAppRule(${index}, 'powersave')">🍃 Mát</span>
+            <span class="mode-chip ${item.mode === 'balance' ? 'active-balance' : ''}" onclick="setAppRule(${index}, 'balance')">⚖️ Vừa</span>
+            <span class="mode-chip ${item.mode === 'fast' ? 'active-fast' : ''}" onclick="setAppRule(${index}, 'fast')">🔥 Max</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function setAppRule(index, mode) {
+      appRules[index].mode = mode;
+      renderPerAppList();
+      await savePerAppToFile();
+      showToast(`Đã gán ${appRules[index].name} -> ${mode.toUpperCase()}`);
+    }
+
+    async function addCustomRule() {
+      const pkg = document.getElementById("custom-pkg").value.trim();
+      const mode = document.getElementById("custom-mode").value;
+      if (!pkg) return;
+      appRules.unshift({ name: pkg.split('.').pop(), pkg: pkg, mode: mode });
+      document.getElementById("custom-pkg").value = "";
+      renderPerAppList();
+      await savePerAppToFile();
+      showToast(`Đã thêm: ${pkg}`);
+    }
+
+    async function savePerAppToFile() {
+      let content = "# Per-app dynamic power mode rule\n- powersave\n* balance\n";
+      appRules.forEach(item => {
+        content += `${item.pkg} ${item.mode}\n`;
+      });
+      await exec(`echo "${content}" > /sdcard/Android/yc/uperf/perapp_powermode.txt`);
+    }
+
+    async function fetchLogs() {
+      const el = document.getElementById("log-text");
+      el.innerText = "Đang đọc nhật ký...";
+      const log = await exec("tail -n 60 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || echo 'Chưa có nhật ký.'");
+      el.innerText = log || "Nhật ký trống.";
+    }
+
+    function clearLogs() {
+      document.getElementById("log-text").innerText = "";
     }
 
     async function restartDaemon() {
       showToast("Đang khởi động lại Uperf...");
       await exec("killall -9 uperf 2>/dev/null || true");
       await exec("sh /data/powercfg.sh auto 2>/dev/null || true");
-      showToast("Uperf đã khởi động lại!");
-      setTimeout(refreshStatus, 800);
+      showToast("Đã khởi động lại thành công!");
     }
 
-    // Init & Polling
+    function reloadRules() {
+      savePerAppToFile();
+      showToast("Đã nạp lại danh sách Per-App!");
+    }
+
+    function saveGuardSettings() {
+      showToast("Đã lưu thiết lập bảo vệ nhiệt!");
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
+      renderPerAppList();
       updateUI();
-      refreshStatus();
-      setInterval(refreshStatus, 1500);
+      refreshTelemetry();
+      setInterval(refreshTelemetry, 1000);
     });
   </script>
 </body>

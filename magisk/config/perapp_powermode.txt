@@ -1,23 +1,42 @@
-# 分应用性能模式配置
-# Per-app dynamic power mode rule
-# '-' means offscreen rule
-# '*' means default rule
+# Per-app dynamic power mode rule for Pixel 8 Pro (Tensor G3)
+# '-' means offscreen (standby/screen-off) rule
+# '*' means default rule for unlisted apps
 
-com.tencent.tmgp.sgame performance
-com.miHoYo.Yuanshen performance
-com.tencent.tmgp.pubgmhd performance
-com.miHoYo.bh3.bilibili performance
-com.miHoYo.enterprise.NGHSoD performance
-com.miHoYo.ys.bilibili performance
-com.tencent.lolm performance
-com.netease.wotb performance
-com.tencent.tmgp.speedmobile performance
-com.tencent.KiHan performance
-fi.twomenandadog.zombiecatchers performance
-com.garena.game.kgtw performance
-com.tencent.ig performance
-com.supercell.brawlstars performance
-com.ioncannon.cpuburn.gpugflops fast
+# Social & Light Apps (Powersave / Balance for maximum cooling)
+com.facebook.katana powersave
+com.facebook.orca powersave
+com.ss.android.ugc.trill balance
+com.zhiliaoapp.musically balance
+com.zing.zalo powersave
+com.google.android.youtube powersave
+com.android.chrome balance
+com.google.android.GoogleCamera balance
+com.google.android.apps.photos powersave
+org.telegram.messenger powersave
+com.instagram.android balance
+com.shopee.vn balance
+vn.tiki.app balance
+com.lazada.android balance
+
+# Heavy Games (High FPS / Performance)
+com.garena.game.kgvn fast
+com.garena.game.kgtw fast
+com.tencent.ig fast
+com.vng.pubgmobile fast
+com.miHoYo.GenshinImpact fast
+com.miHoYo.Yuanshen fast
+com.miHoYo.hkrpg fast
+com.dts.freefireth fast
+com.roblox.client balance
+com.tencent.tmgp.sgame fast
+com.tencent.lolm fast
+
+# Benchmarks
 com.primatelabs.geekbench5 fast
+com.primatelabs.geekbench6 fast
+com.antutu.ABenchMark fast
+com.ioncannon.cpuburn.gpugflops fast
+
+# Global Defaults
 - powersave
-* performance
+* balance
