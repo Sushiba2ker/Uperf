@@ -1,8 +1,8 @@
 id=uperf
-name=Uperf Game Turbo
-version=️1.35 based on uperf 904
-versionCode=240424
-author=Matt Yang (Sushiba2ker mod)
+name=Uperf Sushiba
+version=1.0.0
+versionCode=240823
+author=Sushiba
 description=Bộ điều phối hiệu năng động & tối ưu nhiệt độ cho Google Tensor G3 (Pixel 8 / 8 Pro / 8a) tích hợp KernelSU WebUI.
 updateJson=https://github.com/Sushiba2ker/Uperf/raw/main/version.json
 ASOPT_VERSIONCODE=260

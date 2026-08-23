@@ -1,6 +1,6 @@
-# Uperf Game Turbo
+# Uperf Sushiba
 
-Bộ điều phối hiệu năng và tối ưu năng lượng tầng Userspace cho Android, hỗ trợ toàn diện các nền tảng SoC hiện đại (bao gồm **Google Tensor G1 / G2 / G3**, Snapdragon, MediaTek Dimensity, Exynos và Kirin).
+Bộ điều phối hiệu năng và tối ưu năng lượng tầng Userspace cho Android, hỗ trợ toàn diện các nền tảng SoC hiện đại (bao gồm **Google Tensor G1 / G2 / G3**, Snapdragon, MediaTek Dimensity, Exynos và Kirin). Tác giả: **Sushiba**.
 
 ---
 
