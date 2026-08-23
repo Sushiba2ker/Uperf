@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Uperf Controller</title>
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-card: rgba(18, 26, 43, 0.75);
+      --bg-card-hover: rgba(28, 40, 65, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #00f0ff;
+      --accent-green: #00ff88;
+      --accent-purple: #9d4edd;
+      --accent-orange: #ff9e00;
+      --accent-red: #ff3366;
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #152238 0%, var(--bg-primary) 70%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 16px;
+      padding-bottom: 40px;
+    }
+
+    .container {
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 20px;
+      color: #050b14;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    }
+
+    .logo-text h1 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #fff, #b4d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: var(--accent-green);
+      border-radius: 20px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Live Telemetry Card */
+    .telemetry-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .telemetry-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .cluster-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .cluster-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .cluster-name {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .cluster-freq {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cluster-bar-wrap {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .cluster-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-cyan);
+      transition: width 0.3s ease;
+    }
+
+    /* Section Title */
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-left: 4px;
+    }
+
+    /* Mode Selection Grid */
+    .modes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .mode-card {
+      position: relative;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .mode-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .mode-card:active {
+      transform: scale(0.98);
+    }
+
+    .mode-card.active {
+      border-color: var(--mode-color);
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0.4));
+      box-shadow: 0 0 20px rgba(var(--mode-color-rgb), 0.25), inset 0 0 15px rgba(var(--mode-color-rgb), 0.1);
+    }
+
+    .mode-card.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: var(--mode-color);
+      box-shadow: 0 0 10px var(--mode-color);
+    }
+
+    .mode-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mode-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mode-card.active .mode-icon {
+      background: rgba(var(--mode-color-rgb), 0.15);
+      border-color: var(--mode-color);
+      color: var(--mode-color);
+      box-shadow: 0 0 12px rgba(var(--mode-color-rgb), 0.3);
+    }
+
+    .mode-text h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .mode-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .mode-radio {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .mode-card.active .mode-radio {
+      border-color: var(--mode-color);
+      background: var(--mode-color);
+      box-shadow: 0 0 10px var(--mode-color);
+    }
+
+    .mode-radio-inner {
+      width: 8px;
+      height: 8px;
+      background: #050b14;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s ease;
+    }
+
+    .mode-card.active .mode-radio-inner {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Colors */
+    .mode-powersave { --mode-color: var(--accent-green); --mode-color-rgb: 0, 255, 136; }
+    .mode-balance { --mode-color: var(--accent-cyan); --mode-color-rgb: 0, 240, 255; }
+    .mode-auto { --mode-color: var(--accent-orange); --mode-color-rgb: 255, 158, 0; }
+    .mode-performance { --mode-color: var(--accent-purple); --mode-color-rgb: 157, 78, 221; }
+    .mode-fast { --mode-color: var(--accent-red); --mode-color-rgb: 255, 51, 102; }
+
+    /* Action Buttons */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .action-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .action-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Log Box */
+    .log-container {
+      background: rgba(5, 10, 20, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      display: none;
+      margin-top: 15px;
+    }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .log-content {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 11px;
+      color: #94a3b8;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 26, 43, 0.95);
+      border: 1px solid var(--accent-cyan);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 999;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-area">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">
+          <h1>Uperf Game Turbo</h1>
+          <p id="soc-info">Google Tensor G3 (Zuma)</p>
+        </div>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span id="daemon-status">Active</span>
+      </div>
+    </div>
+
+    <!-- Live Telemetry -->
+    <div class="telemetry-card">
+      <div class="telemetry-title">
+        <span>Tần số xung nhịp CPU</span>
+        <span id="soc-temp" style="color: var(--accent-orange);">38.5°C</span>
+      </div>
+      <div class="cluster-grid">
+        <div class="cluster-box">
+          <div class="cluster-name">4x Little (0-3)</div>
+          <div class="cluster-freq" id="freq-c0">--- MHz</div>
+          <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c0"></div></div>
+        </div>
+        <div class="cluster-box">
+          <div class="cluster-name">4x Mid (4-7)</div>
+          <div class="cluster-freq" id="freq-c1">--- MHz</div>
+          <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c1"></div></div>
+        </div>
+        <div class="cluster-box">
+          <div class="cluster-name">1x Cortex-X3 (8)</div>
+          <div class="cluster-freq" id="freq-c2">--- MHz</div>
+          <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c2"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Selector -->
+    <div class="section-title">Chọn chế độ hiệu năng</div>
+    <div class="modes-list">
+      <!-- Powersave -->
+      <div class="mode-card mode-powersave" onclick="setMode('powersave')">
+        <div class="mode-info">
+          <div class="mode-icon">🍃</div>
+          <div class="mode-text">
+            <h3>Powersave (Siêu mát)</h3>
+            <p>Ghim Sweet Freq 1.74GHz, triệt nhiệt 5G & ngoài trời</p>
+          </div>
+        </div>
+        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+      </div>
+
+      <!-- Balance -->
+      <div class="mode-card mode-balance" onclick="setMode('balance')">
+        <div class="mode-info">
+          <div class="mode-icon">⚖️</div>
+          <div class="mode-text">
+            <h3>Balance (Cân bằng)</h3>
+            <p>Mượt mà, mát mẻ, tối ưu Perf/Watt hàng ngày</p>
+          </div>
+        </div>
+        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+      </div>
+
+      <!-- Auto -->
+      <div class="mode-card mode-auto" onclick="setMode('auto')">
+        <div class="mode-info">
+          <div class="mode-icon">🔄</div>
+          <div class="mode-text">
+            <h3>Auto (Tự động thích ứng)</h3>
+            <p>Tự nhận diện hành vi và game/app đang chạy</p>
+          </div>
+        </div>
+        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+      </div>
+
+      <!-- Performance -->
+      <div class="mode-card mode-performance" onclick="setMode('performance')">
+        <div class="mode-info">
+          <div class="mode-icon">🚀</div>
+          <div class="mode-text">
+            <h3>Performance (Mượt tối đa)</h3>
+            <p>Phản hồi tức thì, ưu tiên FPS và độ nhạy thao tác</p>
+          </div>
+        </div>
+        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+      </div>
+
+      <!-- Fast / Turbo -->
+      <div class="mode-card mode-fast" onclick="setMode('fast')">
+        <div class="mode-info">
+          <div class="mode-icon">🔥</div>
+          <div class="mode-text">
+            <h3>Fast / Turbo (Chơi game)</h3>
+            <p>Giải phóng toàn bộ xung nhịp cho tác vụ cực nặng</p>
+          </div>
+        </div>
+        <div class="mode-radio"><div class="mode-radio-inner"></div></div>
+      </div>
+    </div>
+
+    <!-- Action Shortcuts -->
+    <div class="section-title">Tiện ích hệ thống</div>
+    <div class="actions-grid">
+      <button class="action-btn" onclick="toggleLog()">
+        📜 Xem Uperf Log
+      </button>
+      <button class="action-btn" onclick="restartDaemon()">
+        🔄 Khởi động lại
+      </button>
+    </div>
+
+    <!-- Log Box -->
+    <div class="log-container" id="log-box">
+      <div class="log-header">
+        <span>UPERF RUNTIME LOG</span>
+        <span onclick="toggleLog()" style="cursor: pointer;">✕ Đóng</span>
+      </div>
+      <div class="log-content" id="log-content">Đang tải nhật ký...</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <span>✓</span>
+    <span id="toast-msg">Đã áp dụng chế độ</span>
+  </div>
+
+  <script>
+    let currentMode = "auto";
+    let isLogOpen = false;
+
+    // KernelSU / APatch / Magisk Shell Execution Bridge
+    async function exec(cmd) {
+      return new Promise((resolve) => {
+        try {
+          if (typeof ksu !== 'undefined' && typeof ksu.exec === 'function') {
+            const res = ksu.exec(cmd);
+            if (res instanceof Promise) res.then(resolve).catch(() => resolve(""));
+            else resolve(res || "");
+          } else if (window.ksu && typeof window.ksu.exec === 'function') {
+            const res = window.ksu.exec(cmd);
+            if (res instanceof Promise) res.then(resolve).catch(() => resolve(""));
+            else resolve(res || "");
+          } else {
+            resolve("");
+          }
+        } catch (e) {
+          try {
+            ksu.exec(cmd, "{}", (errno, stdout) => resolve(stdout || ""));
+          } catch (err) {
+            resolve("");
+          }
+        }
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toast-msg");
+      toastMsg.innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2000);
+    }
+
+    async function setMode(mode) {
+      currentMode = mode;
+      updateUI();
+      showToast(`Đang chuyển sang chế độ: ${mode.toUpperCase()}`);
+      await exec(`sh /data/powercfg.sh ${mode}`);
+      await exec(`echo "${mode}" > /sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null || true`);
+      await exec(`echo "${mode}" > /sdcard/yc/uperf/cur_powermode.txt 2>/dev/null || true`);
+      setTimeout(refreshStatus, 400);
+    }
+
+    function updateUI() {
+      document.querySelectorAll(".mode-card").forEach(card => {
+        card.classList.remove("active");
+        if (card.classList.contains(`mode-${currentMode}`)) {
+          card.classList.add("active");
+        }
+      });
+    }
+
+    async function refreshStatus() {
+      // 1. Check current mode
+      let mode = await exec("cat /sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null || cat /sdcard/yc/uperf/cur_powermode.txt 2>/dev/null || cat /data/cur_powermode.txt 2>/dev/null");
+      mode = (mode || "").trim().toLowerCase();
+      if (mode && ["powersave", "balance", "auto", "performance", "fast"].includes(mode)) {
+        currentMode = mode;
+        updateUI();
+      }
+
+      // 2. Read CPU frequencies
+      const f0 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq 2>/dev/null") || "0");
+      const f1 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy4/scaling_cur_freq 2>/dev/null") || "0");
+      const f2 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy8/scaling_cur_freq 2>/dev/null") || "0");
+
+      if (f0 > 0) {
+        document.getElementById("freq-c0").innerText = `${Math.round(f0 / 1000)} MHz`;
+        document.getElementById("bar-c0").style.width = `${Math.min(100, Math.round((f0 / 1704000) * 100))}%`;
+      }
+      if (f1 > 0) {
+        document.getElementById("freq-c1").innerText = `${Math.round(f1 / 1000)} MHz`;
+        document.getElementById("bar-c1").style.width = `${Math.min(100, Math.round((f1 / 2367000) * 100))}%`;
+      }
+      if (f2 > 0) {
+        document.getElementById("freq-c2").innerText = `${Math.round(f2 / 1000)} MHz`;
+        document.getElementById("bar-c2").style.width = `${Math.min(100, Math.round((f2 / 2914000) * 100))}%`;
+      }
+
+      // 3. Read Temp
+      let temp = parseInt(await exec("cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || cat /sys/class/power_supply/battery/temp 2>/dev/null") || "0");
+      if (temp > 1000) temp = temp / 1000;
+      if (temp > 0) {
+        document.getElementById("soc-temp").innerText = `${temp.toFixed(1)}°C`;
+      }
+    }
+
+    async function toggleLog() {
+      const box = document.getElementById("log-box");
+      const content = document.getElementById("log-content");
+      isLogOpen = !isLogOpen;
+      box.style.display = isLogOpen ? "block" : "none";
+
+      if (isLogOpen) {
+        content.innerText = "Đang tải...";
+        const log = await exec("tail -n 40 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || tail -n 40 /data/powercfg.log 2>/dev/null || echo 'Chưa có nhật ký ghi nhận.'");
+        content.innerText = log || "Chưa có log.";
+        content.scrollTop = content.scrollHeight;
+      }
+    }
+
+    async function restartDaemon() {
+      showToast("Đang khởi động lại Uperf...");
+      await exec("killall -9 uperf 2>/dev/null || true");
+      await exec("sh /data/powercfg.sh auto 2>/dev/null || true");
+      showToast("Uperf đã khởi động lại!");
+      setTimeout(refreshStatus, 800);
+    }
+
+    // Init & Polling
+    document.addEventListener("DOMContentLoaded", () => {
+      updateUI();
+      refreshStatus();
+      setInterval(refreshStatus, 1500);
+    });
+  </script>
+</body>
+</html>
