@@ -42,14 +42,10 @@ unify_cgroup() {
 }
 
 unify_sched() {
-    # clear stune & uclamp
+    # clear legacy stune
     for d in /dev/stune/*/; do
-        lock_val "0" $d/schedtune.boost
-        lock_val "0" $d/schedtune.prefer_idle
-    done
-    for d in /dev/cpuctl/*/; do
-        lock_val "0" $d/cpu.uclamp.min
-        lock_val "0" $d/cpu.uclamp.latency_sensitive
+        [ -d "$d" ] && lock_val "0" $d/schedtune.boost
+        [ -d "$d" ] && lock_val "0" $d/schedtune.prefer_idle
     done
 
     for d in kernel walt; do
@@ -192,7 +188,6 @@ disable_userspace_boost() {
     stop vendor.power-hal-1-1
     stop vendor.power-hal-1-2
     stop vendor.power-hal-1-3
-    stop vendor.power-hal-aidl
 }
 
 restart_userspace_boost() {
