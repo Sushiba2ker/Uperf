@@ -195,6 +195,8 @@ get_config_name() {
     "cheetah") echo "gs201" ;;
     "husky") echo "gs301" ;;
     "zuma") echo "gs301" ;;
+    "shiba") echo "gs301" ;;
+    "akita") echo "gs301" ;;
     "PRL") echo "kirin65x" ;;
     "BLN") echo "kirin65x" ;;
     "hi6250") echo "kirin65x" ;;
