@@ -1,9 +1,9 @@
 id=uperf
 name=Uperf Sushiba
-version=2.0.0
-versionCode=240825
+version=2.1.0
+versionCode=240826
 author=Sushiba
-description=Bộ điều phối hiệu năng toàn diện cho Tensor G3: GPU Mali-G715 Clamping, Per-App Visual Manager, Battery Thermal Charging Guard, PollingDelay 20s & WebUI 2.0.
+description=Bộ điều phối hiệu năng & phần cứng tối thượng cho Tensor G3: Devfreq RAM/DSU, Smart GMS Doze, KTweak UFS 3.1 I/O, GPU Mali Clamping, PollingDelay 20s & WebUI 2.0.
 updateJson=https://github.com/Sushiba2ker/Uperf/raw/main/version.json
 ASOPT_VERSIONCODE=260
 web=true
