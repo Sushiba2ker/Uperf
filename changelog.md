@@ -1,23 +1,18 @@
-# 更新日志
+# Nhật ký thay đổi Uperf Sushiba
 
-## Uperf-Game-Turbo1.51
+## [v1.0.0] - 2026-08-23
 
-【更新内容】
-
-    ✅ 适配了更多处理器
-    ✅ 调整处理器识别
-    ✅ 调整各模式功耗和性能
-    ✅ 修复偶发性卡顿bug
-    ✅ 调整功耗模型
-    ✅ 调整并重写处理器识别
-    ✅ 更新内置asoul版本
-
-【Update Details】
-
-    ✅  Adapted to more processors
-    ✅  Adjusted processor identification
-    ✅  Adjusted power consumption and performance in various modes
-    ✅  Fixed occasional stuttering bugs
-    ✅  Adjusted power consumption model
-    ✅  Adjusted and rewrote processor identification
-    ✅  Updated built-in Asoul version
+### 🚀 Tính năng & Tối ưu hóa mới
+- **Hỗ trợ đầy đủ Google Tensor G3 (`zuma`):**
+  - Khởi tạo file cấu hình chuẩn `gs301.json` khớp bảng tần số thực tế 3 cụm nhân từ ADB (4x Cortex-A510, 4x Cortex-A715, 1x Cortex-X3).
+  - Tối ưu hóa bảng Energy Model và điểm ngọt tần số (**Sweet Frequency: 1.745GHz**) cho nhân Cortex-X3 nhằm triệt tiêu nhiệt độ khi sử dụng 4G/5G và chơi game.
+  - Mở rộng nhận diện thiết bị trong `libsysinfo.sh` cho toàn bộ dải thiết bị Tensor G3 (`husky`, `zuma`, `shiba`, `akita`).
+- **Tích hợp KernelSU WebUI:**
+  - Giao diện điều khiển 1 chạm hiện đại (Dark Glassmorphism).
+  - Hỗ trợ chuyển đổi tức thời 5 chế độ hiệu năng: `powersave`, `balance`, `auto`, `performance`, `fast`.
+  - Giám sát xung nhịp thực tế 3 cụm CPU và nhiệt độ SoC theo thời gian thực.
+  - Tích hợp trình xem nhật ký vận hành trực tiếp (`uperf_log.txt`).
+- **Nâng cấp trình cài đặt:**
+  - Tối ưu `setup.sh` cài đặt tự động, không yêu cầu thao tác phím cứng.
+  - Hỗ trợ đầy đủ KernelSU, KernelSU-Next, Magisk và APatch.
+- **Tài liệu:** Toàn bộ `README.md` được biên soạn bằng tiếng Việt chuẩn kỹ thuật.
