@@ -6,9 +6,9 @@
   <title>Uperf Sushiba</title>
   <style>
     :root {
-      --bg-primary: #070b12;
-      --bg-card: rgba(15, 23, 42, 0.75);
-      --bg-card-hover: rgba(30, 41, 69, 0.85);
+      --bg-primary: #070b14;
+      --bg-card: #0f172a;
+      --bg-card-hover: #1e293b;
       --border-color: rgba(255, 255, 255, 0.08);
       --accent-cyan: #00f0ff;
       --accent-green: #00ff88;
@@ -17,9 +17,9 @@
       --accent-red: #ef4444;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
     }
 
     * {
@@ -29,14 +29,15 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+      transform: translateZ(0);
     }
 
     body {
-      background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg-primary) 70%);
+      background: var(--bg-primary);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 14px;
-      padding-bottom: 50px;
+      padding: 12px;
+      padding-bottom: 40px;
     }
 
     .container {
@@ -49,43 +50,36 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      padding: 12px 16px;
+      margin-bottom: 12px;
+      padding: 12px 14px;
       background: var(--bg-card);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     .logo-area {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .logo-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
-      border-radius: 12px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
-      font-size: 20px;
+      font-size: 18px;
       color: #030712;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
     }
 
     .logo-text h1 {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      background: linear-gradient(90deg, #fff, #93c5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #fff;
     }
 
     .logo-text p {
@@ -97,27 +91,20 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 6px 12px;
-      background: rgba(0, 255, 136, 0.1);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      background: rgba(0, 255, 136, 0.12);
       border: 1px solid rgba(0, 255, 136, 0.3);
       color: var(--accent-green);
       border-radius: 20px;
     }
 
     .status-dot {
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       background: var(--accent-green);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-green);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     /* Tab Bar */
@@ -125,28 +112,26 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 6px;
-      margin-bottom: 16px;
-      background: rgba(0, 0, 0, 0.3);
+      margin-bottom: 14px;
+      background: #0b1120;
       padding: 4px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
     }
 
     .nav-tab {
-      padding: 8px 4px;
+      padding: 8px 2px;
       text-align: center;
       font-size: 12px;
       font-weight: 700;
       color: var(--text-muted);
       border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
     .nav-tab.active {
-      background: rgba(255, 255, 255, 0.1);
+      background: #1e293b;
       color: var(--text-main);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .tab-content {
@@ -157,14 +142,13 @@
       display: block;
     }
 
-    /* Real-Time Waveform Chart Card */
+    /* Waveform Chart Card */
     .chart-card {
       background: var(--bg-card);
-      backdrop-filter: blur(16px);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 14px;
-      margin-bottom: 16px;
+      padding: 12px;
+      margin-bottom: 14px;
     }
 
     .chart-header {
@@ -175,36 +159,32 @@
     }
 
     .chart-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--accent-cyan);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .chart-legend {
       display: flex;
-      gap: 10px;
-      font-size: 11px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--text-muted);
     }
 
     .legend-color {
-      width: 8px;
-      height: 8px;
+      display: inline-block;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
+      margin-right: 2px;
     }
 
     canvas#liveChart {
       width: 100%;
-      height: 100px;
+      height: 80px;
       display: block;
-      background: rgba(0, 0, 0, 0.4);
+      background: #050811;
       border-radius: var(--radius-sm);
     }
 
@@ -212,15 +192,15 @@
     .telemetry-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
+      gap: 6px;
+      margin-bottom: 14px;
     }
 
     .cluster-box {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 8px;
+      padding: 8px 4px;
       text-align: center;
     }
 
@@ -242,7 +222,7 @@
       height: 3px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 2px;
-      margin-top: 5px;
+      margin-top: 4px;
       overflow: hidden;
     }
 
@@ -250,17 +230,16 @@
       height: 100%;
       width: 0%;
       background: var(--accent-cyan);
-      transition: width 0.3s ease;
     }
 
     /* Section Title */
     .section-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.5px;
       color: var(--text-muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       padding-left: 2px;
     }
 
@@ -268,37 +247,30 @@
     .modes-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
     .mode-card {
       position: relative;
       background: var(--bg-card);
-      backdrop-filter: blur(16px);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 14px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      transition: all 0.2s ease;
       overflow: hidden;
     }
 
-    .mode-card:hover {
-      background: var(--bg-card-hover);
-      transform: translateY(-2px);
-    }
-
     .mode-card:active {
-      transform: scale(0.98);
+      background: var(--bg-card-hover);
     }
 
     .mode-card.active {
       border-color: var(--mode-color);
-      box-shadow: 0 0 20px rgba(var(--mode-color-rgb), 0.25), inset 0 0 15px rgba(var(--mode-color-rgb), 0.1);
+      background: #131d33;
     }
 
     .mode-card.active::before {
@@ -309,7 +281,6 @@
       bottom: 0;
       width: 4px;
       background: var(--mode-color);
-      box-shadow: 0 0 10px var(--mode-color);
     }
 
     .mode-info {
@@ -319,27 +290,25 @@
     }
 
     .mode-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .mode-card.active .mode-icon {
       background: rgba(var(--mode-color-rgb), 0.15);
-      border-color: var(--mode-color);
-      box-shadow: 0 0 10px rgba(var(--mode-color-rgb), 0.3);
+      border: 1px solid var(--mode-color);
     }
 
     .mode-text h3 {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
 
     .mode-text p {
@@ -348,8 +317,8 @@
     }
 
     .mode-radio {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       border: 2px solid rgba(255, 255, 255, 0.2);
       display: flex;
@@ -365,7 +334,7 @@
     .mode-radio-inner {
       width: 6px;
       height: 6px;
-      background: #050b14;
+      background: #070b14;
       border-radius: 50%;
       opacity: 0;
     }
@@ -386,8 +355,8 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 12px;
-      margin-bottom: 8px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -428,30 +397,30 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 12px;
-      margin-bottom: 14px;
+      padding: 10px;
+      margin-bottom: 12px;
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .app-input {
       flex: 1;
-      background: rgba(0, 0, 0, 0.3);
+      background: #070b14;
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: var(--radius-sm);
       font-size: 12px;
       outline: none;
     }
 
     .app-select {
-      background: rgba(15, 23, 42, 0.9);
+      background: #070b14;
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 8px;
+      padding: 6px;
       border-radius: var(--radius-sm);
-      font-size: 12px;
+      font-size: 11px;
       outline: none;
     }
 
@@ -459,10 +428,10 @@
       background: var(--accent-cyan);
       color: #030712;
       border: none;
-      padding: 8px 14px;
+      padding: 6px 12px;
       border-radius: var(--radius-sm);
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
     }
 
@@ -471,15 +440,15 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 14px;
-      margin-bottom: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .guard-text h4 {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       margin-bottom: 2px;
     }
@@ -487,65 +456,14 @@
     .guard-text p {
       font-size: 11px;
       color: var(--text-muted);
-      line-height: 1.3;
-    }
-
-    /* Toggle Switch */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 44px;
-      height: 24px;
-      flex-shrink: 0;
-    }
-
-    .switch input { opacity: 0; width: 0; height: 0; }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(255, 255, 255, 0.15);
-      transition: .3s;
-      border-radius: 24px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider { background-color: var(--accent-green); }
-    input:checked + .slider:before { transform: translateX(20px); }
-
-    /* Log Box */
-    .log-box {
-      background: rgba(3, 7, 18, 0.95);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 12px;
-      font-family: ui-monospace, monospace;
-      font-size: 11px;
-      color: #94a3b8;
-      max-height: 320px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      line-height: 1.4;
     }
 
     /* Actions Grid */
     .actions-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 14px;
+      gap: 8px;
+      margin-top: 12px;
     }
 
     .btn-action {
@@ -557,13 +475,24 @@
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
     }
 
-    .btn-action:active { transform: scale(0.97); }
+    .btn-action:active { background: #1e293b; }
+
+    /* Log Box */
+    .log-box {
+      background: #030712;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      color: #94a3b8;
+      max-height: 280px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
 
     /* Toast */
     .toast {
@@ -571,15 +500,15 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: rgba(15, 23, 42, 0.95);
+      background: #1e293b;
       border: 1px solid var(--accent-cyan);
       color: #fff;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 12px;
       font-weight: 700;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      transition: transform 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.25s ease;
       z-index: 999;
       pointer-events: none;
     }
@@ -614,39 +543,39 @@
 
     <!-- TAB 1: OVERVIEW -->
     <div id="tab-overview" class="tab-content active">
-      <!-- Live Real-Time Waveform Chart -->
+      <!-- Real-Time Waveform Chart -->
       <div class="chart-card">
         <div class="chart-header">
-          <span class="chart-title">Đồ thị tải xung & nhiệt độ live</span>
+          <span class="chart-title">Đồ thị xung & nhiệt độ live</span>
           <div class="chart-legend">
-            <div class="legend-item"><span class="legend-color" style="background: var(--accent-cyan);"></span> Mid</div>
-            <div class="legend-item"><span class="legend-color" style="background: var(--accent-red);"></span> X3</div>
-            <div class="legend-item"><span class="legend-color" style="background: var(--accent-orange);"></span> °C</div>
+            <span><span class="legend-color" style="background: var(--accent-cyan);"></span>Mid</span>
+            <span><span class="legend-color" style="background: var(--accent-red);"></span>X3</span>
+            <span><span class="legend-color" style="background: var(--accent-orange);"></span>°C</span>
           </div>
         </div>
-        <canvas id="liveChart" width="540" height="100"></canvas>
+        <canvas id="liveChart" width="540" height="80"></canvas>
       </div>
 
       <!-- Telemetry Grid -->
       <div class="telemetry-grid">
         <div class="cluster-box">
           <div class="cluster-name">4x Little (0-3)</div>
-          <div class="cluster-freq" id="freq-c0">--- MHz</div>
+          <div class="cluster-freq" id="freq-c0">---</div>
           <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c0"></div></div>
         </div>
         <div class="cluster-box">
           <div class="cluster-name">4x Mid (4-7)</div>
-          <div class="cluster-freq" id="freq-c1">--- MHz</div>
+          <div class="cluster-freq" id="freq-c1">---</div>
           <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c1"></div></div>
         </div>
         <div class="cluster-box">
           <div class="cluster-name">1x Core X3 (8)</div>
-          <div class="cluster-freq" id="freq-c2">--- MHz</div>
+          <div class="cluster-freq" id="freq-c2">---</div>
           <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-c2"></div></div>
         </div>
         <div class="cluster-box">
-          <div class="cluster-name">Mali-G715 GPU</div>
-          <div class="cluster-freq" id="freq-gpu">--- MHz</div>
+          <div class="cluster-name">Mali GPU / °C</div>
+          <div class="cluster-freq" id="freq-gpu">---</div>
           <div class="cluster-bar-wrap"><div class="cluster-bar" id="bar-gpu" style="background: var(--accent-purple);"></div></div>
         </div>
       </div>
@@ -684,7 +613,7 @@
             <div class="mode-icon">🔄</div>
             <div class="mode-text">
               <h3>Auto (Tự động thích ứng)</h3>
-              <p>Tự nhận diện theo quy tắc Per-App và tải thực tế</p>
+              <p>Tự nhận diện theo Per-App và phân tích khung hình</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -696,7 +625,7 @@
             <div class="mode-icon">🚀</div>
             <div class="mode-text">
               <h3>Performance (Mượt tối đa)</h3>
-              <p>Phản hồi nhanh tức thì, giải phóng toàn bộ xung nhịp</p>
+              <p>Phản hồi tức thì, giải phóng toàn bộ xung nhịp</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -707,8 +636,8 @@
           <div class="mode-info">
             <div class="mode-icon">🔥</div>
             <div class="mode-text">
-              <h3>Fast / Turbo (Chơi game nặng)</h3>
-              <p>Cấp tối đa xung CPU và GPU 890MHz cho Gaming</p>
+              <h3>Fast / Turbo (Gaming)</h3>
+              <p>Cấp tối đa xung CPU và GPU 890MHz cho Game nặng</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -718,7 +647,7 @@
 
     <!-- TAB 2: PER-APP MANAGER -->
     <div id="tab-perapp" class="tab-content">
-      <div class="section-title">Thêm quy tắc ứng dụng tùy chỉnh</div>
+      <div class="section-title">Thêm ứng dụng tùy chỉnh</div>
       <div class="add-app-box">
         <input type="text" id="custom-pkg" class="app-input" placeholder="com.example.app">
         <select id="custom-mode" class="app-select">
@@ -729,44 +658,36 @@
         <button class="btn-add" onclick="addCustomRule()">Thêm</button>
       </div>
 
-      <div class="section-title">Danh sách ứng dụng đã cấu hình</div>
-      <div id="perapp-list">
-        <!-- Rendered via JS -->
-      </div>
+      <div class="section-title">Danh sách ứng dụng</div>
+      <div id="perapp-list"></div>
     </div>
 
-    <!-- TAB 3: THERMAL GUARD & SETTINGS -->
+    <!-- TAB 3: THERMAL GUARD -->
     <div id="tab-guard" class="tab-content">
-      <div class="section-title">Cơ chế bảo vệ phần cứng</div>
+      <div class="section-title">Bảo vệ phần cứng</div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>⚡ Bảo vệ nhiệt độ khi Sạc pin</h4>
-          <p>Tự động hạ dòng sạc khi pin > 40.5°C để chống chai phồng và quá nhiệt.</p>
+          <h4>⚡ Bảo vệ sạc pin (Thermal Guard)</h4>
+          <p>Tự giảm dòng sạc khi pin > 40.5°C để chống chai phồng.</p>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="guard-charging" checked onchange="saveGuardSettings()">
-          <span class="slider"></span>
-        </label>
+        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ĐANG CHẠY</span>
       </div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>🎮 Mali-G715 GPU Dynamic Clamp</h4>
-          <p>Khống chế trần xung GPU ở 580-649MHz khi máy ấm để giữ FPS ổn định.</p>
+          <h4>🎮 Mali-G715 GPU DVFS Clamp</h4>
+          <p>Khóa trần GPU ở 580-649MHz khi máy ấm để giữ FPS.</p>
         </div>
-        <label class="switch">
-          <input type="checkbox" id="guard-gpu" checked onchange="saveGuardSettings()">
-          <span class="slider"></span>
-        </label>
+        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">TỰ ĐỘNG</span>
       </div>
 
       <div class="guard-card">
         <div class="guard-text">
           <h4>⏱️ PollingDelay 20s (Thermal HAL)</h4>
-          <p>Trích xuất từ vendor máy, cảm biến nhiệt phản hồi sau mỗi 20s (Active).</p>
+          <p>Cảm biến nhiệt độ phản hồi nhanh sau mỗi 20 giây.</p>
         </div>
-        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ĐÃ KÍCH HOẠT</span>
+        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
       </div>
 
       <div class="actions-grid">
@@ -777,11 +698,11 @@
 
     <!-- TAB 4: LOGS -->
     <div id="tab-logs" class="tab-content">
-      <div class="section-title">Nhật ký vận hành trực tiếp</div>
-      <div class="log-box" id="log-text">Đang tải nhật ký...</div>
+      <div class="section-title">Nhật ký vận hành</div>
+      <div class="log-box" id="log-text">Đang tải...</div>
       <div class="actions-grid">
-        <button class="btn-action" onclick="fetchLogs()">🔄 Làm mới nhật ký</button>
-        <button class="btn-action" onclick="clearLogs()">🗑️ Xóa màn hình</button>
+        <button class="btn-action" onclick="fetchLogs()">🔄 Làm mới</button>
+        <button class="btn-action" onclick="clearLogs()">🗑️ Xóa</button>
       </div>
     </div>
   </div>
@@ -791,24 +712,23 @@
   <script>
     let currentMode = "auto";
     let chartHistory = { mid: [], big: [], temp: [] };
-    const maxDataPoints = 40;
+    const maxDataPoints = 35;
+    let isPollingBusy = false;
 
-    // Default Per-App rules dictionary
     let appRules = [
       { name: "Facebook", pkg: "com.facebook.katana", mode: "powersave" },
       { name: "Messenger", pkg: "com.facebook.orca", mode: "powersave" },
       { name: "TikTok", pkg: "com.ss.android.ugc.trill", mode: "balance" },
       { name: "Zalo", pkg: "com.zing.zalo", mode: "powersave" },
       { name: "YouTube", pkg: "com.google.android.youtube", mode: "powersave" },
-      { name: "Google Chrome", pkg: "com.android.chrome", mode: "balance" },
-      { name: "Google Camera", pkg: "com.google.android.GoogleCamera", mode: "balance" },
-      { name: "Liên Quân Mobile", pkg: "com.garena.game.kgvn", mode: "fast" },
-      { name: "PUBG Mobile", pkg: "com.tencent.ig", mode: "fast" },
-      { name: "Genshin Impact", pkg: "com.miHoYo.GenshinImpact", mode: "fast" },
-      { name: "Honkai Star Rail", pkg: "com.miHoYo.hkrpg", mode: "fast" }
+      { name: "Chrome", pkg: "com.android.chrome", mode: "balance" },
+      { name: "Camera", pkg: "com.google.android.GoogleCamera", mode: "balance" },
+      { name: "Liên Quân", pkg: "com.garena.game.kgvn", mode: "fast" },
+      { name: "PUBG", pkg: "com.tencent.ig", mode: "fast" },
+      { name: "Genshin", pkg: "com.miHoYo.GenshinImpact", mode: "fast" }
     ];
 
-    // Bridge for KernelSU / Magisk Shell Execution
+    // Ultra-Fast Native IPC Bridge
     async function exec(cmd) {
       return new Promise((resolve) => {
         try {
@@ -837,7 +757,7 @@
       const toast = document.getElementById("toast");
       toast.innerText = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2000);
+      setTimeout(() => toast.classList.remove("show"), 1800);
     }
 
     function switchTab(tabId) {
@@ -853,8 +773,6 @@
       updateUI();
       showToast(`Chế độ: ${mode.toUpperCase()}`);
       await exec(`sh /data/powercfg.sh ${mode}`);
-      await exec(`echo "${mode}" > /sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null || true`);
-      setTimeout(refreshTelemetry, 300);
     }
 
     function updateUI() {
@@ -866,52 +784,71 @@
       });
     }
 
+    // 1-Shot Batch Telemetry Query (Only 1 root process fork instead of 6)
     async function refreshTelemetry() {
-      // 1. Check current mode
-      let mode = (await exec("cat /sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null || cat /data/cur_powermode.txt 2>/dev/null") || "").trim().toLowerCase();
-      if (mode && ["powersave", "balance", "auto", "performance", "fast"].includes(mode)) {
-        currentMode = mode;
-        updateUI();
+      if (isPollingBusy) return;
+      isPollingBusy = true;
+
+      try {
+        const batchOutput = await exec(
+          "cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq " +
+          "/sys/devices/system/cpu/cpufreq/policy4/scaling_cur_freq " +
+          "/sys/devices/system/cpu/cpufreq/policy8/scaling_cur_freq " +
+          "/sys/devices/platform/1f000000.mali/cur_freq " +
+          "/sys/class/thermal/thermal_zone0/temp " +
+          "/sdcard/Android/yc/uperf/cur_powermode.txt 2>/dev/null"
+        );
+
+        if (batchOutput) {
+          const lines = batchOutput.trim().split("\n");
+          const f0 = parseInt(lines[0]) || 0;
+          const f1 = parseInt(lines[1]) || 0;
+          const f2 = parseInt(lines[2]) || 0;
+          const fgpu = parseInt(lines[3]) || 0;
+          let temp = parseInt(lines[4]) || 0;
+          const mode = (lines[5] || "").trim().toLowerCase();
+
+          if (mode && mode !== currentMode && ["powersave", "balance", "auto", "performance", "fast"].includes(mode)) {
+            currentMode = mode;
+            updateUI();
+          }
+
+          if (temp > 1000) temp = temp / 1000;
+          else if (temp > 100) temp = temp / 10;
+
+          if (f0 > 0) {
+            document.getElementById("freq-c0").innerText = `${Math.round(f0 / 1000)}M`;
+            document.getElementById("bar-c0").style.width = `${Math.min(100, Math.round((f0 / 1704000) * 100))}%`;
+          }
+          if (f1 > 0) {
+            document.getElementById("freq-c1").innerText = `${Math.round(f1 / 1000)}M`;
+            document.getElementById("bar-c1").style.width = `${Math.min(100, Math.round((f1 / 2367000) * 100))}%`;
+          }
+          if (f2 > 0) {
+            document.getElementById("freq-c2").innerText = `${Math.round(f2 / 1000)}M`;
+            document.getElementById("bar-c2").style.width = `${Math.min(100, Math.round((f2 / 2914000) * 100))}%`;
+          }
+          if (fgpu > 0 || temp > 0) {
+            document.getElementById("freq-gpu").innerText = `${Math.round(fgpu / 1000)}M | ${temp > 0 ? temp.toFixed(0) : '--'}°C`;
+            document.getElementById("bar-gpu").style.width = `${Math.min(100, Math.round((fgpu / 890000) * 100))}%`;
+          }
+
+          // Push to chart
+          chartHistory.mid.push(f1 > 0 ? f1 / 2367000 : 0);
+          chartHistory.big.push(f2 > 0 ? f2 / 2914000 : 0);
+          chartHistory.temp.push(temp > 0 ? Math.min(1, temp / 60) : 0.5);
+
+          if (chartHistory.mid.length > maxDataPoints) chartHistory.mid.shift();
+          if (chartHistory.big.length > maxDataPoints) chartHistory.big.shift();
+          if (chartHistory.temp.length > maxDataPoints) chartHistory.temp.shift();
+
+          requestAnimationFrame(drawLiveChart);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        isPollingBusy = false;
       }
-
-      // 2. CPU & GPU Frequencies
-      const f0 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq 2>/dev/null") || "0");
-      const f1 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy4/scaling_cur_freq 2>/dev/null") || "0");
-      const f2 = parseInt(await exec("cat /sys/devices/system/cpu/cpufreq/policy8/scaling_cur_freq 2>/dev/null") || "0");
-      const fgpu = parseInt(await exec("cat /sys/devices/platform/1f000000.mali/cur_freq 2>/dev/null") || "0");
-
-      if (f0 > 0) {
-        document.getElementById("freq-c0").innerText = `${Math.round(f0 / 1000)}M`;
-        document.getElementById("bar-c0").style.width = `${Math.min(100, Math.round((f0 / 1704000) * 100))}%`;
-      }
-      if (f1 > 0) {
-        document.getElementById("freq-c1").innerText = `${Math.round(f1 / 1000)}M`;
-        document.getElementById("bar-c1").style.width = `${Math.min(100, Math.round((f1 / 2367000) * 100))}%`;
-      }
-      if (f2 > 0) {
-        document.getElementById("freq-c2").innerText = `${Math.round(f2 / 1000)}M`;
-        document.getElementById("bar-c2").style.width = `${Math.min(100, Math.round((f2 / 2914000) * 100))}%`;
-      }
-      if (fgpu > 0) {
-        document.getElementById("freq-gpu").innerText = `${Math.round(fgpu / 1000)}M`;
-        document.getElementById("bar-gpu").style.width = `${Math.min(100, Math.round((fgpu / 890000) * 100))}%`;
-      }
-
-      // 3. Temp
-      let temp = parseInt(await exec("cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || cat /sys/class/power_supply/battery/temp 2>/dev/null") || "0");
-      if (temp > 1000) temp = temp / 1000;
-      else if (temp > 100) temp = temp / 10;
-
-      // Update Chart Data
-      chartHistory.mid.push(f1 > 0 ? f1 / 2367000 : 0);
-      chartHistory.big.push(f2 > 0 ? f2 / 2914000 : 0);
-      chartHistory.temp.push(temp > 0 ? Math.min(1, temp / 60) : 0.5);
-
-      if (chartHistory.mid.length > maxDataPoints) chartHistory.mid.shift();
-      if (chartHistory.big.length > maxDataPoints) chartHistory.big.shift();
-      if (chartHistory.temp.length > maxDataPoints) chartHistory.temp.shift();
-
-      drawLiveChart();
     }
 
     function drawLiveChart() {
@@ -923,34 +860,26 @@
 
       ctx.clearRect(0, 0, w, h);
 
-      // Draw Grid
-      ctx.strokeStyle = "rgba(255,255,255,0.05)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(0, h * 0.5); ctx.lineTo(w, h * 0.5);
-      ctx.stroke();
-
-      function plotLine(data, color) {
+      function plot(data, color) {
         if (data.length < 2) return;
         ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         const step = w / (maxDataPoints - 1);
-        data.forEach((val, idx) => {
-          const x = idx * step;
-          const y = h - (val * (h - 10) + 5);
-          if (idx === 0) ctx.moveTo(x, y);
+        for (let i = 0; i < data.length; i++) {
+          const x = i * step;
+          const y = h - (data[i] * (h - 8) + 4);
+          if (i === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
-        });
+        }
         ctx.stroke();
       }
 
-      plotLine(chartHistory.mid, "#00f0ff");
-      plotLine(chartHistory.big, "#ef4444");
-      plotLine(chartHistory.temp, "#f59e0b");
+      plot(chartHistory.mid, "#00f0ff");
+      plot(chartHistory.big, "#ef4444");
+      plot(chartHistory.temp, "#f59e0b");
     }
 
-    // Per-App Manager
     function renderPerAppList() {
       const container = document.getElementById("perapp-list");
       container.innerHTML = "";
@@ -965,7 +894,7 @@
           <div class="app-mode-chips">
             <span class="mode-chip ${item.mode === 'powersave' ? 'active-powersave' : ''}" onclick="setAppRule(${index}, 'powersave')">🍃 Mát</span>
             <span class="mode-chip ${item.mode === 'balance' ? 'active-balance' : ''}" onclick="setAppRule(${index}, 'balance')">⚖️ Vừa</span>
-            <span class="mode-chip ${item.mode === 'fast' ? 'active-fast' : ''}" onclick="setAppRule(${index}, 'fast')">🔥 Max</span>
+            <span class="mode-chip ${item.mode === 'fast' ? 'active-fast' : ''}" onclick="setAppRule(${index}, 'fast')">🔥 Game</span>
           </div>
         `;
         container.appendChild(div);
@@ -976,7 +905,7 @@
       appRules[index].mode = mode;
       renderPerAppList();
       await savePerAppToFile();
-      showToast(`Đã gán ${appRules[index].name} -> ${mode.toUpperCase()}`);
+      showToast(`${appRules[index].name} -> ${mode.toUpperCase()}`);
     }
 
     async function addCustomRule() {
@@ -987,7 +916,7 @@
       document.getElementById("custom-pkg").value = "";
       renderPerAppList();
       await savePerAppToFile();
-      showToast(`Đã thêm: ${pkg}`);
+      showToast(`Đã thêm ${pkg}`);
     }
 
     async function savePerAppToFile() {
@@ -1000,8 +929,8 @@
 
     async function fetchLogs() {
       const el = document.getElementById("log-text");
-      el.innerText = "Đang đọc nhật ký...";
-      const log = await exec("tail -n 60 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || echo 'Chưa có nhật ký.'");
+      el.innerText = "Đang tải...";
+      const log = await exec("tail -n 40 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || echo 'Chưa có nhật ký.'");
       el.innerText = log || "Nhật ký trống.";
     }
 
@@ -1010,26 +939,22 @@
     }
 
     async function restartDaemon() {
-      showToast("Đang khởi động lại Uperf...");
+      showToast("Khởi động lại Uperf...");
       await exec("killall -9 uperf 2>/dev/null || true");
       await exec("sh /data/powercfg.sh auto 2>/dev/null || true");
-      showToast("Đã khởi động lại thành công!");
+      showToast("Đã khởi động lại!");
     }
 
     function reloadRules() {
       savePerAppToFile();
-      showToast("Đã nạp lại danh sách Per-App!");
-    }
-
-    function saveGuardSettings() {
-      showToast("Đã lưu thiết lập bảo vệ nhiệt!");
+      showToast("Đã nạp lại Per-App!");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
       renderPerAppList();
       updateUI();
       refreshTelemetry();
-      setInterval(refreshTelemetry, 1000);
+      setInterval(refreshTelemetry, 2500);
     });
   </script>
 </body>
