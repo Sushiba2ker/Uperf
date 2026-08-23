@@ -1,9 +1,9 @@
 id=uperf
 name=Uperf Sushiba
-version=1.0.0
-versionCode=240823
+version=1.1.0
+versionCode=240824
 author=Sushiba
-description=Bộ điều phối hiệu năng động & tối ưu nhiệt độ cho Google Tensor G3 (Pixel 8 / 8 Pro / 8a) tích hợp KernelSU WebUI.
+description=Bộ điều phối hiệu năng động cho Tensor G3 tích hợp KernelSU WebUI và bản vá PollingDelay 20s cho Thermal HAL.
 updateJson=https://github.com/Sushiba2ker/Uperf/raw/main/version.json
 ASOPT_VERSIONCODE=260
 web=true
