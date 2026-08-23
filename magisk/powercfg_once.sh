@@ -196,14 +196,9 @@ disable_userspace_boost() {
 }
 
 restart_userspace_boost() {
-    # Qualcomm&MTK perfhal
-    perfhal_start
-
-    # libperfmgr
-    start vendor.power-hal-1-0
-    start vendor.power-hal-1-1
-    start vendor.power-hal-1-2
-    start vendor.power-hal-1-3
+    # Keep vendor.power-hal-* / perf-hal stopped so libperfmgr cannot
+    # overwrite Mali/MIF/DSU clamps on Tensor G3.
+    return 0
 }
 
 disable_userspace_thermal() {

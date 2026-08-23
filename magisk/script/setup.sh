@@ -49,7 +49,7 @@ install_uperf() {
     echo "- ro.product.board=$(getprop ro.product.board)"
 
     local target
-    local cfgname
+    cfgname=""
     target="$(getprop ro.board.platform)"
     cfgname="$(get_config_name $target)"
     if [ "$cfgname" == "unsupported" ]; then
@@ -178,7 +178,12 @@ echo "- 正在为您安装Uperf Game Turbo❤️"
 install_uperf
 #unlock_limit
 echo "* Uperf Game Turbo installed successfully."
-install_corp
-echo "* asopt installed."
+if [ "$cfgname" = "gs301" ]; then
+    echo "* Skip asopt on Tensor G3 (9 cores; bundled AsoulOpt has no cpu8 mask)."
+    rm -rf "$MODULE_PATH"/modules/asoulopt.zip
+else
+    install_corp
+    echo "* asopt installed."
+fi
 echo "* Reboot to activate module."
 fix_module_prop
