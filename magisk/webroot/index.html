@@ -1010,7 +1010,7 @@
             if (parts.length >= 2) {
               const pkg = parts[0];
               const mode = parts[1];
-              if (/^[a-zA-Z0-9._]+$/.test(pkg)) {
+              if (/^[a-zA-Z0-9._]+$/.test(pkg) && ["powersave", "balance", "fast", "performance", "auto"].includes(mode)) {
                 loaded.push({ name: pkg.split('.').pop(), pkg: pkg, mode: mode });
               }
             }

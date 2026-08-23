@@ -32,10 +32,3 @@ if [ -f /proc/sys/net/ipv4/tcp_congestion_control ]; then
         echo "bbr3" > /proc/sys/net/ipv4/tcp_congestion_control 2>/dev/null
     fi
 fi
-
-# 5. ZRAM ZSTD High-Efficiency Memory Compression
-if [ -f /sys/block/zram0/comp_algorithm ]; then
-    if grep -q "zstd" /sys/block/zram0/comp_algorithm 2>/dev/null; then
-        echo "zstd" > /sys/block/zram0/comp_algorithm 2>/dev/null
-    fi
-fi

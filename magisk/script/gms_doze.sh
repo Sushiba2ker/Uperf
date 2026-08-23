@@ -5,6 +5,14 @@
 # Author: Sushiba
 #
 
+# Reset F2FS GC to normal mode upon exit/termination
+cleanup_f2fs() {
+    for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
+        [ -f "$f2fs_node" ] && echo 0 > "$f2fs_node" 2>/dev/null
+    done
+}
+trap cleanup_f2fs EXIT INT TERM
+
 (
     # Wait until system is fully booted and user storage is unlocked
     until [ "$(getprop sys.boot_completed)" = "1" ] && [ -d /sdcard/Android ]; do
@@ -22,13 +30,24 @@
 
     # F2FS Smart Garbage Collection background service
     while true; do
-        sleep 120
-        # Check if screen is off (display interactive = false)
-        if dumpsys power | grep -q "mHoldingDisplaySuspendBlocker=false" 2>/dev/null; then
+        sleep 180
+        # Check if screen is off via display suspend blocker or wakefulness state
+        pwr_dump="$(dumpsys power 2>/dev/null)"
+        is_screen_off=false
+
+        if echo "$pwr_dump" | grep -q "mHoldingDisplaySuspendBlocker=false"; then
+            is_screen_off=true
+        elif echo "$pwr_dump" | grep -qE "mWakefulness=(Asleep|Dozing)"; then
+            is_screen_off=true
+        fi
+
+        if [ "$is_screen_off" = "true" ]; then
+            # Screen is OFF: allow maintenance GC during sleep or charging
             for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
                 [ -f "$f2fs_node" ] && echo 1 > "$f2fs_node" 2>/dev/null
             done
         else
+            # Screen is ON: strictly disable GC to eliminate frame drops & micro-stutter
             for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
                 [ -f "$f2fs_node" ] && echo 0 > "$f2fs_node" 2>/dev/null
             done
