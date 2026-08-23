@@ -172,11 +172,8 @@ echo "* ❤️吟惋兮❤️"
 echo "- 正在为您安装Uperf Game Turbo❤️"
 install_uperf
 #unlock_limit
-echo "* Uperf Game Turbo安装成功❤️"
-#install_corp
-check_asopt
-echo "* asopt安装成功❤️"
-echo "* 重启即可"
-echo "* 欢迎使用Uperf Game Turbo"
-echo "* 祝体验愉快"
+echo "* Uperf Game Turbo installed successfully."
+install_corp
+echo "* asopt installed."
+echo "* Reboot to activate module."
 fix_module_prop
