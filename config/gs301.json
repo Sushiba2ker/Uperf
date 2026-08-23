@@ -1,7 +1,8 @@
 {
   "meta": {
     "name": "Google Tensor G3", 
-    "author": "Sushiba"
+    "author": "Sushiba",
+    "note": "Fg cpuset excludes cpu4-5 and cpu8 to reserve Mid/X3 cores for SurfaceFlinger and top-app UI rendering."
   }, 
   "modules": {
     "switcher": {

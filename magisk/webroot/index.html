@@ -1039,7 +1039,7 @@
 
     async function restartDaemon() {
       showToast("Khởi động lại Uperf...");
-      await exec("killall -9 uperf 2>/dev/null; /data/adb/modules/uperf/bin/uperf /sdcard/Android/yc/uperf/uperf.json >/dev/null 2>&1 &");
+      await exec("killall -9 uperf 2>/dev/null; /data/adb/modules/uperf/bin/uperf -o /sdcard/Android/yc/uperf/uperf_log.txt /sdcard/Android/yc/uperf/uperf.json >/dev/null 2>&1 &");
       await exec("sh /data/powercfg.sh auto 2>/dev/null || true");
       showToast("Đã khởi động lại Uperf!");
     }

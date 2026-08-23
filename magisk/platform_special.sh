@@ -25,6 +25,11 @@ BASEDIR="$(dirname "$(readlink -f "$0")")"
 
 
 
+# Early return for Google Tensor (Mali GPU, non-MTK, non-Qualcomm)
+if [ "$(is_mtk)" != "true" ] && [ ! -e "/sys/class/kgsl/kgsl-3d0" ]; then
+    return 0 2>/dev/null || exit 0
+fi
+
 # MTK specified
 if [ "$(is_mtk)" = "true" ]; then
     if [ -d "/data/adb/modules/asoul_affinity_opt" ];then

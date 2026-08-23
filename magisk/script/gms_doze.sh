@@ -13,13 +13,10 @@
     sleep 10
 
     # Whitelist critical communication and push services so notifications NEVER fail
+    dumpsys deviceidle whitelist +com.google.android.gms 2>/dev/null
     dumpsys deviceidle whitelist +com.zing.zalo 2>/dev/null
     dumpsys deviceidle whitelist +com.facebook.orca 2>/dev/null
     dumpsys deviceidle whitelist +org.telegram.messenger 2>/dev/null
     dumpsys deviceidle whitelist +com.whatsapp 2>/dev/null
     dumpsys deviceidle whitelist +com.google.android.apps.messaging 2>/dev/null
-
-    # Put GMS into battery optimization
-    GMS="com.google.android.gms"
-    dumpsys deviceidle whitelist -$GMS 2>/dev/null
 ) &

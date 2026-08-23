@@ -204,7 +204,6 @@ restart_userspace_boost() {
     start vendor.power-hal-1-1
     start vendor.power-hal-1-2
     start vendor.power-hal-1-3
-    start vendor.power-hal-aidl
 }
 
 disable_userspace_thermal() {
@@ -239,22 +238,6 @@ disable_userspace_thermal
 restart_userspace_thermal
 disable_userspace_boost
 restart_userspace_boost
-
-# unify value
-disable_kernel_boost
-disable_hotplug
-unify_sched
-unify_devfreq
-unify_lpm
-
-
-BASEDIR="$(dirname "$(readlink -f "$0")")"
-. "$BASEDIR"/pathinfo.sh
-. "$BASEDIR"/libcommon.sh
-. "$BASEDIR"/libpowercfg.sh
-. "$BASEDIR"/libcgroup.sh
-. "$BASEDIR"/libsysinfo.sh
-
 
 if [ "$(is_mtk)" == "true" ]; then
    
