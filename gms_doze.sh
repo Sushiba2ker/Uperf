@@ -65,18 +65,14 @@ is_screen_off() {
                 for i in 1 2 3 4; do cmd deviceidle step deep 2>/dev/null; done
             fi
 
-            # 4. Enable JobScheduler flex-policy idle mode (Android 13+)
-            cmd jobscheduler enable-flex-policy --option idle 2>/dev/null
-
             was_screen_off=true
         else
-            # Screen is ON: strictly disable GC & reset flex policy to eliminate frame drops & micro-stutter
+            # Screen is ON: strictly disable GC to eliminate frame drops & micro-stutter
             for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
                 [ -f "$f2fs_node" ] && echo 0 > "$f2fs_node" 2>/dev/null
             done
 
             if [ "$was_screen_off" = "true" ]; then
-                cmd jobscheduler reset-flex-policy 2>/dev/null
                 dumpsys deviceidle unforce 2>/dev/null
                 was_screen_off=false
             fi

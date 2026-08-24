@@ -1000,10 +1000,10 @@
 
     async function toggleDeepDoze(enable) {
       if (enable) {
-        await exec("dumpsys deviceidle enable all 2>/dev/null; cmd jobscheduler enable-flex-policy --option idle 2>/dev/null");
+        await exec("dumpsys deviceidle enable all 2>/dev/null; dumpsys deviceidle force-idle deep 2>/dev/null");
         showToast("Đã bật Siêu Ngủ Sâu!");
       } else {
-        await exec("dumpsys deviceidle unforce 2>/dev/null; cmd jobscheduler reset-flex-policy 2>/dev/null");
+        await exec("dumpsys deviceidle unforce 2>/dev/null");
         showToast("Đã hoàn nguyên Doze mặc định.");
       }
     }
