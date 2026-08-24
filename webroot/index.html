@@ -110,8 +110,8 @@
     /* Tab Bar */
     .nav-tabs {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
       margin-bottom: 14px;
       background: #0b1120;
       padding: 4px;
@@ -122,16 +122,18 @@
     .nav-tab {
       padding: 8px 2px;
       text-align: center;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--text-muted);
       border-radius: var(--radius-sm);
       cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
     }
 
     .nav-tab.active {
       background: #1e293b;
-      color: var(--text-main);
+      color: var(--accent-cyan);
     }
 
     .tab-content {
@@ -248,39 +250,27 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-bottom: 14px;
     }
 
     .mode-card {
-      position: relative;
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-md);
       padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      overflow: hidden;
+      transition: all 0.2s ease;
     }
 
-    .mode-card:active {
+    .mode-card:hover {
       background: var(--bg-card-hover);
     }
 
     .mode-card.active {
       border-color: var(--mode-color);
-      background: #131d33;
-    }
-
-    .mode-card.active::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--mode-color);
+      background: rgba(255, 255, 255, 0.03);
     }
 
     .mode-info {
@@ -290,13 +280,13 @@
     }
 
     .mode-icon {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 16px;
       background: rgba(255, 255, 255, 0.05);
     }
 
@@ -349,6 +339,78 @@
     .mode-auto { --mode-color: var(--accent-orange); --mode-color-rgb: 245, 158, 11; }
     .mode-performance { --mode-color: var(--accent-purple); --mode-color-rgb: 168, 85, 247; }
     .mode-fast { --mode-color: var(--accent-red); --mode-color-rgb: 239, 68, 68; }
+
+    /* Interactive Toggles in Tweaks Tab */
+    .tweak-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tweak-text h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .tweak-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* Modern Switch UI */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
+      transition: .25s;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #fff;
+      transition: .25s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-cyan);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: #030712;
+    }
 
     /* Per-App Manager Styles */
     .app-card {
@@ -467,7 +529,7 @@
     }
 
     .btn-action {
-      background: var(--bg-card);
+      background: #1e293b;
       border: 1px solid var(--border-color);
       color: var(--text-main);
       padding: 10px;
@@ -475,26 +537,36 @@
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .btn-action:active { background: #1e293b; }
+    .btn-action:hover {
+      background: #334155;
+      border-color: var(--accent-cyan);
+    }
+
+    .btn-action-primary {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 255, 136, 0.15));
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
 
     /* Log Box */
     .log-box {
-      background: #030712;
+      background: #050811;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
       padding: 10px;
-      font-family: ui-monospace, monospace;
-      font-size: 11px;
+      font-family: monospace;
+      font-size: 10px;
       color: #94a3b8;
-      max-height: 280px;
+      height: 280px;
       overflow-y: auto;
       white-space: pre-wrap;
-      line-height: 1.4;
+      word-break: break-all;
     }
 
-    /* Toast */
+    /* Toast Notification */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -524,7 +596,7 @@
         <div class="logo-icon">⚡</div>
         <div class="logo-text">
           <h1>Uperf Sushiba</h1>
-          <p id="soc-info">Google Tensor G3 (Zuma - 9 Cores)</p>
+          <p id="soc-info">Tensor G3 & Frosty Engine</p>
         </div>
       </div>
       <div class="status-badge">
@@ -536,8 +608,9 @@
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
       <div class="nav-tab active" onclick="switchTab('overview')">⚡ Tổng quan</div>
+      <div class="nav-tab" onclick="switchTab('tweaks')">🧊 Tinh chỉnh</div>
       <div class="nav-tab" onclick="switchTab('perapp')">📱 Ứng dụng</div>
-      <div class="nav-tab" onclick="switchTab('guard')">🛡️ Bảo vệ</div>
+      <div class="nav-tab" onclick="switchTab('guard')">🛡️ Phần cứng</div>
       <div class="nav-tab" onclick="switchTab('logs')">📜 Nhật ký</div>
     </div>
 
@@ -645,7 +718,68 @@
       </div>
     </div>
 
-    <!-- TAB 2: PER-APP MANAGER -->
+    <!-- TAB 2: TWEAKS (FROSTY INTEGRATION) -->
+    <div id="tab-tweaks" class="tab-content">
+      <div class="section-title">Công tắc Tối ưu hóa (Frosty Matrix)</div>
+
+      <!-- Tweak 1: GMS Freeze -->
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>❄️ Đóng băng GMS Telemetry & Ads</h4>
+          <p>Tắt 80+ dịch vụ thu thập, quảng cáo ngầm của Google. Giữ 100% FCM Push.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-gms-freeze" checked onchange="toggleGmsFreeze(this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Tweak 2: Kernel & VM Tweaks -->
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>⚡ Tinh chỉnh Kernel, VM & I/O</h4>
+          <p>Khóa Watermark Boost 0, nén đa luồng ZRAM, tối ưu queue UFS 128KB.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-kernel-tweaks" checked onchange="toggleKernelTweaks(this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Tweak 3: Framework Tracing & Telemetry -->
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>🛡️ Triệt tiêu Framework Tracing</h4>
+          <p>Tắt ftrace, Jank Monitor frame tracing, bật Zygote Compaction & USAP Pool.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-sys-opt" checked onchange="toggleSysOpt(this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Tweak 4: Deep Sleep & Screen-Off Maintenance -->
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>💤 Siêu Ngủ Sâu & Dọn RAM khi ngủ</h4>
+          <p>Kích hoạt JobScheduler Flex-Idle, F2FS GC và xả PageCache khi khóa màn hình.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-deep-doze" checked onchange="toggleDeepDoze(this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="section-title" style="margin-top: 14px;">Thao tác Nhanh (Fast Actions)</div>
+      <div class="actions-grid">
+        <button class="btn-action btn-action-primary" onclick="runRamClean()">🧹 Dọn dẹp RAM ngay</button>
+        <button class="btn-action btn-action-primary" onclick="runZramCompact()">📦 Nén ZRAM tức thì</button>
+        <button class="btn-action" onclick="runCancelGoogleJobs()">🚫 Hủy Job ngầm Google</button>
+        <button class="btn-action" onclick="reapplyAllTweaks()">🔄 Nạp lại toàn bộ Tweak</button>
+      </div>
+    </div>
+
+    <!-- TAB 3: PER-APP MANAGER -->
     <div id="tab-perapp" class="tab-content">
       <div class="section-title">Thêm ứng dụng tùy chỉnh</div>
       <div class="add-app-box">
@@ -662,7 +796,7 @@
       <div id="perapp-list"></div>
     </div>
 
-    <!-- TAB 3: THERMAL GUARD -->
+    <!-- TAB 4: HARDWARE & GUARD -->
     <div id="tab-guard" class="tab-content">
       <div class="section-title">Bảo vệ phần cứng</div>
 
@@ -720,7 +854,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: LOGS -->
+    <!-- TAB 5: LOGS -->
     <div id="tab-logs" class="tab-content">
       <div class="section-title">Nhật ký vận hành</div>
       <div class="log-box" id="log-text">Đang tải...</div>
@@ -752,14 +886,30 @@
       { name: "Genshin", pkg: "com.miHoYo.GenshinImpact", mode: "fast" }
     ];
 
-    // Ultra-Fast Native IPC Bridge
+    // Native IPC Bridge for KernelSU / APatch / MMRL
+    let cbCounter = 0;
+    function uid() { return 'cb_' + Date.now() + '_' + (cbCounter++); }
+
     async function exec(cmd) {
       return new Promise((resolve) => {
         try {
           if (typeof ksu !== 'undefined' && typeof ksu.exec === 'function') {
-            const res = ksu.exec(cmd);
-            if (res instanceof Promise) res.then(resolve).catch(() => resolve(""));
-            else resolve(res || "");
+            const cbName = uid();
+            window[cbName] = function(errno, stdout, stderr) {
+              delete window[cbName];
+              resolve(stdout || "");
+            };
+            const res = ksu.exec(cmd, "{}", cbName);
+            if (res instanceof Promise) {
+              res.then(r => {
+                delete window[cbName];
+                if (typeof r === 'object' && r !== null) resolve(r.stdout || "");
+                else resolve(String(r || ""));
+              }).catch(() => {
+                delete window[cbName];
+                resolve("");
+              });
+            }
           } else if (window.ksu && typeof window.ksu.exec === 'function') {
             const res = window.ksu.exec(cmd);
             if (res instanceof Promise) res.then(resolve).catch(() => resolve(""));
@@ -768,11 +918,7 @@
             resolve("");
           }
         } catch (e) {
-          try {
-            ksu.exec(cmd, "{}", (errno, stdout) => resolve(stdout || ""));
-          } catch (err) {
-            resolve("");
-          }
+          resolve("");
         }
       });
     }
@@ -781,14 +927,15 @@
       const toast = document.getElementById("toast");
       toast.textContent = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1800);
+      setTimeout(() => toast.classList.remove("show"), 2000);
     }
 
     function switchTab(tabId) {
       document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
       document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-      event.currentTarget.classList.add("active");
-      document.getElementById(`tab-${tabId}`).classList.add("active");
+      if (event && event.currentTarget) event.currentTarget.classList.add("active");
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) target.classList.add("active");
       if (tabId === 'logs') fetchLogs();
     }
 
@@ -808,7 +955,92 @@
       });
     }
 
-    // 1-Shot Batch Telemetry Query (Only 1 root process fork)
+    // Unified Robust Script Runner
+    const SCRIPT_PATHS = [
+      "/data/adb/modules/uperf/script",
+      "/data/adb/modules/uperf",
+      "/data/uperf/script",
+      "/data/uperf"
+    ];
+
+    async function runModuleScript(name, args = "") {
+      const cmd = SCRIPT_PATHS.map(p => `sh ${p}/${name} ${args} 2>/dev/null`).join(" || ");
+      return await exec(cmd);
+    }
+
+    // Toggle Actions
+    async function toggleGmsFreeze(enable) {
+      showToast(enable ? "Đang đóng băng GMS Telemetry..." : "Đang khôi phục GMS...");
+      if (enable) {
+        await runModuleScript("gms_freeze.sh", "freeze");
+        showToast("Đã đóng băng GMS Telemetry & Ads!");
+      } else {
+        await runModuleScript("gms_freeze.sh", "unfreeze");
+        showToast("Đã khôi phục dịch vụ GMS.");
+      }
+    }
+
+    async function toggleKernelTweaks(enable) {
+      if (enable) {
+        await runModuleScript("ktweak_opt.sh");
+        showToast("Đã áp dụng tối ưu Kernel & VM!");
+      } else {
+        showToast("Tắt tối ưu Kernel (Khởi động lại để hoàn nguyên)");
+      }
+    }
+
+    async function toggleSysOpt(enable) {
+      if (enable) {
+        await runModuleScript("sys_opt.sh");
+        showToast("Đã triệt tiêu Tracing & Jank Monitor!");
+      } else {
+        showToast("Tắt triệt tiêu Tracing.");
+      }
+    }
+
+    async function toggleDeepDoze(enable) {
+      if (enable) {
+        await exec("dumpsys deviceidle enable all 2>/dev/null; cmd jobscheduler enable-flex-policy --option idle 2>/dev/null");
+        showToast("Đã bật Siêu Ngủ Sâu!");
+      } else {
+        await exec("dumpsys deviceidle unforce 2>/dev/null; cmd jobscheduler reset-flex-policy 2>/dev/null");
+        showToast("Đã hoàn nguyên Doze mặc định.");
+      }
+    }
+
+    // Fast Tool Actions
+    async function runRamClean() {
+      showToast("Đang dọn dẹp RAM...");
+      const res = await runModuleScript("ram_clean.sh");
+      try {
+        const json = JSON.parse(res);
+        showToast(`Đã giải phóng: ${json.freed_mb || 0} MB (Trống ${json.available_mb || 0} MB)`);
+      } catch (e) {
+        showToast("Đã dọn dẹp RAM & PageCache thành công!");
+      }
+    }
+
+    async function runZramCompact() {
+      showToast("Đang nén khối nhớ ZRAM...");
+      await exec("echo 1 > /sys/block/zram0/compact 2>/dev/null; [ -f /proc/sys/vm/compact_memory ] && echo 1 > /proc/sys/vm/compact_memory 2>/dev/null");
+      showToast("Đã hoàn tất nén ZRAM & Compact Memory!");
+    }
+
+    async function runCancelGoogleJobs() {
+      showToast("Đang xóa tác vụ ngầm...");
+      await exec("cmd jobscheduler cancel -u 0 com.google.android.gms 2>/dev/null; cmd jobscheduler cancel -u 0 com.android.vending 2>/dev/null");
+      showToast("Đã hủy toàn bộ Job ngầm của Google!");
+    }
+
+    async function reapplyAllTweaks() {
+      showToast("Đang nạp lại toàn bộ...");
+      await runModuleScript("ktweak_opt.sh");
+      await runModuleScript("sys_opt.sh");
+      await runModuleScript("gms_freeze.sh", "freeze");
+      showToast("Đã nạp lại toàn bộ tinh chỉnh!");
+    }
+
+    // 1-Shot Batch Telemetry Query
     async function refreshTelemetry() {
       if (isPollingBusy) return;
       isPollingBusy = true;
@@ -869,7 +1101,6 @@
           requestAnimationFrame(drawLiveChart);
         }
       } catch (err) {
-        console.error(err);
       } finally {
         isPollingBusy = false;
       }
@@ -904,9 +1135,10 @@
       plot(chartHistory.temp, "#f59e0b");
     }
 
-    // Safe DOM Rendering for Per-App Manager (No innerHTML XSS vulnerabilities)
+    // Safe DOM Rendering for Per-App Manager
     function renderPerAppList() {
       const container = document.getElementById("perapp-list");
+      if (!container) return;
       container.textContent = "";
       appRules.forEach((item, index) => {
         const card = document.createElement("div");
@@ -958,19 +1190,16 @@
       showToast(`${appRules[index].name} -> ${mode.toUpperCase()}`);
     }
 
-    // Strictly Sanitized Custom Rule Addition
     async function addCustomRule() {
       const inputEl = document.getElementById("custom-pkg");
       const rawPkg = inputEl.value.trim();
       const mode = document.getElementById("custom-mode").value;
 
-      // Strict validation: Only allow valid package characters
       if (!rawPkg || !/^[a-zA-Z0-9._]+$/.test(rawPkg)) {
         showToast("Lỗi: Package name không hợp lệ!");
         return;
       }
 
-      // Check if duplicate
       const existing = appRules.find(r => r.pkg === rawPkg);
       if (existing) {
         existing.mode = mode;
@@ -985,7 +1214,6 @@
       showToast(`Đã thêm: ${rawPkg}`);
     }
 
-    // Secure File Writing via Base64 Encoding
     async function savePerAppToFile() {
       let content = "# Per-app dynamic power mode rule\n- powersave\n* balance\n";
       appRules.forEach(item => {
@@ -1018,7 +1246,6 @@
           if (loaded.length > 0) {
             appRules = loaded;
             renderPerAppList();
-            showToast("Đã tải danh sách từ bộ nhớ!");
             return;
           }
         }
@@ -1028,13 +1255,15 @@
 
     async function fetchLogs() {
       const el = document.getElementById("log-text");
+      if (!el) return;
       el.textContent = "Đang tải...";
       const log = await exec("tail -n 40 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || echo 'Chưa có nhật ký.'");
       el.textContent = log || "Nhật ký trống.";
     }
 
     function clearLogs() {
-      document.getElementById("log-text").textContent = "";
+      const el = document.getElementById("log-text");
+      if (el) el.textContent = "";
     }
 
     async function restartDaemon() {

@@ -1,5 +1,30 @@
 # Nhật ký thay đổi Uperf Sushiba
 
+## [v2.2.0] - 2026-08-24 — TÍCH HỢP TINH HOA FROSTY (DEEP OPTIMIZATION MATRIX)
+
+### 🧊 Tinh hoa kiến trúc từ Frosty:
+- **Bộ thông số System Properties toàn diện (`system.prop`):**
+  - Vô hiệu hóa toàn bộ logging & dump ngầm của SurfaceFlinger, EGL Profiler, Graphic render stats, ANR history, Live logcat, và IMS/Modem debug.
+  - Bật Modem RIL power collapse (`ro.ril.power_collapse=1`), tối ưu hóa kết nối di động và tiết kiệm pin chờ.
+  - Triệt tiêu StrictMode, CheckJNI runtime overhead, giúp ứng dụng khởi chạy tức thì và giảm micro-stutter.
+- **Triệt tiêu Telemetry, Logging & Framework Tracing (`sys_opt.sh`):**
+  - Tắt ftrace kernel (`tracing_on=0`), dập tắt các tiến trình `traced`, `cnss_diag`, `aplogd`.
+  - Vô hiệu hóa Jank Monitor frame tracing, hoãn PSS profiler của ActivityManager để giải phóng 100% chu kỳ CPU cho luồng render game.
+  - Kích hoạt cơ chế nén bộ nhớ runtime Zygote (`use_compaction=true`), Cached App Freezer (`use_freezer=true`) và USAP Pool.
+  - Vô hiệu hóa Google Analytics, Clearcut Telemetry, Phenotype polling, và chặn toàn bộ 30+ tag logging sự cố Dropbox ngầm.
+- **Nâng cấp Kernel, VM & Bộ nhớ sâu (`ktweak_opt.sh`):**
+  - Khóa `watermark_boost_factor = 0` triệt tiêu hoàn toàn hiện tượng tụt FPS do kswapd thức giấc đột ngột khi game ngốn RAM.
+  - Điều chỉnh `extra_free_kbytes` thích ứng tự động theo dung lượng RAM thực tế (lên tới 24MB trên máy 12GB+ RAM).
+  - Tự động mở rộng luồng nén ZRAM (`max_comp_streams`) khớp với toàn bộ số nhân CPU (`nproc`), tăng tốc độ nén/giải nén swap song song.
+  - Quét động và dập tắt toàn bộ `debug_mask`, `log_level`, `debug_level` trong `/sys/**`.
+  - Tự động vô hiệu hóa các daemon dọn RAM rác của OEM/Vendor (`process_reclaim`, `mi_reclaim`, `memplus`, `opchain`).
+  - Hỗ trợ TCP Congestion đa tầng tự thích ứng (`bbr3 -> bbr2 -> bbrplus -> bbr -> westwood -> cubic`) cùng TCP FastOpen & Keepalive tối ưu.
+- **Nâng cấp Cơ chế Ngủ sâu & Dọn dẹp RAM Màn hình tắt (`gms_doze.sh`):**
+  - Tự động kích hoạt nén bộ nhớ (`compact_memory`, `zram compact`) và xả cache an toàn khi tắt màn hình.
+  - Kích hoạt JobScheduler Flex-Idle policy trên Android 13+ khi thiết bị ngủ sâu và tự động hoàn nguyên khi mở khóa màn hình.
+
+---
+
 ## [v2.1.0] - 2026-08-23 — BẢN PHÁT HÀNH TỔNG LỰC PHẦN CỨNG (HARDWARE SYNERGY)
 
 ### 🚀 Tích hợp tinh hoa mã nguồn mở & Tinh chỉnh phần cứng sâu

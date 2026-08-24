@@ -72,6 +72,7 @@ install_uperf() {
     fi
 
     rm -rf $MODULE_PATH/config
+    chmod 755 $MODULE_PATH/*.sh $MODULE_PATH/script/*.sh 2>/dev/null
     set_perm_recursive $BIN_PATH 0 0 0755 0755 u:object_r:system_file:s0
 }
 

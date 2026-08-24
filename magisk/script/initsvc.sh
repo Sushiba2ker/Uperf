@@ -25,6 +25,8 @@ wait_until_login
 sh $SCRIPT_PATH/powercfg_once.sh
 sh $SCRIPT_PATH/platform_special.sh
 sh $SCRIPT_PATH/ktweak_opt.sh
+sh $SCRIPT_PATH/sys_opt.sh
+sh $SCRIPT_PATH/gms_freeze.sh &
 sh $SCRIPT_PATH/gms_doze.sh &
 sh $SCRIPT_PATH/thermal_guard.sh &
 sh $SCRIPT_PATH/powercfg_main.sh auto
