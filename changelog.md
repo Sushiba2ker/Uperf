@@ -21,8 +21,8 @@
   - Hỗ trợ TCP Congestion đa tầng tự thích ứng (`bbr3 -> bbr2 -> bbrplus -> bbr -> westwood -> cubic`) cùng TCP FastOpen & Keepalive tối ưu.
 - **Nâng cấp Cơ chế Ngủ sâu & Dọn dẹp RAM Màn hình tắt (`gms_doze.sh`):**
   - Tự động kích hoạt nén bộ nhớ (`compact_memory`, `zram compact`) và xả cache an toàn khi tắt màn hình.
-  - Kích hoạt JobScheduler Flex-Idle policy trên Android 13+ khi thiết bị ngủ sâu và tự động hoàn nguyên khi mở khóa màn hình.
-
+  - Kích hoạt chu kỳ bảo trì dọn rác F2FS GC ngầm khi màn hình tắt và lập tức ngắt khi bật sáng màn hình để chống giật khung hình.
+  - Tự động cưỡng chế Deep Doze khi ngủ sâu và tự động hoàn nguyên khi mở khóa màn hình.
 ---
 
 ## [v2.1.0] - 2026-08-23 — BẢN PHÁT HÀNH TỔNG LỰC PHẦN CỨNG (HARDWARE SYNERGY)
