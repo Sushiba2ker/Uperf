@@ -2,3 +2,6 @@ __pycache__
 /.vscode
 /build
 magisk/script/gpm-injector.code-workspace
+*.zip
+.DS_Store
+*/.DS_Store
