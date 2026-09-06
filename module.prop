@@ -1,9 +1,9 @@
 id=uperf
 name=Uperf Sushiba
-version=2.2.0
-versionCode=240827
+version=2.3.0
+versionCode=240906
 author=Sushiba
-description=Bộ điều phối hiệu năng & phần cứng tối thượng cho Tensor G3: Frosty Deep Optimization Matrix, Devfreq RAM/DSU, Surgical GMS Freeze, KTweak UFS 3.1 I/O, GPU Mali Clamping & WebUI 2.2.
+description=Bộ điều phối hiệu năng & phần cứng tối thượng cho Tensor G3: Granular Feature Matrix, Devfreq RAM/DSU, Surgical GMS Freeze, KTweak UFS 3.1 I/O, GPU Mali Clamping & WebUI 2.3.
 updateJson=https://github.com/Sushiba2ker/Uperf/raw/main/version.json
 ASOPT_VERSIONCODE=260
 web=true

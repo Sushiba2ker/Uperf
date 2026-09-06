@@ -1,6 +1,6 @@
 # Nhật ký thay đổi Uperf Sushiba
 
-## [Unreleased] — Điều khiển từng tính năng runtime
+## [v2.3.0] - 2026-09-06 — ĐIỀU KHIỂN TỪNG TÍNH NĂNG RUNTIME & TỰ ĐỘNG HÓA PHÁT HÀNH
 
 - Thêm file cấu hình người dùng `features.conf` với các công tắc: `module_enabled`, `uperf`, `powercfg`, `powercfg_once`, `kernel_tweaks`, `system_tweaks`, `gms_freeze`, `gms_doze`, `thermal_guard`, `ram_clean`, `zram_compact`, `google_jobs`.
 - WebUI đọc trạng thái runtime và cho phép bật/tắt từng tính năng hoặc tắt toàn bộ module.
