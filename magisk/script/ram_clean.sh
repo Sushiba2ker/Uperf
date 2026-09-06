@@ -4,6 +4,13 @@
 # Ported & Optimized from Frosty for Uperf
 # Author: Sushiba
 #
+BASEDIR="$(dirname $(readlink -f "$0"))"
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
+if ! feature_enabled ram_clean; then
+    printf '{"status":"disabled","feature":"ram_clean"}\n'
+    exit 0
+fi
 
 mem_before=$(awk '/MemAvailable/{print $2}' /proc/meminfo 2>/dev/null)
 

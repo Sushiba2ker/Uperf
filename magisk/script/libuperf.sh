@@ -25,7 +25,8 @@ uperf_stop() {
 }
 
 uperf_start() {
-    # raise inotify limit in case file sync existed
+    feature_enabled uperf || return 0
+
     lock_val "1048576" /proc/sys/fs/inotify/max_queued_events
     lock_val "1048576" /proc/sys/fs/inotify/max_user_watches
     lock_val "1024" /proc/sys/fs/inotify/max_user_instances

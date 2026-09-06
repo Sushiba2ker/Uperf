@@ -1,5 +1,13 @@
 # Nhật ký thay đổi Uperf Sushiba
 
+## [Unreleased] — Điều khiển từng tính năng runtime
+
+- Thêm file cấu hình người dùng `features.conf` với các công tắc: `module_enabled`, `uperf`, `powercfg`, `powercfg_once`, `kernel_tweaks`, `system_tweaks`, `gms_freeze`, `gms_doze`, `thermal_guard`, `ram_clean`, `zram_compact`, `google_jobs`.
+- WebUI đọc trạng thái runtime và cho phép bật/tắt từng tính năng hoặc tắt toàn bộ module.
+- Tắt một tính năng ngăn các lần áp dụng tiếp theo; các giá trị sysfs, kernel và overlay đã áp dụng không tự hoàn nguyên, nên khởi động lại khi cần hoàn nguyên hoàn toàn.
+- Chuẩn hóa implementation runtime tại `magisk/script`; thư mục gốc module chỉ còn các entrypoint Magisk và tài nguyên đóng gói.
+- Thêm GitHub Actions build và publish ZIP khi push tag `v*`, kèm kiểm tra metadata, shell syntax và nội dung archive.
+
 ## [v2.2.0] - 2026-08-24 — TÍCH HỢP TINH HOA FROSTY (DEEP OPTIMIZATION MATRIX)
 
 ### 🧊 Tinh hoa kiến trúc từ Frosty:

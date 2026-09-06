@@ -23,6 +23,9 @@ FLAG_PATH="$MODULE_PATH/flag"
 
 USER_PATH="/sdcard/Android/yc/uperf"
 LOG_FILE="$USER_PATH/initsvc.log"
+FEATURE_FILE="$USER_PATH/features.conf"
+RUNTIME_PATH="$USER_PATH/.runtime"
+PANEL_FILE="$FEATURE_FILE"
 
 # use private busybox
 PATH="$BIN_PATH/busybox:$PATH"

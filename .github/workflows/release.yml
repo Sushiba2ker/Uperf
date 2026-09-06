@@ -1,0 +1,79 @@
+name: Build and publish release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build flashable module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate release metadata and shell syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_version="${GITHUB_REF_NAME#v}"
+          module_version="$(awk -F= '$1 == "version" { print $2; exit }' magisk/module.prop)"
+          if [ -z "$module_version" ] || [ "$module_version" != "$tag_version" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} must match magisk/module.prop version (${module_version:-missing})."
+            exit 1
+          fi
+
+          while IFS= read -r file; do
+            sh -n "$file"
+          done < <(find magisk -type f -name '*.sh' -print)
+
+      - name: Build module archive
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="Uperf-Sushiba-${GITHUB_REF_NAME}.zip"
+          rm -f "$archive"
+          (
+            cd magisk
+            zip -qr "$GITHUB_WORKSPACE/$archive" . -x '*/.DS_Store' '.DS_Store'
+          )
+          test -s "$archive"
+          unzip -t "$archive"
+          manifest="$(mktemp)"
+          module_prop="$(mktemp)"
+          runtime_registry="$(mktemp)"
+          trap 'rm -f "$manifest" "$module_prop" "$runtime_registry"' EXIT
+          unzip -Z1 "$archive" > "$manifest"
+          if grep -Eq '(^|/)\.DS_Store$' "$manifest"; then
+            echo "::error::The release archive contains .DS_Store."
+            exit 1
+          fi
+          grep -Fxq 'module.prop' "$manifest"
+          grep -Fxq 'script/feature_runtime.sh' "$manifest"
+          unzip -p "$archive" module.prop > "$module_prop"
+          grep -q '^id=uperf$' "$module_prop"
+          unzip -p "$archive" script/feature_runtime.sh > "$runtime_registry"
+          grep -q '^STARTUP_FEATURES=' "$runtime_registry"
+          printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARCHIVE: ${{ steps.package.outputs.archive }}
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" "$GITHUB_WORKSPACE/$ARCHIVE" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Uperf $GITHUB_REF_NAME" \
+            --generate-notes \
+            --verify-tag

@@ -30,13 +30,29 @@ Bộ điều phối hiệu năng và tối ưu năng lượng tầng Userspace c
 2. Giải nén module vào thư mục `/data/uperf`.
 3. Cấp quyền thực thi:
    ```bash
-   chmod 755 /data/uperf/setup_uperf.sh /data/uperf/run_uperf.sh /data/uperf/initsvc_uperf.sh
+   chmod 755 /data/uperf/service.sh /data/uperf/script/*.sh
    ```
-4. Thực thi cài đặt và khởi chạy:
+4. Khởi tạo cấu hình và chạy module:
    ```bash
-   sh /data/uperf/setup_uperf.sh
-   sh /data/uperf/run_uperf.sh
+   sh /data/uperf/script/setup.sh
+   sh /data/uperf/script/initsvc.sh
    ```
+
+## Điều khiển tính năng runtime
+WebUI cho phép bật/tắt từng tính năng. Cấu hình được lưu tại `/sdcard/Android/yc/uperf/features.conf` và được giữ lại khi cập nhật module.
+
+Các khóa runtime gồm: `module_enabled`, `uperf`, `powercfg`, `powercfg_once`, `kernel_tweaks`, `system_tweaks`, `gms_freeze`, `gms_doze`, `thermal_guard`, `ram_clean`, `zram_compact`, `google_jobs`.
+
+Ví dụ bật/tắt bằng ADB hoặc Termux:
+```bash
+su -c "sh /data/adb/modules/uperf/script/feature_ctl.sh status"
+su -c "sh /data/adb/modules/uperf/script/feature_ctl.sh set thermal_guard 0"
+su -c "sh /data/adb/modules/uperf/script/feature_ctl.sh set thermal_guard 1"
+```
+
+Tắt `thermal_guard` chỉ tắt giới hạn dòng sạc theo nhiệt độ; không tắt việc sạc. Các giá trị sysfs, kernel và overlay đã áp dụng cần khởi động lại để hoàn nguyên hoàn toàn.
+
+Workflow release yêu cầu tag khớp với version trong `magisk/module.prop`: `version=2.3.0` dùng tag `v2.3.0`.
 
 ---
 

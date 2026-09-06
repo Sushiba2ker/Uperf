@@ -6,6 +6,9 @@
 #
 # Eliminates background GMS battery drain while guaranteeing 100% FCM Push Notifications
 #
+BASEDIR="$(dirname $(readlink -f "$0"))"
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
 
 GMS_SAFE_TELEMETRY="
 com.google.android.gms/com.google.android.gms.ads.identifier.service.AdvertisingIdNotificationService
@@ -87,6 +90,10 @@ com.google.android.gms/com.google.android.finsky.instantapps.InstantAppsLoggingS
 "
 
 action="${1:-freeze}"
+if [ "$action" != "unfreeze" ] && [ "$action" != "restore" ] && ! feature_enabled gms_freeze; then
+    printf '{"status":"disabled","feature":"gms_freeze"}\n'
+    exit 0
+fi
 
 if [ "$action" = "unfreeze" ] || [ "$action" = "restore" ]; then
     for svc in $GMS_SAFE_TELEMETRY $GMS_SAFE_BACKGROUND; do

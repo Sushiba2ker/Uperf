@@ -6,8 +6,9 @@
 #
 
 BASEDIR="$(dirname $(readlink -f "$0"))"
-. $BASEDIR/pathinfo.sh
-
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
+feature_enabled powercfg || exit 0
 GPU_MAX_NODE="/sys/devices/platform/1f000000.mali/scaling_max_freq"
 MIF_MAX_NODE="/sys/class/devfreq/17000010.devfreq_mif/max_freq"
 DSU_MAX_NODE="/sys/class/devfreq/17000090.devfreq_dsu/max_freq"

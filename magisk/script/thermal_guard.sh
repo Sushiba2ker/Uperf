@@ -4,6 +4,23 @@
 # Author: Sushiba
 #
 
+BASEDIR="$(dirname $(readlink -f "$0"))"
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
+feature_enabled thermal_guard || exit 0
+
+PID_FILE="$RUNTIME_PATH/thermal_guard.pid"
+mkdir -p "$RUNTIME_PATH" 2>/dev/null || exit 1
+if [ -f "$PID_FILE" ]; then
+    old_pid="$(cat "$PID_FILE" 2>/dev/null)"
+    old_cmd="$(cat "/proc/$old_pid/cmdline" 2>/dev/null)"
+    case "$old_cmd" in
+        *thermal_guard.sh*) exit 0 ;;
+    esac
+    rm -f "$PID_FILE"
+fi
+printf '%s\n' "$$" > "$PID_FILE"
+
 BAT_TEMP_NODE="/sys/class/power_supply/battery/temp"
 BAT_STATUS_NODE="/sys/class/power_supply/battery/status"
 BAT_CHG_SPEED="/sys/class/power_supply/battery/charging_speed"
@@ -15,19 +32,27 @@ CHG_SPEED_NORMAL="$(cat "$BAT_CHG_SPEED" 2>/dev/null)"
 [ -n "$CHG_SPEED_NORMAL" ] || CHG_SPEED_NORMAL="0"
 LAST_WRITTEN=""
 
-while true; do
-    # Battery Charging Thermal Protection
+cleanup() {
+    if [ -f "$BAT_CHG_SPEED" ] && [ -n "$LAST_WRITTEN" ]; then
+        echo "$CHG_SPEED_NORMAL" > "$BAT_CHG_SPEED" 2>/dev/null
+    fi
+    rm -f "$PID_FILE"
+}
+trap cleanup EXIT
+trap 'exit 0' INT TERM
+
+while feature_enabled thermal_guard; do
     if [ -f "$BAT_TEMP_NODE" ] && [ -f "$BAT_STATUS_NODE" ]; then
         bat_temp=$(cat "$BAT_TEMP_NODE" 2>/dev/null)
         bat_status=$(cat "$BAT_STATUS_NODE" 2>/dev/null)
 
         if [ "$bat_status" = "Charging" ]; then
-            # If battery temp > 40.5C (405): reduce charging current (write once)
+            # If battery temp > 40.5C (405): reduce charging current (write once).
             if [ -n "$bat_temp" ] && [ "$bat_temp" -gt 405 ] 2>/dev/null; then
                 if [ -f "$BAT_CHG_SPEED" ] && [ "$LAST_WRITTEN" != "$CHG_SPEED_REDUCED" ]; then
                     echo "$CHG_SPEED_REDUCED" > "$BAT_CHG_SPEED" 2>/dev/null && LAST_WRITTEN="$CHG_SPEED_REDUCED"
                 fi
-            # If cooled down below 37.5C (375): restore the driver's original value
+            # If cooled down below 37.5C (375): restore the driver's original value.
             elif [ -n "$bat_temp" ] && [ "$bat_temp" -lt 375 ] 2>/dev/null; then
                 if [ -f "$BAT_CHG_SPEED" ] && [ "$LAST_WRITTEN" != "$CHG_SPEED_NORMAL" ]; then
                     echo "$CHG_SPEED_NORMAL" > "$BAT_CHG_SPEED" 2>/dev/null && LAST_WRITTEN="$CHG_SPEED_NORMAL"

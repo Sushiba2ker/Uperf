@@ -4,6 +4,10 @@
 # Ported & Optimized from Frosty for Uperf
 # Author: Sushiba
 #
+BASEDIR="$(dirname $(readlink -f "$0"))"
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
+feature_enabled system_tweaks || exit 0
 
 # 1. Kill Kernel Tracing & Diagnostic Subsystems
 if [ -d /sys/kernel/tracing ]; then

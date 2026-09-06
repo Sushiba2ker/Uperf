@@ -16,6 +16,8 @@
 #
 
 BASEDIR="$(dirname $(readlink -f "$0"))"
+. "$BASEDIR/script/pathinfo.sh"
+. "$BASEDIR/script/libcommon.sh"
 
 crash_recuser() {
     rm $BASEDIR/logcat.log
@@ -25,5 +27,7 @@ crash_recuser() {
     rm -f $BASEDIR/flag/need_recuser
 }
 
-(crash_recuser &)
+if feature_enabled module_enabled; then
+    (crash_recuser &)
+fi
 sh $BASEDIR/script/initsvc.sh

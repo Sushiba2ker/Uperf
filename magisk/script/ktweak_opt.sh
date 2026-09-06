@@ -4,6 +4,10 @@
 # Enhanced with Frosty Deep Kernel & Memory Architecture
 # Author: Sushiba
 #
+BASEDIR="$(dirname $(readlink -f "$0"))"
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
+feature_enabled kernel_tweaks || exit 0
 
 # 1. Flash Storage Queue Optimizations (UFS / NVMe / eMMC)
 for dev in /sys/block/*; do

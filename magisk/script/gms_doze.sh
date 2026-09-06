@@ -5,13 +5,27 @@
 # Author: Sushiba
 #
 
-# Reset F2FS GC to normal mode upon exit/termination
+BASEDIR="$(dirname $(readlink -f "$0"))"
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
+feature_enabled gms_doze || exit 0
+
+PID_FILE="$RUNTIME_PATH/gms_doze.pid"
+mkdir -p "$RUNTIME_PATH" 2>/dev/null || exit 1
+if [ -f "$PID_FILE" ]; then
+    old_pid="$(cat "$PID_FILE" 2>/dev/null)"
+    old_cmd="$(cat "/proc/$old_pid/cmdline" 2>/dev/null)"
+    case "$old_cmd" in
+        *gms_doze.sh*) exit 0 ;;
+    esac
+    rm -f "$PID_FILE"
+fi
+
 cleanup_f2fs() {
     for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
         [ -f "$f2fs_node" ] && echo 0 > "$f2fs_node" 2>/dev/null
     done
 }
-trap cleanup_f2fs EXIT INT TERM
 
 is_screen_off() {
     local pwr_dump
@@ -28,13 +42,25 @@ is_screen_off() {
 }
 
 (
-    # Wait until system is fully booted and user storage is unlocked
+    was_screen_off=false
+
+    cleanup() {
+        cleanup_f2fs
+        if [ "$was_screen_off" = "true" ]; then
+            dumpsys deviceidle unforce >/dev/null 2>&1
+        fi
+        rm -f "$PID_FILE"
+    }
+    trap cleanup EXIT
+    trap 'exit 0' INT TERM
+
+    # Wait until system is fully booted and user storage is unlocked.
     until [ "$(getprop sys.boot_completed)" = "1" ] && [ -d /sdcard/Android ]; do
         sleep 5
     done
     sleep 10
 
-    # Whitelist critical communication and push services so notifications NEVER fail
+    # Whitelist critical communication and push services so notifications remain available.
     dumpsys deviceidle whitelist +com.google.android.gms 2>/dev/null
     dumpsys deviceidle whitelist +com.zing.zalo 2>/dev/null
     dumpsys deviceidle whitelist +com.facebook.orca 2>/dev/null
@@ -42,35 +68,32 @@ is_screen_off() {
     dumpsys deviceidle whitelist +com.whatsapp 2>/dev/null
     dumpsys deviceidle whitelist +com.google.android.apps.messaging 2>/dev/null
 
-    was_screen_off=false
-
-    # Background Sleep & Storage Maintenance Loop (180s interval)
-    while true; do
+    # Background sleep and storage maintenance loop (180s interval).
+    while feature_enabled gms_doze; do
         sleep 180
+        feature_enabled gms_doze || break
 
         if is_screen_off; then
-            # 1. Screen is OFF: Allow F2FS maintenance GC during idle sleep
+            # Screen is OFF: allow F2FS maintenance GC during idle sleep.
             for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
                 [ -f "$f2fs_node" ] && echo 1 > "$f2fs_node" 2>/dev/null
             done
 
-            # 2. Memory compaction & page cache cleanup
+            # Memory compaction and page cache cleanup.
             sync
             echo 3 > /proc/sys/vm/drop_caches 2>/dev/null
             [ -f /proc/sys/vm/compact_memory ] && echo 1 > /proc/sys/vm/compact_memory 2>/dev/null
             [ -f /sys/block/zram0/compact ] && echo 1 > /sys/block/zram0/compact 2>/dev/null
 
-            # 3. Step deep doze force-idle
+            # Step deep doze force-idle.
             if ! dumpsys deviceidle force-idle deep 2>/dev/null; then
                 for i in 1 2 3 4; do cmd deviceidle step deep 2>/dev/null; done
             fi
 
             was_screen_off=true
         else
-            # Screen is ON: strictly disable GC to eliminate frame drops & micro-stutter
-            for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
-                [ -f "$f2fs_node" ] && echo 0 > "$f2fs_node" 2>/dev/null
-            done
+            # Screen is ON: disable GC to avoid frame drops and micro-stutter.
+            cleanup_f2fs
 
             if [ "$was_screen_off" = "true" ]; then
                 dumpsys deviceidle unforce 2>/dev/null
@@ -79,3 +102,5 @@ is_screen_off() {
         fi
     done
 ) &
+
+printf '%s\n' "$!" > "$PID_FILE"

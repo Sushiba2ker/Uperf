@@ -30,8 +30,10 @@
 #   uperf daemon and powercfg_main.sh own the DVFS/cpuset policy.
 
 BASEDIR="$(dirname $(readlink -f "$0"))"
-. $BASEDIR/pathinfo.sh
-. $BASEDIR/libcommon.sh
+. "$BASEDIR/pathinfo.sh"
+. "$BASEDIR/libcommon.sh"
+feature_enabled powercfg_once || exit 0
+
 
 clear_log
 exec 1>$LOG_FILE

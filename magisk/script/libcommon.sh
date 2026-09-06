@@ -86,6 +86,86 @@ read_cfg_value() {
     echo "$value"
 }
 
+###############################
+# Runtime Feature Switches
+###############################
+
+# $1:key $2:default $return:value(0|1)
+feature_value() {
+    local key="$1"
+    local default="${2:-1}"
+    local value=""
+
+    if [ -f "$FEATURE_FILE" ]; then
+        value="$(grep -E "^${key}=" "$FEATURE_FILE" 2>/dev/null | head -n 1 | cut -d= -f2- | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')"
+    fi
+
+    case "$value" in
+        1|true|on|yes|enabled) echo 1 ;;
+        0|false|off|no|disabled) echo 0 ;;
+        *) echo "$default" ;;
+    esac
+}
+
+# $1:key
+feature_enabled() {
+    [ "$1" = "module_enabled" ] || [ "$(feature_value module_enabled 1)" = "1" ] || return 1
+    [ "$(feature_value "$1" 1)" = "1" ]
+}
+
+# $1:key $2:value(0|1)
+set_feature_value() {
+    local key="$1"
+    local value="$2"
+    local temp_file="${FEATURE_FILE}.tmp.$$"
+
+    mkdir -p "$USER_PATH" || return 1
+    if [ -f "$FEATURE_FILE" ]; then
+        sed "/^${key}=/d" "$FEATURE_FILE" >"$temp_file" || {
+            rm -f "$temp_file"
+            return 1
+        }
+    else
+        : >"$temp_file" || return 1
+    fi
+    printf '%s=%s\n' "$key" "$value" >>"$temp_file" || {
+        rm -f "$temp_file"
+        return 1
+    }
+    chmod 0600 "$temp_file"
+    mv -f "$temp_file" "$FEATURE_FILE"
+}
+
+# $1:name, kill the managed background process for a feature
+stop_managed_process() {
+    local name="$1"
+    local pid_file="${RUNTIME_PATH}/${name}.pid"
+    local pid=""
+    local proc_cmd=""
+    local waited=0
+
+    if [ -f "$pid_file" ]; then
+        pid="$(cat "$pid_file" 2>/dev/null)"
+        case "$pid" in
+            ''|*[!0-9]*) ;;
+            *)
+                proc_cmd="$(cat "/proc/$pid/cmdline" 2>/dev/null)"
+                case "$proc_cmd" in
+                    *"$name.sh"*)
+                        kill "$pid" 2>/dev/null
+                        while [ "$waited" -lt 5 ] && kill -0 "$pid" 2>/dev/null; do
+                            sleep 1
+                            waited=$((waited + 1))
+                        done
+                        kill -9 "$pid" 2>/dev/null
+                        ;;
+                esac
+                ;;
+        esac
+        rm -f "$pid_file"
+    fi
+}
+
 # $1:content
 write_panel() {
     echo "$1" >>"$PANEL_FILE"

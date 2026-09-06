@@ -411,6 +411,10 @@
       transform: translateX(20px);
       background-color: #030712;
     }
+    .switch input:disabled + .slider {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
 
     /* Per-App Manager Styles */
     .app-card {
@@ -721,6 +725,50 @@
     <!-- TAB 2: TWEAKS (FROSTY INTEGRATION) -->
     <div id="tab-tweaks" class="tab-content">
       <div class="section-title">Công tắc Tối ưu hóa (Frosty Matrix)</div>
+      <div class="section-title">Điều khiển module</div>
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Master switch của Uperf</h4>
+          <p>Tắt toàn bộ script và daemon runtime. Overlay hệ thống cần khởi động lại để thay đổi hoàn toàn.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-module" checked onchange="toggleFeature('module_enabled', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Uperf core daemon</h4>
+          <p>Điều phối tải, cpuset và phản hồi theo ứng dụng.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-uperf" checked onchange="toggleFeature('uperf', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Hardware power profiles</h4>
+          <p>Cho phép các profile chỉnh trần GPU, RAM và DSU.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-powercfg" checked onchange="toggleFeature('powercfg', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Boot CPU safety</h4>
+          <p>Bật thao tác đưa các core Tensor G3 online sau khi khởi động.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-powercfg-once" checked onchange="toggleFeature('powercfg_once', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
 
       <!-- Tweak 1: GMS Freeze -->
       <div class="tweak-card">
@@ -769,6 +817,50 @@
           <span class="slider"></span>
         </label>
       </div>
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Thermal charging guard</h4>
+          <p>Giảm tốc độ sạc khi pin vượt 40.5°C và khôi phục khi đã nguội.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-thermal-guard" checked onchange="toggleFeature('thermal_guard', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="section-title" style="margin-top: 14px;">Quyền thao tác nhanh</div>
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Cho phép dọn RAM</h4>
+          <p>Cho phép nút dọn cache, compact memory và đóng ứng dụng nền.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-ram-clean" checked onchange="toggleFeature('ram_clean', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Cho phép nén ZRAM</h4>
+          <p>Cho phép thao tác nén ZRAM và compact memory tức thì.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-zram-compact" checked onchange="toggleFeature('zram_compact', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="tweak-card">
+        <div class="tweak-text">
+          <h4>Cho phép hủy Google jobs</h4>
+          <p>Cho phép nút hủy tác vụ nền của Google Play Services và Play Store.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-google-jobs" checked onchange="toggleFeature('google_jobs', this)">
+          <span class="slider"></span>
+        </label>
+      </div>
 
       <div class="section-title" style="margin-top: 14px;">Thao tác Nhanh (Fast Actions)</div>
       <div class="actions-grid">
@@ -805,7 +897,7 @@
           <h4>⚡ Bảo vệ sạc pin (Thermal Guard)</h4>
           <p>Tự giảm dòng sạc khi pin > 40.5°C để chống chai phồng.</p>
         </div>
-        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ĐANG CHẠY</span>
+        <span id="status-thermal-guard" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ĐANG CHẠY</span>
       </div>
 
       <div class="guard-card">
@@ -813,7 +905,7 @@
           <h4>🎮 Mali-G715 GPU DVFS Clamp</h4>
           <p>Khóa trần GPU ở 580-649MHz khi máy ấm để giữ FPS.</p>
         </div>
-        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">TỰ ĐỘNG</span>
+        <span id="status-powercfg-gpu" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">TỰ ĐỘNG</span>
       </div>
 
       <div class="guard-card">
@@ -821,7 +913,7 @@
           <h4>🧠 LPDDR5X & DSU L3 Devfreq Clamp</h4>
           <p>Khóa trần bus RAM 2288MHz & DSU 1328MHz tiết kiệm 1.5W điện.</p>
         </div>
-        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">TỰ ĐỘNG</span>
+        <span id="status-powercfg-memory" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">TỰ ĐỘNG</span>
       </div>
 
       <div class="guard-card">
@@ -829,7 +921,7 @@
           <h4>💤 Smart GMS Doze & Deep Sleep</h4>
           <p>Ngủ sâu sau 15s, Whitelist FCM không trễ tin nhắn Zalo/FB.</p>
         </div>
-        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
+        <span id="status-gms-doze" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
       </div>
 
       <div class="guard-card">
@@ -837,7 +929,7 @@
           <h4>⚡ KTweak UFS 3.1 Flash Engine</h4>
           <p>Hàng đợi 128KB, tắt iostats giảm ngắt CPU, mở app siêu nhanh.</p>
         </div>
-        <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
+        <span id="status-kernel-tweaks" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
       </div>
 
       <div class="guard-card">
@@ -873,6 +965,21 @@
     const maxDataPoints = 35;
     let isPollingBusy = false;
 
+    const FEATURE_DEFAULTS = {
+      module_enabled: 1,
+      uperf: 1,
+      powercfg: 1,
+      powercfg_once: 1,
+      kernel_tweaks: 1,
+      system_tweaks: 1,
+      gms_freeze: 1,
+      gms_doze: 1,
+      thermal_guard: 1,
+      ram_clean: 1,
+      zram_compact: 1,
+      google_jobs: 1
+    };
+    let featureState = { ...FEATURE_DEFAULTS };
     let appRules = [
       { name: "Facebook", pkg: "com.facebook.katana", mode: "powersave" },
       { name: "Messenger", pkg: "com.facebook.orca", mode: "powersave" },
@@ -940,16 +1047,20 @@
     }
 
     async function setMode(mode) {
+      if (Number(featureState.module_enabled) !== 1 || Number(featureState.powercfg) !== 1) {
+        showToast("Power profiles đang tắt");
+        return;
+      }
       currentMode = mode;
       updateUI();
-      showToast(`Chế độ: ${mode.toUpperCase()}`);
-      await exec(`sh /data/powercfg.sh ${mode}`);
+      showToast("Chế độ: " + mode.toUpperCase());
+      await exec("sh /data/powercfg.sh " + mode);
     }
 
     function updateUI() {
       document.querySelectorAll(".mode-card").forEach(card => {
         card.classList.remove("active");
-        if (card.classList.contains(`mode-${currentMode}`)) {
+        if (card.classList.contains("mode-" + currentMode)) {
           card.classList.add("active");
         }
       });
@@ -958,86 +1069,161 @@
     // Unified Robust Script Runner
     const SCRIPT_PATHS = [
       "/data/adb/modules/uperf/script",
-      "/data/adb/modules/uperf",
-      "/data/uperf/script",
-      "/data/uperf"
+      "/data/uperf/script"
     ];
 
     async function runModuleScript(name, args = "") {
-      const cmd = SCRIPT_PATHS.map(p => `sh ${p}/${name} ${args} 2>/dev/null`).join(" || ");
+      const cmd = SCRIPT_PATHS.map(p => "sh " + p + "/" + name + " " + args + " 2>/dev/null").join(" || ");
       return await exec(cmd);
+    }
+
+    const FEATURE_INPUTS = {
+      module_enabled: "toggle-module",
+      uperf: "toggle-uperf",
+      powercfg: "toggle-powercfg",
+      powercfg_once: "toggle-powercfg-once",
+      gms_freeze: "toggle-gms-freeze",
+      kernel_tweaks: "toggle-kernel-tweaks",
+      system_tweaks: "toggle-sys-opt",
+      gms_doze: "toggle-deep-doze",
+      thermal_guard: "toggle-thermal-guard",
+      ram_clean: "toggle-ram-clean",
+      zram_compact: "toggle-zram-compact",
+      google_jobs: "toggle-google-jobs"
+    };
+
+    function parseFeatureResponse(raw) {
+      const lines = String(raw || "").trim().split("\n");
+      for (let index = lines.length - 1; index >= 0; index--) {
+        if (!lines[index]) continue;
+        try {
+          return JSON.parse(lines[index]);
+        } catch (e) {
+        }
+      }
+      return null;
+    }
+
+    function updateFeatureControls() {
+      Object.keys(FEATURE_INPUTS).forEach(feature => {
+        const input = document.getElementById(FEATURE_INPUTS[feature]);
+        if (input) input.checked = Number(featureState[feature]) === 1;
+      });
+
+      const daemonStatus = document.getElementById("daemon-status");
+      if (daemonStatus) {
+        if (Number(featureState.module_enabled) !== 1) daemonStatus.textContent = "Disabled";
+        else if (Number(featureState.uperf) !== 1) daemonStatus.textContent = "Core off";
+        else daemonStatus.textContent = "Active";
+      }
+      const featureStatuses = [
+        ["status-thermal-guard", "thermal_guard"],
+        ["status-powercfg-gpu", "powercfg"],
+        ["status-powercfg-memory", "powercfg"],
+        ["status-gms-doze", "gms_doze"],
+        ["status-kernel-tweaks", "kernel_tweaks"]
+      ];
+      featureStatuses.forEach(([id, feature]) => {
+        const status = document.getElementById(id);
+        if (!status) return;
+        const active = Number(featureState.module_enabled) === 1 && Number(featureState[feature]) === 1;
+        status.textContent = active ? "ACTIVE" : "OFF";
+        status.style.color = active ? "var(--accent-green)" : "var(--text-muted)";
+      });
+    }
+
+    async function loadFeatureState() {
+      const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "status"));
+      if (!response || response.status !== "ok") return;
+      Object.keys(FEATURE_INPUTS).forEach(feature => {
+        if (response[feature] === 0 || response[feature] === 1) {
+          featureState[feature] = response[feature];
+        }
+      });
+      updateFeatureControls();
+    }
+
+    async function setFeature(feature, enabled, input) {
+      const previous = Number(featureState[feature]) === 1;
+      const desired = enabled ? 1 : 0;
+      if (input) input.disabled = true;
+
+      const response = parseFeatureResponse(
+        await runModuleScript("feature_ctl.sh", "set " + feature + " " + desired)
+      );
+      if (!response || response.status !== "ok") {
+        if (input) {
+          input.checked = previous;
+          input.disabled = false;
+        }
+        showToast("Không thể cập nhật công tắc " + feature);
+        return;
+      }
+
+      featureState[feature] = desired;
+      if (input) input.disabled = false;
+      updateFeatureControls();
+      if (response.active === 0 && desired === 1) {
+        showToast("Đã lưu " + feature + "; module đang tắt");
+      } else if (feature === "module_enabled" && desired === 0) {
+        showToast("Đã tắt toàn bộ runtime; reboot để hoàn nguyên overlay");
+      } else {
+        showToast((desired ? "Đã bật " : "Đã tắt ") + feature);
+      }
+    }
+
+    async function toggleFeature(feature, input) {
+      await setFeature(feature, input.checked, input);
     }
 
     // Toggle Actions
     async function toggleGmsFreeze(enable) {
-      showToast(enable ? "Đang đóng băng GMS Telemetry..." : "Đang khôi phục GMS...");
-      if (enable) {
-        await runModuleScript("gms_freeze.sh", "freeze");
-        showToast("Đã đóng băng GMS Telemetry & Ads!");
-      } else {
-        await runModuleScript("gms_freeze.sh", "unfreeze");
-        showToast("Đã khôi phục dịch vụ GMS.");
-      }
+      await setFeature("gms_freeze", enable, document.getElementById("toggle-gms-freeze"));
     }
 
     async function toggleKernelTweaks(enable) {
-      if (enable) {
-        await runModuleScript("ktweak_opt.sh");
-        showToast("Đã áp dụng tối ưu Kernel & VM!");
-      } else {
-        showToast("Tắt tối ưu Kernel (Khởi động lại để hoàn nguyên)");
-      }
+      await setFeature("kernel_tweaks", enable, document.getElementById("toggle-kernel-tweaks"));
     }
 
     async function toggleSysOpt(enable) {
-      if (enable) {
-        await runModuleScript("sys_opt.sh");
-        showToast("Đã triệt tiêu Tracing & Jank Monitor!");
-      } else {
-        showToast("Tắt triệt tiêu Tracing.");
-      }
+      await setFeature("system_tweaks", enable, document.getElementById("toggle-sys-opt"));
     }
 
     async function toggleDeepDoze(enable) {
-      if (enable) {
-        await exec("dumpsys deviceidle enable all 2>/dev/null; dumpsys deviceidle force-idle deep 2>/dev/null");
-        showToast("Đã bật Siêu Ngủ Sâu!");
-      } else {
-        await exec("dumpsys deviceidle unforce 2>/dev/null");
-        showToast("Đã hoàn nguyên Doze mặc định.");
-      }
+      await setFeature("gms_doze", enable, document.getElementById("toggle-deep-doze"));
     }
 
     // Fast Tool Actions
     async function runRamClean() {
       showToast("Đang dọn dẹp RAM...");
-      const res = await runModuleScript("ram_clean.sh");
-      try {
-        const json = JSON.parse(res);
-        showToast(`Đã giải phóng: ${json.freed_mb || 0} MB (Trống ${json.available_mb || 0} MB)`);
-      } catch (e) {
-        showToast("Đã dọn dẹp RAM & PageCache thành công!");
+      const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run ram_clean"));
+      if (!response || response.status === "disabled") {
+        showToast("Thao tác dọn RAM đang tắt");
+      } else if (response.status === "error") {
+        showToast("Không thể dọn RAM");
+      } else if (typeof response.freed_mb !== "undefined") {
+        showToast("Đã giải phóng: " + (response.freed_mb || 0) + " MB (Trống " + (response.available_mb || 0) + " MB)");
+      } else {
+        showToast("Đã dọn dẹp RAM & PageCache");
       }
     }
 
     async function runZramCompact() {
       showToast("Đang nén khối nhớ ZRAM...");
-      await exec("echo 1 > /sys/block/zram0/compact 2>/dev/null; [ -f /proc/sys/vm/compact_memory ] && echo 1 > /proc/sys/vm/compact_memory 2>/dev/null");
-      showToast("Đã hoàn tất nén ZRAM & Compact Memory!");
+      const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run zram_compact"));
+      showToast(response && response.status === "ok" ? "Đã hoàn tất nén ZRAM" : "Thao tác nén ZRAM đang tắt");
     }
 
     async function runCancelGoogleJobs() {
       showToast("Đang xóa tác vụ ngầm...");
-      await exec("cmd jobscheduler cancel -u 0 com.google.android.gms 2>/dev/null; cmd jobscheduler cancel -u 0 com.android.vending 2>/dev/null");
-      showToast("Đã hủy toàn bộ Job ngầm của Google!");
+      const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run google_jobs"));
+      showToast(response && response.status === "ok" ? "Đã hủy Google jobs" : "Thao tác Google jobs đang tắt");
     }
 
     async function reapplyAllTweaks() {
-      showToast("Đang nạp lại toàn bộ...");
-      await runModuleScript("ktweak_opt.sh");
-      await runModuleScript("sys_opt.sh");
-      await runModuleScript("gms_freeze.sh", "freeze");
-      showToast("Đã nạp lại toàn bộ tinh chỉnh!");
+      showToast("Đang nạp lại các tính năng đã bật...");
+      const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run reapply"));
+      showToast(response && response.status === "ok" ? "Đã nạp lại các tính năng đã bật" : "Module runtime đang tắt");
     }
 
     // 1-Shot Batch Telemetry Query
@@ -1267,13 +1453,13 @@
     }
 
     async function restartDaemon() {
-      showToast("Khởi động lại Uperf...");
-      await exec("killall -9 uperf 2>/dev/null; /data/adb/modules/uperf/bin/uperf /sdcard/Android/yc/uperf/uperf.json -o /sdcard/Android/yc/uperf/uperf_log.txt >/dev/null 2>&1 &");
-      await exec("sh /data/powercfg.sh auto 2>/dev/null || true");
-      showToast("Đã khởi động lại Uperf!");
+      showToast("Đang khởi động lại Uperf...");
+      const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run restart"));
+      showToast(response && response.status === "ok" ? "Đã khởi động lại Uperf" : "Uperf core đang tắt");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      loadFeatureState();
       loadPerAppFromFile();
       updateUI();
       refreshTelemetry();
