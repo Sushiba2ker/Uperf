@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -77,7 +77,7 @@
     }
 
     .logo-text h1 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: #fff;
     }
@@ -85,6 +85,38 @@
     .logo-text p {
       font-size: 11px;
       color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .lang-btn {
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      color: #030712;
+      background: var(--accent-cyan);
+      font-weight: 800;
     }
 
     .status-badge {
@@ -182,19 +214,17 @@
       margin-right: 2px;
     }
 
-    canvas#liveChart {
+    canvas {
       width: 100%;
       height: 80px;
       display: block;
-      background: #050811;
-      border-radius: var(--radius-sm);
     }
 
     /* Telemetry Grid */
     .telemetry-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
       margin-bottom: 14px;
     }
 
@@ -202,29 +232,29 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 8px 4px;
-      text-align: center;
+      padding: 10px 12px;
     }
 
     .cluster-name {
       font-size: 10px;
       color: var(--text-muted);
-      margin-bottom: 2px;
-      white-space: nowrap;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
     .cluster-freq {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      color: var(--text-main);
+      color: #fff;
+      font-family: monospace;
+      margin-bottom: 6px;
     }
 
     .cluster-bar-wrap {
-      height: 3px;
-      background: rgba(255, 255, 255, 0.1);
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 2px;
-      margin-top: 4px;
       overflow: hidden;
     }
 
@@ -232,34 +262,37 @@
       height: 100%;
       width: 0%;
       background: var(--accent-cyan);
+      border-radius: 2px;
+      transition: width 0.3s ease;
     }
 
     /* Section Title */
     .section-title {
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: var(--text-muted);
       margin-bottom: 8px;
       padding-left: 2px;
     }
 
-    /* Mode Selection Grid */
+    /* Mode Selector */
     .modes-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      margin-bottom: 14px;
     }
 
     .mode-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
       padding: 12px 14px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -269,8 +302,8 @@
     }
 
     .mode-card.active {
-      border-color: var(--mode-color);
-      background: rgba(255, 255, 255, 0.03);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
     }
 
     .mode-info {
@@ -280,25 +313,19 @@
     }
 
     .mode-icon {
+      font-size: 22px;
       width: 32px;
       height: 32px;
-      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .mode-card.active .mode-icon {
-      background: rgba(var(--mode-color-rgb), 0.15);
-      border: 1px solid var(--mode-color);
     }
 
     .mode-text h3 {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      margin-bottom: 1px;
+      color: #fff;
+      margin-bottom: 2px;
     }
 
     .mode-text p {
@@ -310,63 +337,58 @@
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      border: 2px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.2s;
     }
 
     .mode-card.active .mode-radio {
-      border-color: var(--mode-color);
-      background: var(--mode-color);
+      border-color: var(--accent-cyan);
     }
 
     .mode-radio-inner {
-      width: 6px;
-      height: 6px;
-      background: #070b14;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      opacity: 0;
+      background: transparent;
+      transition: background 0.2s;
     }
 
     .mode-card.active .mode-radio-inner {
-      opacity: 1;
+      background: var(--accent-cyan);
     }
 
-    /* Colors */
-    .mode-powersave { --mode-color: var(--accent-green); --mode-color-rgb: 0, 255, 136; }
-    .mode-balance { --mode-color: var(--accent-cyan); --mode-color-rgb: 0, 240, 255; }
-    .mode-auto { --mode-color: var(--accent-orange); --mode-color-rgb: 245, 158, 11; }
-    .mode-performance { --mode-color: var(--accent-purple); --mode-color-rgb: 168, 85, 247; }
-    .mode-fast { --mode-color: var(--accent-red); --mode-color-rgb: 239, 68, 68; }
-
-    /* Interactive Toggles in Tweaks Tab */
+    /* Tweaks Cards */
     .tweak-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
       padding: 12px 14px;
       margin-bottom: 8px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      align-items: center;
+    }
+
+    .tweak-text {
+      max-width: 80%;
     }
 
     .tweak-text h4 {
       font-size: 13px;
       font-weight: 700;
-      color: #fff;
       margin-bottom: 2px;
     }
 
     .tweak-text p {
       font-size: 11px;
       color: var(--text-muted);
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
-    /* Modern Switch UI */
+    /* Switch */
     .switch {
       position: relative;
       display: inline-block;
@@ -385,57 +407,56 @@
       position: absolute;
       cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #334155;
-      transition: .25s;
+      background-color: #1e293b;
+      transition: 0.3s;
       border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
     }
 
     .slider:before {
       position: absolute;
       content: "";
-      height: 18px;
-      width: 18px;
-      left: 2px;
-      bottom: 2px;
-      background-color: #fff;
-      transition: .25s;
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #94a3b8;
+      transition: 0.3s;
       border-radius: 50%;
     }
 
     input:checked + .slider {
-      background-color: var(--accent-cyan);
+      background-color: rgba(0, 255, 136, 0.2);
+      border-color: var(--accent-green);
     }
 
     input:checked + .slider:before {
       transform: translateX(20px);
-      background-color: #030712;
-    }
-    .switch input:disabled + .slider {
-      opacity: 0.45;
-      cursor: not-allowed;
+      background-color: var(--accent-green);
     }
 
-    /* Per-App Manager Styles */
+    /* Per-App Manager */
     .app-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
       padding: 10px 12px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
 
     .app-name-box h4 {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
+      color: #fff;
     }
 
     .app-name-box p {
       font-size: 10px;
       color: var(--text-muted);
+      font-family: monospace;
     }
 
     .app-mode-chips {
@@ -600,22 +621,28 @@
         <div class="logo-icon">⚡</div>
         <div class="logo-text">
           <h1>Uperf Sushiba</h1>
-          <p id="soc-info">Tensor G3 & Frosty Engine</p>
+          <p id="soc-info" data-i18n="soc_info">Google Tensor G3 Optimizer</p>
         </div>
       </div>
-      <div class="status-badge">
-        <span class="status-dot"></span>
-        <span id="daemon-status">Active</span>
+      <div class="header-right">
+        <div class="lang-switch">
+          <span class="lang-btn active" id="lang-en" onclick="setLanguage('en')">EN</span>
+          <span class="lang-btn" id="lang-vi" onclick="setLanguage('vi')">VI</span>
+        </div>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span id="daemon-status" data-i18n="status_active">Active</span>
+        </div>
       </div>
     </div>
 
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
-      <div class="nav-tab active" onclick="switchTab('overview')">⚡ Tổng quan</div>
-      <div class="nav-tab" onclick="switchTab('tweaks')">🧊 Tinh chỉnh</div>
-      <div class="nav-tab" onclick="switchTab('perapp')">📱 Ứng dụng</div>
-      <div class="nav-tab" onclick="switchTab('guard')">🛡️ Phần cứng</div>
-      <div class="nav-tab" onclick="switchTab('logs')">📜 Nhật ký</div>
+      <div class="nav-tab active" onclick="switchTab('overview')" data-i18n="tab_overview">⚡ Overview</div>
+      <div class="nav-tab" onclick="switchTab('tweaks')" data-i18n="tab_tweaks">🧊 Tweaks</div>
+      <div class="nav-tab" onclick="switchTab('perapp')" data-i18n="tab_perapp">📱 Per-App</div>
+      <div class="nav-tab" onclick="switchTab('guard')" data-i18n="tab_guard">🛡️ Hardware</div>
+      <div class="nav-tab" onclick="switchTab('logs')" data-i18n="tab_logs">📜 Logs</div>
     </div>
 
     <!-- TAB 1: OVERVIEW -->
@@ -623,7 +650,7 @@
       <!-- Real-Time Waveform Chart -->
       <div class="chart-card">
         <div class="chart-header">
-          <span class="chart-title">Đồ thị xung & nhiệt độ live</span>
+          <span class="chart-title" data-i18n="chart_title">Live CPU, GPU & Temp Graph</span>
           <div class="chart-legend">
             <span><span class="legend-color" style="background: var(--accent-cyan);"></span>Mid</span>
             <span><span class="legend-color" style="background: var(--accent-red);"></span>X3</span>
@@ -658,15 +685,15 @@
       </div>
 
       <!-- Mode Selector -->
-      <div class="section-title">Chọn chế độ hiệu năng</div>
+      <div class="section-title" data-i18n="modes_title">Select Performance Mode</div>
       <div class="modes-list">
         <!-- Powersave -->
         <div class="mode-card mode-powersave" onclick="setMode('powersave')">
           <div class="mode-info">
             <div class="mode-icon">🍃</div>
             <div class="mode-text">
-              <h3>Powersave (Siêu mát)</h3>
-              <p>Ghim Sweet Freq 1.74GHz, GPU 580MHz, RAM 2288MHz</p>
+              <h3 data-i18n="mode_powersave_title">Powersave (Cool & Battery)</h3>
+              <p data-i18n="mode_powersave_desc">Lock Sweet Freq 1.74GHz, GPU 580MHz, RAM 2288MHz</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -677,8 +704,8 @@
           <div class="mode-info">
             <div class="mode-icon">⚖️</div>
             <div class="mode-text">
-              <h3>Balance (Cân bằng)</h3>
-              <p>Mượt mà, mát mẻ, GPU 649MHz, Perf/Watt tối ưu</p>
+              <h3 data-i18n="mode_balance_title">Balance (Recommended)</h3>
+              <p data-i18n="mode_balance_desc">Smooth daily use, GPU 649MHz, optimal Perf/Watt</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -689,8 +716,8 @@
           <div class="mode-info">
             <div class="mode-icon">🔄</div>
             <div class="mode-text">
-              <h3>Auto (Tự động thích ứng)</h3>
-              <p>Tự nhận diện theo Per-App và phân tích khung hình</p>
+              <h3 data-i18n="mode_auto_title">Auto (Adaptive)</h3>
+              <p data-i18n="mode_auto_desc">Auto-switches based on Per-App profile & frame lag</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -701,8 +728,8 @@
           <div class="mode-info">
             <div class="mode-icon">🚀</div>
             <div class="mode-text">
-              <h3>Performance (Mượt tối đa)</h3>
-              <p>Phản hồi tức thì, giải phóng toàn bộ xung nhịp</p>
+              <h3 data-i18n="mode_perf_title">Performance (Maximum Smooth)</h3>
+              <p data-i18n="mode_perf_desc">Instant touch response, unleashes CPU cores</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -713,8 +740,8 @@
           <div class="mode-info">
             <div class="mode-icon">🔥</div>
             <div class="mode-text">
-              <h3>Fast / Turbo (Gaming)</h3>
-              <p>Cấp tối đa xung CPU, GPU 890MHz và RAM 3744MHz</p>
+              <h3 data-i18n="mode_fast_title">Fast / Turbo (Gaming)</h3>
+              <p data-i18n="mode_fast_desc">Max CPU clock, GPU 890MHz & RAM 3744MHz</p>
             </div>
           </div>
           <div class="mode-radio"><div class="mode-radio-inner"></div></div>
@@ -724,12 +751,12 @@
 
     <!-- TAB 2: TWEAKS (FROSTY INTEGRATION) -->
     <div id="tab-tweaks" class="tab-content">
-      <div class="section-title">Công tắc Tối ưu hóa (Frosty Matrix)</div>
-      <div class="section-title">Điều khiển module</div>
+      <div class="section-title" data-i18n="section_tweaks">Optimization Switches (Frosty Matrix)</div>
+      <div class="section-title" data-i18n="section_module_ctrl">Module Runtime Controls</div>
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Master switch của Uperf</h4>
-          <p>Tắt toàn bộ script và daemon runtime. Overlay hệ thống cần khởi động lại để thay đổi hoàn toàn.</p>
+          <h4 data-i18n="tweak_module_title">Uperf Master Switch</h4>
+          <p data-i18n="tweak_module_desc">Toggles all runtime scripts. System overlays require reboot to fully revert.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-module" checked onchange="toggleFeature('module_enabled', this)">
@@ -739,8 +766,8 @@
 
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Uperf core daemon</h4>
-          <p>Điều phối tải, cpuset và phản hồi theo ứng dụng.</p>
+          <h4 data-i18n="tweak_uperf_title">Uperf Core Daemon</h4>
+          <p data-i18n="tweak_uperf_desc">Userspace scheduler, thread affinity & load response.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-uperf" checked onchange="toggleFeature('uperf', this)">
@@ -750,8 +777,8 @@
 
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Hardware power profiles</h4>
-          <p>Cho phép các profile chỉnh trần GPU, RAM và DSU.</p>
+          <h4 data-i18n="tweak_powercfg_title">Hardware Power Profiles</h4>
+          <p data-i18n="tweak_powercfg_desc">Controls GPU, LPDDR5X RAM and DSU bus frequency caps.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-powercfg" checked onchange="toggleFeature('powercfg', this)">
@@ -761,8 +788,8 @@
 
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Boot CPU safety</h4>
-          <p>Bật thao tác đưa các core Tensor G3 online sau khi khởi động.</p>
+          <h4 data-i18n="tweak_powercfg_once_title">Boot CPU Safety</h4>
+          <p data-i18n="tweak_powercfg_once_desc">Brings all 9 Tensor G3 CPU cores online after boot.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-powercfg-once" checked onchange="toggleFeature('powercfg_once', this)">
@@ -773,8 +800,8 @@
       <!-- Tweak 1: GMS Freeze -->
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>❄️ Đóng băng GMS Telemetry & Ads</h4>
-          <p>Tắt 80+ dịch vụ thu thập, quảng cáo ngầm của Google. Giữ 100% FCM Push.</p>
+          <h4 data-i18n="tweak_gms_freeze_title">❄️ Surgical GMS Freeze</h4>
+          <p data-i18n="tweak_gms_freeze_desc">Disables 50+ background telemetry & ads services. 100% FCM push intact.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-gms-freeze" checked onchange="toggleGmsFreeze(this.checked)">
@@ -785,8 +812,8 @@
       <!-- Tweak 2: Kernel & VM Tweaks -->
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>⚡ Tinh chỉnh Kernel, VM & I/O</h4>
-          <p>Khóa Watermark Boost 0, nén đa luồng ZRAM, tối ưu queue UFS 128KB.</p>
+          <h4 data-i18n="tweak_kernel_tweaks_title">⚡ Kernel, VM & I/O Optimizations</h4>
+          <p data-i18n="tweak_kernel_tweaks_desc">Watermark Boost 0, parallel ZRAM streams, UFS 128KB queue.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-kernel-tweaks" checked onchange="toggleKernelTweaks(this.checked)">
@@ -797,8 +824,8 @@
       <!-- Tweak 3: Framework Tracing & Telemetry -->
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>🛡️ Triệt tiêu Framework Tracing</h4>
-          <p>Tắt ftrace, Jank Monitor frame tracing, bật Zygote Compaction & USAP Pool.</p>
+          <h4 data-i18n="tweak_sys_opt_title">🛡️ Suppress Framework Tracing</h4>
+          <p data-i18n="tweak_sys_opt_desc">Disables ftrace & Jank Monitor, enables Zygote Compaction & USAP Pool.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-sys-opt" checked onchange="toggleSysOpt(this.checked)">
@@ -809,18 +836,19 @@
       <!-- Tweak 4: Deep Sleep & Screen-Off Maintenance -->
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>💤 Siêu Ngủ Sâu & Dọn RAM khi ngủ</h4>
-          <p>Kích hoạt JobScheduler Flex-Idle, F2FS GC và xả PageCache khi khóa màn hình.</p>
+          <h4 data-i18n="tweak_deep_doze_title">💤 Deep Sleep & Screen-Off Maintenance</h4>
+          <p data-i18n="tweak_deep_doze_desc">Triggers F2FS GC, ZRAM compaction and pagecache drop when screen off.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-deep-doze" checked onchange="toggleDeepDoze(this.checked)">
           <span class="slider"></span>
         </label>
       </div>
+
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Thermal charging guard</h4>
-          <p>Giảm tốc độ sạc khi pin vượt 40.5°C và khôi phục khi đã nguội.</p>
+          <h4 data-i18n="tweak_thermal_guard_title">Thermal Charging Guard</h4>
+          <p data-i18n="tweak_thermal_guard_desc">Throttles charging speed when battery > 40.5°C; restores when cooled.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-thermal-guard" checked onchange="toggleFeature('thermal_guard', this)">
@@ -828,11 +856,11 @@
         </label>
       </div>
 
-      <div class="section-title" style="margin-top: 14px;">Quyền thao tác nhanh</div>
+      <div class="section-title" style="margin-top: 14px;" data-i18n="section_permissions">Action Permissions</div>
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Cho phép dọn RAM</h4>
-          <p>Cho phép nút dọn cache, compact memory và đóng ứng dụng nền.</p>
+          <h4 data-i18n="tweak_ram_clean_title">Allow RAM Cleanup</h4>
+          <p data-i18n="tweak_ram_clean_desc">Enables cache drop, memory compaction and background app freeze.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-ram-clean" checked onchange="toggleFeature('ram_clean', this)">
@@ -842,8 +870,8 @@
 
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Cho phép nén ZRAM</h4>
-          <p>Cho phép thao tác nén ZRAM và compact memory tức thì.</p>
+          <h4 data-i18n="tweak_zram_compact_title">Allow ZRAM Compaction</h4>
+          <p data-i18n="tweak_zram_compact_desc">Allows instant ZRAM memory compression.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-zram-compact" checked onchange="toggleFeature('zram_compact', this)">
@@ -853,8 +881,8 @@
 
       <div class="tweak-card">
         <div class="tweak-text">
-          <h4>Cho phép hủy Google jobs</h4>
-          <p>Cho phép nút hủy tác vụ nền của Google Play Services và Play Store.</p>
+          <h4 data-i18n="tweak_google_jobs_title">Allow Cancel Google Jobs</h4>
+          <p data-i18n="tweak_google_jobs_desc">Allows canceling pending jobs from Play Services and Store.</p>
         </div>
         <label class="switch">
           <input type="checkbox" id="toggle-google-jobs" checked onchange="toggleFeature('google_jobs', this)">
@@ -862,18 +890,18 @@
         </label>
       </div>
 
-      <div class="section-title" style="margin-top: 14px;">Thao tác Nhanh (Fast Actions)</div>
+      <div class="section-title" style="margin-top: 14px;" data-i18n="section_actions">Fast Actions</div>
       <div class="actions-grid">
-        <button class="btn-action btn-action-primary" onclick="runRamClean()">🧹 Dọn dẹp RAM ngay</button>
-        <button class="btn-action btn-action-primary" onclick="runZramCompact()">📦 Nén ZRAM tức thì</button>
-        <button class="btn-action" onclick="runCancelGoogleJobs()">🚫 Hủy Job ngầm Google</button>
-        <button class="btn-action" onclick="reapplyAllTweaks()">🔄 Nạp lại toàn bộ Tweak</button>
+        <button class="btn-action btn-action-primary" onclick="runRamClean()" data-i18n="btn_clean_ram">🧹 Clean RAM Now</button>
+        <button class="btn-action btn-action-primary" onclick="runZramCompact()" data-i18n="btn_compact_zram">📦 Compact ZRAM</button>
+        <button class="btn-action" onclick="runCancelGoogleJobs()" data-i18n="btn_cancel_jobs">🚫 Cancel Google Jobs</button>
+        <button class="btn-action" onclick="reapplyAllTweaks()" data-i18n="btn_reapply_tweaks">🔄 Reapply All Tweaks</button>
       </div>
     </div>
 
     <!-- TAB 3: PER-APP MANAGER -->
     <div id="tab-perapp" class="tab-content">
-      <div class="section-title">Thêm ứng dụng tùy chỉnh</div>
+      <div class="section-title" data-i18n="section_add_app">Add Custom Application</div>
       <div class="add-app-box">
         <input type="text" id="custom-pkg" class="app-input" placeholder="com.example.app">
         <select id="custom-mode" class="app-select">
@@ -881,85 +909,333 @@
           <option value="balance" selected>⚖️ Balance</option>
           <option value="fast">🔥 Fast / Game</option>
         </select>
-        <button class="btn-add" onclick="addCustomRule()">Thêm</button>
+        <button class="btn-add" onclick="addCustomRule()" data-i18n="btn_add">Add</button>
       </div>
 
-      <div class="section-title">Danh sách ứng dụng</div>
+      <div class="section-title" data-i18n="section_app_list">Configured Applications</div>
       <div id="perapp-list"></div>
     </div>
 
     <!-- TAB 4: HARDWARE & GUARD -->
     <div id="tab-guard" class="tab-content">
-      <div class="section-title">Bảo vệ phần cứng</div>
+      <div class="section-title" data-i18n="section_hardware">Hardware Protection & Tuning</div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>⚡ Bảo vệ sạc pin (Thermal Guard)</h4>
-          <p>Tự giảm dòng sạc khi pin > 40.5°C để chống chai phồng.</p>
+          <h4 data-i18n="guard_thermal_title">⚡ Battery Thermal Charging Guard</h4>
+          <p data-i18n="guard_thermal_desc">Auto throttles charging current when battery > 40.5°C to preserve health.</p>
         </div>
-        <span id="status-thermal-guard" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ĐANG CHẠY</span>
+        <span id="status-thermal-guard" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">RUNNING</span>
       </div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>🎮 Mali-G715 GPU DVFS Clamp</h4>
-          <p>Khóa trần GPU ở 580-649MHz khi máy ấm để giữ FPS.</p>
+          <h4 data-i18n="guard_gpu_title">🎮 Mali-G715 GPU DVFS Clamp</h4>
+          <p data-i18n="guard_gpu_desc">Clamps GPU clock to 580–649MHz under thermal load to prevent frame drops.</p>
         </div>
-        <span id="status-powercfg-gpu" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">TỰ ĐỘNG</span>
+        <span id="status-powercfg-gpu" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">AUTO</span>
       </div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>🧠 LPDDR5X & DSU L3 Devfreq Clamp</h4>
-          <p>Khóa trần bus RAM 2288MHz & DSU 1328MHz tiết kiệm 1.5W điện.</p>
+          <h4 data-i18n="guard_mem_title">🧠 LPDDR5X & DSU L3 Devfreq Clamp</h4>
+          <p data-i18n="guard_mem_desc">Clamps RAM bus to 2288MHz & DSU to 1328MHz, saving up to 1.5W power.</p>
         </div>
-        <span id="status-powercfg-memory" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">TỰ ĐỘNG</span>
+        <span id="status-powercfg-memory" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">AUTO</span>
       </div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>💤 Smart GMS Doze & Deep Sleep</h4>
-          <p>Ngủ sâu sau 15s, Whitelist FCM không trễ tin nhắn Zalo/FB.</p>
+          <h4 data-i18n="guard_gms_title">💤 Smart GMS Doze & Deep Sleep</h4>
+          <p data-i18n="guard_gms_desc">Enters deep sleep after 15s; FCM whitelisted for instant notifications.</p>
         </div>
         <span id="status-gms-doze" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
       </div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>⚡ KTweak UFS 3.1 Flash Engine</h4>
-          <p>Hàng đợi 128KB, tắt iostats giảm ngắt CPU, mở app siêu nhanh.</p>
+          <h4 data-i18n="guard_ktweak_title">⚡ KTweak UFS 3.1 Flash Engine</h4>
+          <p data-i18n="guard_ktweak_desc">128KB read-ahead queue, disables iostats for near-instant app launch.</p>
         </div>
         <span id="status-kernel-tweaks" style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
       </div>
 
       <div class="guard-card">
         <div class="guard-text">
-          <h4>⏱️ PollingDelay 20s (Thermal HAL)</h4>
-          <p>Cảm biến nhiệt độ phản hồi nhanh sau mỗi 20 giây.</p>
+          <h4 data-i18n="guard_thermal_hal_title">⏱️ PollingDelay 20s (Thermal HAL)</h4>
+          <p data-i18n="guard_thermal_hal_desc">High-frequency 20-second sensor polling for responsive thermal adaptation.</p>
         </div>
         <span style="font-size: 11px; font-weight: 700; color: var(--accent-green);">ACTIVE</span>
       </div>
 
       <div class="actions-grid">
-        <button class="btn-action" onclick="restartDaemon()">🔄 Khởi động lại Uperf</button>
-        <button class="btn-action" onclick="loadPerAppFromFile()">📥 Nạp lại Per-App</button>
+        <button class="btn-action" onclick="restartDaemon()" data-i18n="btn_restart_daemon">🔄 Restart Uperf</button>
+        <button class="btn-action" onclick="loadPerAppFromFile()" data-i18n="btn_reload_perapp">📥 Reload Per-App</button>
       </div>
     </div>
 
     <!-- TAB 5: LOGS -->
     <div id="tab-logs" class="tab-content">
-      <div class="section-title">Nhật ký vận hành</div>
-      <div class="log-box" id="log-text">Đang tải...</div>
+      <div class="section-title" data-i18n="section_logs">Operation Logs</div>
+      <div class="log-box" id="log-text">Loading...</div>
       <div class="actions-grid">
-        <button class="btn-action" onclick="fetchLogs()">🔄 Làm mới</button>
-        <button class="btn-action" onclick="clearLogs()">🗑️ Xóa</button>
+        <button class="btn-action" onclick="fetchLogs()" data-i18n="btn_refresh_logs">🔄 Refresh</button>
+        <button class="btn-action" onclick="clearLogs()" data-i18n="btn_clear_logs">🗑️ Clear</button>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast">Đã cập nhật</div>
+  <div class="toast" id="toast">Updated</div>
 
   <script>
+    const TRANSLATIONS = {
+      en: {
+        soc_info: "Google Tensor G3 Optimizer",
+        status_active: "Active",
+        status_disabled: "Disabled",
+        status_core_off: "Core off",
+        status_running: "RUNNING",
+        status_auto: "AUTO",
+        tab_overview: "⚡ Overview",
+        tab_tweaks: "🧊 Tweaks",
+        tab_perapp: "📱 Per-App",
+        tab_guard: "🛡️ Hardware",
+        tab_logs: "📜 Logs",
+        chart_title: "Live CPU, GPU & Temp Graph",
+        modes_title: "Select Performance Mode",
+        mode_powersave_title: "Powersave (Cool & Battery)",
+        mode_powersave_desc: "Lock Sweet Freq 1.74GHz, GPU 580MHz, RAM 2288MHz",
+        mode_balance_title: "Balance (Recommended)",
+        mode_balance_desc: "Smooth daily use, GPU 649MHz, optimal Perf/Watt",
+        mode_auto_title: "Auto (Adaptive)",
+        mode_auto_desc: "Auto-switches based on Per-App profile & frame lag",
+        mode_perf_title: "Performance (Maximum Smooth)",
+        mode_perf_desc: "Instant touch response, unleashes CPU cores",
+        mode_fast_title: "Fast / Turbo (Gaming)",
+        mode_fast_desc: "Max CPU clock, GPU 890MHz & RAM 3744MHz",
+        section_tweaks: "Optimization Switches (Frosty Matrix)",
+        section_module_ctrl: "Module Runtime Controls",
+        tweak_module_title: "Uperf Master Switch",
+        tweak_module_desc: "Toggles all runtime scripts. System overlays require reboot to fully revert.",
+        tweak_uperf_title: "Uperf Core Daemon",
+        tweak_uperf_desc: "Userspace scheduler, thread affinity & load response.",
+        tweak_powercfg_title: "Hardware Power Profiles",
+        tweak_powercfg_desc: "Controls GPU, LPDDR5X RAM and DSU bus frequency caps.",
+        tweak_powercfg_once_title: "Boot CPU Safety",
+        tweak_powercfg_once_desc: "Brings all 9 Tensor G3 CPU cores online after boot.",
+        tweak_gms_freeze_title: "❄️ Surgical GMS Freeze",
+        tweak_gms_freeze_desc: "Disables 50+ background telemetry & ads services. 100% FCM push intact.",
+        tweak_kernel_tweaks_title: "⚡ Kernel, VM & I/O Optimizations",
+        tweak_kernel_tweaks_desc: "Watermark Boost 0, parallel ZRAM streams, UFS 128KB queue.",
+        tweak_sys_opt_title: "🛡️ Suppress Framework Tracing",
+        tweak_sys_opt_desc: "Disables ftrace & Jank Monitor, enables Zygote Compaction & USAP Pool.",
+        tweak_deep_doze_title: "💤 Deep Sleep & Screen-Off Maintenance",
+        tweak_deep_doze_desc: "Triggers F2FS GC, ZRAM compaction and pagecache drop when screen off.",
+        tweak_thermal_guard_title: "Thermal Charging Guard",
+        tweak_thermal_guard_desc: "Throttles charging speed when battery > 40.5°C; restores when cooled.",
+        section_permissions: "Action Permissions",
+        tweak_ram_clean_title: "Allow RAM Cleanup",
+        tweak_ram_clean_desc: "Enables cache drop, memory compaction and background app freeze.",
+        tweak_zram_compact_title: "Allow ZRAM Compaction",
+        tweak_zram_compact_desc: "Allows instant ZRAM memory compression.",
+        tweak_google_jobs_title: "Allow Cancel Google Jobs",
+        tweak_google_jobs_desc: "Allows canceling pending jobs from Play Services and Store.",
+        section_actions: "Fast Actions",
+        btn_clean_ram: "🧹 Clean RAM Now",
+        btn_compact_zram: "📦 Compact ZRAM",
+        btn_cancel_jobs: "🚫 Cancel Google Jobs",
+        btn_reapply_tweaks: "🔄 Reapply All Tweaks",
+        section_add_app: "Add Custom Application",
+        btn_add: "Add",
+        section_app_list: "Configured Applications",
+        section_hardware: "Hardware Protection & Tuning",
+        guard_thermal_title: "⚡ Battery Thermal Charging Guard",
+        guard_thermal_desc: "Auto throttles charging current when battery > 40.5°C to preserve health.",
+        guard_gpu_title: "🎮 Mali-G715 GPU DVFS Clamp",
+        guard_gpu_desc: "Clamps GPU clock to 580–649MHz under thermal load to prevent frame drops.",
+        guard_mem_title: "🧠 LPDDR5X & DSU L3 Devfreq Clamp",
+        guard_mem_desc: "Clamps RAM bus to 2288MHz & DSU to 1328MHz, saving up to 1.5W power.",
+        guard_gms_title: "💤 Smart GMS Doze & Deep Sleep",
+        guard_gms_desc: "Enters deep sleep after 15s; FCM whitelisted for instant notifications.",
+        guard_ktweak_title: "⚡ KTweak UFS 3.1 Flash Engine",
+        guard_ktweak_desc: "128KB read-ahead queue, disables iostats for near-instant app launch.",
+        guard_thermal_hal_title: "⏱️ PollingDelay 20s (Thermal HAL)",
+        guard_thermal_hal_desc: "High-frequency 20-second sensor polling for responsive thermal adaptation.",
+        btn_restart_daemon: "🔄 Restart Uperf",
+        btn_reload_perapp: "📥 Reload Per-App",
+        section_logs: "Operation Logs",
+        btn_refresh_logs: "🔄 Refresh",
+        btn_clear_logs: "🗑️ Clear",
+        chip_save: "🍃 Save",
+        chip_bal: "⚖️ Bal",
+        chip_fast: "🔥 Game",
+        log_loading: "Loading...",
+        log_empty: "Log is empty.",
+        toast_power_disabled: "Power profiles currently disabled",
+        toast_mode: "Mode: ",
+        toast_cannot_update: "Cannot update switch: ",
+        toast_saved_off: "Saved; module is disabled",
+        toast_runtime_off: "Runtime disabled; reboot to revert overlays",
+        toast_enabled: "Enabled ",
+        toast_disabled: "Disabled ",
+        toast_cleaning_ram: "Cleaning RAM...",
+        toast_ram_disabled: "RAM cleanup action is disabled",
+        toast_ram_error: "Unable to clean RAM",
+        toast_ram_freed: "Freed: ",
+        toast_ram_cleaned: "Cleaned RAM & PageCache",
+        toast_compacting_zram: "Compacting ZRAM...",
+        toast_zram_done: "ZRAM compaction completed",
+        toast_zram_disabled: "ZRAM compaction is disabled",
+        toast_canceling_jobs: "Canceling background jobs...",
+        toast_jobs_done: "Google background jobs canceled",
+        toast_jobs_disabled: "Google jobs action is disabled",
+        toast_reapplying: "Reapplying enabled features...",
+        toast_reapply_done: "Reapplied all enabled features",
+        toast_reapply_disabled: "Module runtime is disabled",
+        toast_restarting: "Restarting Uperf daemon...",
+        toast_restarted: "Uperf restarted",
+        toast_perapp_reloaded: "Reloaded Per-App config",
+        toast_rule_added: "Rule added: ",
+        toast_rule_exists: "Package rule already exists",
+        toast_rule_removed: "Rule removed: ",
+        toast_rule_enter_pkg: "Please enter a valid package name"
+      },
+      vi: {
+        soc_info: "Bộ điều phối Google Tensor G3",
+        status_active: "Hoạt động",
+        status_disabled: "Đã tắt",
+        status_core_off: "Core tắt",
+        status_running: "ĐANG CHẠY",
+        status_auto: "TỰ ĐỘNG",
+        tab_overview: "⚡ Tổng quan",
+        tab_tweaks: "🧊 Tinh chỉnh",
+        tab_perapp: "📱 Ứng dụng",
+        tab_guard: "🛡️ Phần cứng",
+        tab_logs: "📜 Nhật ký",
+        chart_title: "Đồ thị xung & nhiệt độ live",
+        modes_title: "Chọn chế độ hiệu năng",
+        mode_powersave_title: "Powersave (Siêu mát)",
+        mode_powersave_desc: "Ghim Sweet Freq 1.74GHz, GPU 580MHz, RAM 2288MHz",
+        mode_balance_title: "Balance (Cân bằng)",
+        mode_balance_desc: "Mượt mà, mát mẻ, GPU 649MHz, Perf/Watt tối ưu",
+        mode_auto_title: "Auto (Tự động thích ứng)",
+        mode_auto_desc: "Tự nhận diện theo Per-App và phân tích khung hình",
+        mode_perf_title: "Performance (Mượt tối đa)",
+        mode_perf_desc: "Phản hồi tức thì, giải phóng toàn bộ xung nhịp",
+        mode_fast_title: "Fast / Turbo (Gaming)",
+        mode_fast_desc: "Cấp tối đa xung CPU, GPU 890MHz và RAM 3744MHz",
+        section_tweaks: "Công tắc Tối ưu hóa (Frosty Matrix)",
+        section_module_ctrl: "Điều khiển module",
+        tweak_module_title: "Master switch của Uperf",
+        tweak_module_desc: "Tắt toàn bộ script và daemon runtime. Overlay hệ thống cần khởi động lại để thay đổi hoàn toàn.",
+        tweak_uperf_title: "Uperf core daemon",
+        tweak_uperf_desc: "Điều phối tải, cpuset và phản hồi theo ứng dụng.",
+        tweak_powercfg_title: "Hardware power profiles",
+        tweak_powercfg_desc: "Cho phép các profile chỉnh trần GPU, RAM và DSU.",
+        tweak_powercfg_once_title: "Boot CPU safety",
+        tweak_powercfg_once_desc: "Bật thao tác đưa các core Tensor G3 online sau khi khởi động.",
+        tweak_gms_freeze_title: "❄️ Đóng băng GMS Telemetry & Ads",
+        tweak_gms_freeze_desc: "Tắt 50+ dịch vụ thu thập, quảng cáo ngầm của Google. Giữ 100% FCM Push.",
+        tweak_kernel_tweaks_title: "⚡ Tinh chỉnh Kernel, VM & I/O",
+        tweak_kernel_tweaks_desc: "Khóa Watermark Boost 0, nén đa luồng ZRAM, tối ưu queue UFS 128KB.",
+        tweak_sys_opt_title: "🛡️ Triệt tiêu Framework Tracing",
+        tweak_sys_opt_desc: "Tắt ftrace, Jank Monitor frame tracing, bật Zygote Compaction & USAP Pool.",
+        tweak_deep_doze_title: "💤 Siêu Ngủ Sâu & Dọn RAM khi ngủ",
+        tweak_deep_doze_desc: "Kích hoạt F2FS GC, ZRAM compaction và xả PageCache khi khóa màn hình.",
+        tweak_thermal_guard_title: "Thermal charging guard",
+        tweak_thermal_guard_desc: "Giảm tốc độ sạc khi pin vượt 40.5°C và khôi phục khi đã nguội.",
+        section_permissions: "Quyền thao tác nhanh",
+        tweak_ram_clean_title: "Cho phép dọn RAM",
+        tweak_ram_clean_desc: "Cho phép nút dọn cache, compact memory và đóng ứng dụng nền.",
+        tweak_zram_compact_title: "Cho phép nén ZRAM",
+        tweak_zram_compact_desc: "Cho phép thao tác nén ZRAM và compact memory tức thì.",
+        tweak_google_jobs_title: "Cho phép hủy Google jobs",
+        tweak_google_jobs_desc: "Cho phép nút hủy tác vụ nền của Google Play Services và Play Store.",
+        section_actions: "Thao tác Nhanh (Fast Actions)",
+        btn_clean_ram: "🧹 Dọn dẹp RAM ngay",
+        btn_compact_zram: "📦 Nén ZRAM tức thì",
+        btn_cancel_jobs: "🚫 Hủy Job ngầm Google",
+        btn_reapply_tweaks: "🔄 Nạp lại toàn bộ Tweak",
+        section_add_app: "Thêm ứng dụng tùy chỉnh",
+        btn_add: "Thêm",
+        section_app_list: "Danh sách ứng dụng",
+        section_hardware: "Bảo vệ phần cứng",
+        guard_thermal_title: "⚡ Bảo vệ sạc pin (Thermal Guard)",
+        guard_thermal_desc: "Tự giảm dòng sạc khi pin > 40.5°C để chống chai phồng.",
+        guard_gpu_title: "🎮 Mali-G715 GPU DVFS Clamp",
+        guard_gpu_desc: "Khóa trần GPU ở 580-649MHz khi máy ấm để giữ FPS.",
+        guard_mem_title: "🧠 LPDDR5X & DSU L3 Devfreq Clamp",
+        guard_mem_desc: "Khóa trần bus RAM 2288MHz & DSU 1328MHz tiết kiệm 1.5W điện.",
+        guard_gms_title: "💤 Smart GMS Doze & Deep Sleep",
+        guard_gms_desc: "Ngủ sâu sau 15s, Whitelist FCM không trễ tin nhắn Zalo/FB.",
+        guard_ktweak_title: "⚡ KTweak UFS 3.1 Flash Engine",
+        guard_ktweak_desc: "Hàng đợi 128KB, tắt iostats giảm ngắt CPU, mở app siêu nhanh.",
+        guard_thermal_hal_title: "⏱️ PollingDelay 20s (Thermal HAL)",
+        guard_thermal_hal_desc: "Cảm biến nhiệt độ phản hồi nhanh sau mỗi 20 giây.",
+        btn_restart_daemon: "🔄 Khởi động lại Uperf",
+        btn_reload_perapp: "📥 Nạp lại Per-App",
+        section_logs: "Nhật ký vận hành",
+        btn_refresh_logs: "🔄 Làm mới",
+        btn_clear_logs: "🗑️ Xóa",
+        chip_save: "🍃 Mát",
+        chip_bal: "⚖️ Vừa",
+        chip_fast: "🔥 Game",
+        log_loading: "Đang tải...",
+        log_empty: "Nhật ký trống.",
+        toast_power_disabled: "Power profiles đang tắt",
+        toast_mode: "Chế độ: ",
+        toast_cannot_update: "Không thể cập nhật công tắc: ",
+        toast_saved_off: "Đã lưu; module đang tắt",
+        toast_runtime_off: "Đã tắt toàn bộ runtime; reboot để hoàn nguyên overlay",
+        toast_enabled: "Đã bật ",
+        toast_disabled: "Đã tắt ",
+        toast_cleaning_ram: "Đang dọn dẹp RAM...",
+        toast_ram_disabled: "Thao tác dọn RAM đang tắt",
+        toast_ram_error: "Không thể dọn RAM",
+        toast_ram_freed: "Đã giải phóng: ",
+        toast_ram_cleaned: "Đã dọn dẹp RAM & PageCache",
+        toast_compacting_zram: "Đang nén khối nhớ ZRAM...",
+        toast_zram_done: "Đã hoàn tất nén ZRAM",
+        toast_zram_disabled: "Thao tác nén ZRAM đang tắt",
+        toast_canceling_jobs: "Đang xóa tác vụ ngầm...",
+        toast_jobs_done: "Đã hủy Google jobs",
+        toast_jobs_disabled: "Thao tác Google jobs đang tắt",
+        toast_reapplying: "Đang nạp lại các tính năng đã bật...",
+        toast_reapply_done: "Đã nạp lại các tính năng đã bật",
+        toast_reapply_disabled: "Module runtime đang tắt",
+        toast_restarting: "Đang khởi động lại Uperf daemon...",
+        toast_restarted: "Đã khởi động lại Uperf",
+        toast_perapp_reloaded: "Đã nạp lại cấu hình Per-App",
+        toast_rule_added: "Đã thêm quy tắc: ",
+        toast_rule_exists: "Quy tắc gói đã tồn tại",
+        toast_rule_removed: "Đã xóa quy tắc: ",
+        toast_rule_enter_pkg: "Vui lòng nhập tên package hợp lệ"
+      }
+    };
+
+    let currentLang = localStorage.getItem("uperf_lang") || "en";
+
+    function t(key) {
+      const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+      return dict[key] || (TRANSLATIONS.en && TRANSLATIONS.en[key]) || key;
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem("uperf_lang", lang);
+      document.documentElement.lang = lang;
+      document.getElementById("lang-en").classList.toggle("active", lang === "en");
+      document.getElementById("lang-vi").classList.toggle("active", lang === "vi");
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (key) el.textContent = t(key);
+      });
+
+      renderPerAppList();
+      updateFeatureControls();
+    }
+
     let currentMode = "auto";
     let chartHistory = { mid: [], big: [], temp: [] };
     const maxDataPoints = 35;
@@ -988,7 +1264,7 @@
       { name: "YouTube", pkg: "com.google.android.youtube", mode: "powersave" },
       { name: "Chrome", pkg: "com.android.chrome", mode: "balance" },
       { name: "Camera", pkg: "com.google.android.GoogleCamera", mode: "balance" },
-      { name: "Liên Quân", pkg: "com.garena.game.kgvn", mode: "fast" },
+      { name: "Wild Rift", pkg: "com.riotgames.league.wildrift", mode: "fast" },
       { name: "PUBG", pkg: "com.tencent.ig", mode: "fast" },
       { name: "Genshin", pkg: "com.miHoYo.GenshinImpact", mode: "fast" }
     ];
@@ -1034,13 +1310,13 @@
       const toast = document.getElementById("toast");
       toast.textContent = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2000);
+      setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
     function switchTab(tabId) {
       document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
       document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-      if (event && event.currentTarget) event.currentTarget.classList.add("active");
+      if (window.event && window.event.currentTarget) window.event.currentTarget.classList.add("active");
       const target = document.getElementById(`tab-${tabId}`);
       if (target) target.classList.add("active");
       if (tabId === 'logs') fetchLogs();
@@ -1048,12 +1324,12 @@
 
     async function setMode(mode) {
       if (Number(featureState.module_enabled) !== 1 || Number(featureState.powercfg) !== 1) {
-        showToast("Power profiles đang tắt");
+        showToast(t("toast_power_disabled"));
         return;
       }
       currentMode = mode;
       updateUI();
-      showToast("Chế độ: " + mode.toUpperCase());
+      showToast(t("toast_mode") + mode.toUpperCase());
       await exec("sh /data/powercfg.sh " + mode);
     }
 
@@ -1112,9 +1388,9 @@
 
       const daemonStatus = document.getElementById("daemon-status");
       if (daemonStatus) {
-        if (Number(featureState.module_enabled) !== 1) daemonStatus.textContent = "Disabled";
-        else if (Number(featureState.uperf) !== 1) daemonStatus.textContent = "Core off";
-        else daemonStatus.textContent = "Active";
+        if (Number(featureState.module_enabled) !== 1) daemonStatus.textContent = t("status_disabled");
+        else if (Number(featureState.uperf) !== 1) daemonStatus.textContent = t("status_core_off");
+        else daemonStatus.textContent = t("status_active");
       }
       const featureStatuses = [
         ["status-thermal-guard", "thermal_guard"],
@@ -1127,7 +1403,7 @@
         const status = document.getElementById(id);
         if (!status) return;
         const active = Number(featureState.module_enabled) === 1 && Number(featureState[feature]) === 1;
-        status.textContent = active ? "ACTIVE" : "OFF";
+        status.textContent = active ? (id === "status-thermal-guard" ? t("status_running") : t("status_auto")) : "OFF";
         status.style.color = active ? "var(--accent-green)" : "var(--text-muted)";
       });
     }
@@ -1156,7 +1432,7 @@
           input.checked = previous;
           input.disabled = false;
         }
-        showToast("Không thể cập nhật công tắc " + feature);
+        showToast(t("toast_cannot_update") + feature);
         return;
       }
 
@@ -1164,11 +1440,11 @@
       if (input) input.disabled = false;
       updateFeatureControls();
       if (response.active === 0 && desired === 1) {
-        showToast("Đã lưu " + feature + "; module đang tắt");
+        showToast(t("toast_saved_off") + " (" + feature + ")");
       } else if (feature === "module_enabled" && desired === 0) {
-        showToast("Đã tắt toàn bộ runtime; reboot để hoàn nguyên overlay");
+        showToast(t("toast_runtime_off"));
       } else {
-        showToast((desired ? "Đã bật " : "Đã tắt ") + feature);
+        showToast((desired ? t("toast_enabled") : t("toast_disabled")) + feature);
       }
     }
 
@@ -1176,7 +1452,6 @@
       await setFeature(feature, input.checked, input);
     }
 
-    // Toggle Actions
     async function toggleGmsFreeze(enable) {
       await setFeature("gms_freeze", enable, document.getElementById("toggle-gms-freeze"));
     }
@@ -1195,35 +1470,35 @@
 
     // Fast Tool Actions
     async function runRamClean() {
-      showToast("Đang dọn dẹp RAM...");
+      showToast(t("toast_cleaning_ram"));
       const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run ram_clean"));
       if (!response || response.status === "disabled") {
-        showToast("Thao tác dọn RAM đang tắt");
+        showToast(t("toast_ram_disabled"));
       } else if (response.status === "error") {
-        showToast("Không thể dọn RAM");
+        showToast(t("toast_ram_error"));
       } else if (typeof response.freed_mb !== "undefined") {
-        showToast("Đã giải phóng: " + (response.freed_mb || 0) + " MB (Trống " + (response.available_mb || 0) + " MB)");
+        showToast(t("toast_ram_freed") + (response.freed_mb || 0) + " MB");
       } else {
-        showToast("Đã dọn dẹp RAM & PageCache");
+        showToast(t("toast_ram_cleaned"));
       }
     }
 
     async function runZramCompact() {
-      showToast("Đang nén khối nhớ ZRAM...");
+      showToast(t("toast_compacting_zram"));
       const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run zram_compact"));
-      showToast(response && response.status === "ok" ? "Đã hoàn tất nén ZRAM" : "Thao tác nén ZRAM đang tắt");
+      showToast(response && response.status === "ok" ? t("toast_zram_done") : t("toast_zram_disabled"));
     }
 
     async function runCancelGoogleJobs() {
-      showToast("Đang xóa tác vụ ngầm...");
+      showToast(t("toast_canceling_jobs"));
       const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run google_jobs"));
-      showToast(response && response.status === "ok" ? "Đã hủy Google jobs" : "Thao tác Google jobs đang tắt");
+      showToast(response && response.status === "ok" ? t("toast_jobs_done") : t("toast_jobs_disabled"));
     }
 
     async function reapplyAllTweaks() {
-      showToast("Đang nạp lại các tính năng đã bật...");
+      showToast(t("toast_reapplying"));
       const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run reapply"));
-      showToast(response && response.status === "ok" ? "Đã nạp lại các tính năng đã bật" : "Module runtime đang tắt");
+      showToast(response && response.status === "ok" ? t("toast_reapply_done") : t("toast_reapply_disabled"));
     }
 
     // 1-Shot Batch Telemetry Query
@@ -1346,17 +1621,17 @@
 
         const chipSave = document.createElement("span");
         chipSave.className = `mode-chip ${item.mode === 'powersave' ? 'active-powersave' : ''}`;
-        chipSave.textContent = "🍃 Mát";
+        chipSave.textContent = t("chip_save");
         chipSave.onclick = () => setAppRule(index, 'powersave');
 
         const chipBal = document.createElement("span");
         chipBal.className = `mode-chip ${item.mode === 'balance' ? 'active-balance' : ''}`;
-        chipBal.textContent = "⚖️ Vừa";
+        chipBal.textContent = t("chip_bal");
         chipBal.onclick = () => setAppRule(index, 'balance');
 
         const chipFast = document.createElement("span");
         chipFast.className = `mode-chip ${item.mode === 'fast' ? 'active-fast' : ''}`;
-        chipFast.textContent = "🔥 Game";
+        chipFast.textContent = t("chip_fast");
         chipFast.onclick = () => setAppRule(index, 'fast');
 
         chips.appendChild(chipSave);
@@ -1382,7 +1657,7 @@
       const mode = document.getElementById("custom-mode").value;
 
       if (!rawPkg || !/^[a-zA-Z0-9._]+$/.test(rawPkg)) {
-        showToast("Lỗi: Package name không hợp lệ!");
+        showToast(t("toast_rule_enter_pkg"));
         return;
       }
 
@@ -1397,7 +1672,7 @@
       inputEl.value = "";
       renderPerAppList();
       await savePerAppToFile();
-      showToast(`Đã thêm: ${rawPkg}`);
+      showToast(t("toast_rule_added") + rawPkg);
     }
 
     async function savePerAppToFile() {
@@ -1442,9 +1717,9 @@
     async function fetchLogs() {
       const el = document.getElementById("log-text");
       if (!el) return;
-      el.textContent = "Đang tải...";
-      const log = await exec("tail -n 40 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || echo 'Chưa có nhật ký.'");
-      el.textContent = log || "Nhật ký trống.";
+      el.textContent = t("log_loading");
+      const log = await exec("tail -n 40 /sdcard/Android/yc/uperf/uperf_log.txt 2>/dev/null || echo ''");
+      el.textContent = log ? log.trim() : t("log_empty");
     }
 
     function clearLogs() {
@@ -1453,12 +1728,13 @@
     }
 
     async function restartDaemon() {
-      showToast("Đang khởi động lại Uperf...");
+      showToast(t("toast_restarting"));
       const response = parseFeatureResponse(await runModuleScript("feature_ctl.sh", "run restart"));
-      showToast(response && response.status === "ok" ? "Đã khởi động lại Uperf" : "Uperf core đang tắt");
+      showToast(response && response.status === "ok" ? t("toast_restarted") : t("toast_reapply_disabled"));
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      setLanguage(currentLang);
       loadFeatureState();
       loadPerAppFromFile();
       updateUI();

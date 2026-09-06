@@ -1,125 +1,156 @@
-# Uperf Sushiba
+[English](README.md) | [Tiếng Việt](README_VI.md)
 
-Bộ điều phối hiệu năng và tối ưu năng lượng tầng Userspace cho Android, thiết kế chuyên sâu và độc quyền cho nền tảng **Google Tensor G3** (Pixel 8, Pixel 8 Pro, Pixel 8a). Tác giả: **Sushiba**.
+# Uperf Sushiba | Pixel 8 (Tensor G3) Optimizer
+
+An advanced userspace performance governor and deep hardware optimization suite exclusively engineered for **Google Tensor G3** devices (**Pixel 8, Pixel 8 Pro, and Pixel 8a**). Developed and maintained by **Sushiba**.
 
 ---
 
-## 🌟 Tính năng chính
+## 🌟 Key Features
 
-- **Độc quyền cho Google Tensor G3 (Pixel 8 Series):** Tối ưu hóa chuẩn xác cho kiến trúc 9 nhân CPU vật lý (4x Cortex-A510, 4x Cortex-A715, 1x Cortex-X3), GPU Mali-G715 Immortalis và cụm bus phần cứng Tensor G3.
-- **Điều phối Bus RAM LPDDR5X & DSU L3-Cache:** Khống chế tần số bus MIF và DSU thích ứng theo từng profile, triệt tiêu 1.2W – 1.5W nhiệt lượng hao phí vô ích.
-- **Mali-G715 GPU DVFS Clamping:** Khóa trần tần số GPU theo từng mức tải, ngăn hiện tượng nhảy xung cực đại gây nóng máy và sụt FPS đột ngột (thermal throttling).
-- **Tinh hoa kiến trúc Frosty (Deep Optimization Matrix):** Vô hiệu hóa toàn diện logging, dump ngầm (SurfaceFlinger, ANR history, Live logcat), dập tắt kernel ftrace (`tracing_on=0`) và các telemetry ngầm của hệ thống.
-- **Đóng băng chọn lọc GMS (Surgical GMS Freeze):** Vô hiệu hóa triệt để hơn 50+ service quảng cáo, đo lường và theo dõi ngầm của Google Play Services mà vẫn đảm bảo **100% FCM Push Notifications không bị trễ**.
-- **Ngủ sâu thông minh & Dọn rác bộ nhớ (Smart GMS Doze & F2FS GC):** Tự động cưỡng chế Deep Doze, nén bộ nhớ (`compact_memory`, `zram compact`) và kích hoạt chu kỳ dọn rác F2FS GC khi tắt màn hình; hoàn nguyên tức thì khi mở khóa màn hình.
-- **Bảo vệ sạc mát (Battery Thermal Charging Guard):** Tự động hạ dòng sạc khi pin vượt ngưỡng nhiệt an toàn (~40.5°C) và tự phục hồi khi nhiệt độ giảm, bảo vệ pin mà không ngắt dòng sạc hoàn toàn.
-- **Điều khiển tính năng runtime độc lập (WebUI 2.3 & `features.conf`):** Quản lý 12 công tắc tính năng độc lập qua WebUI KernelSU / WebUI Magisk hoặc dòng lệnh `feature_ctl.sh`, lưu trữ bền vững qua các lần cập nhật module.
-- **Điều phối theo điểm ngọt năng lượng (Sweet Frequency):** Giữ xung nhịp CPU trong vùng có tỉ số Hiệu năng/Điện năng ($\frac{\text{Perf}}{\text{Watt}}$) tối ưu nhất.
-- **Phân tích khung hình trễ qua `SfAnalysis`:** Hook trực tiếp vào `SurfaceFlinger` để bắt khung hình trễ (`SfLag`), chỉ tăng xung khi cần thiết và lập tức hạ xung sau khi hoàn tất render.
-- **Tối ưu luồng giao diện (UI Affinity) & Bắt tín hiệu cảm ứng:** Ghim luồng render quan trọng vào cụm Mid/Big Core, lắng nghe sự kiện từ `/dev/input` để phản hồi tức thì mà không cần boost xung mù quáng.
-- **Hỗ trợ rộng rãi:** Hoạt động tốt trên Android 14 / Android 15, tương thích hoàn toàn với **KernelSU**, **Magisk** và **APatch** (không cần tắt SELinux).
+- **Exclusive Google Tensor G3 Architecture Focus:** Precision-tuned for Tensor G3's 9 physical CPU cores (4x Cortex-A510, 4x Cortex-A715, 1x Cortex-X3), Mali-G715 Immortalis GPU, and hardware bus controllers (`zuma` / `husky` / `shiba` / `akita` / `gs301`).
+- **LPDDR5X RAM & DSU L3-Cache Devfreq Clamping:** Dynamically clamps MIF and DSU bus frequencies based on active profiles, eliminating 1.2W – 1.5W of wasted interconnect power and thermal load.
+- **Mali-G715 Immortalis GPU Clamping:** Clamps GPU peak frequencies to 580MHz / 649MHz under load, eliminating thermal throttling spikes and stabilizing FPS in demanding 3D gaming.
+- **Frosty Deep Optimization Matrix:** Completely suppresses silent background logging, EGL profiler dumps, SurfaceFlinger tracing, and ftrace (`tracing_on=0`), freeing 100% CPU cycles for the foreground render thread.
+- **Surgical GMS Telemetry Freeze:** Safely disables 50+ background tracking, analytics, and advertising services in Google Play Services while guaranteeing **100% instant FCM Push Notifications** for all messaging apps.
+- **Smart GMS Doze & F2FS GC Maintenance:** Enforces deep sleep within 15 seconds of screen-off, triggers ZRAM compaction and pagecache cleanup, and runs F2FS garbage collection in the background without causing screen-on lag.
+- **Battery Thermal Charging Guard:** Automatically throttles charging current when battery temperature exceeds 40.5°C to protect battery health and prevent overheating, restoring normal charging once cooled without severing power.
+- **Bilingual WebUI 2.3 & Granular Runtime Controller:** Interactive WebUI with live 60FPS CPU/GPU/thermal waveform graph, 12 independent feature toggles (`features.conf` via `feature_ctl.sh`), Per-App profile manager, and instant **EN | VI** language switching.
+- **Energy Model Sweet Frequency Tuning:** Locks CPU clock scaling to energy-optimal points ($\frac{\text{Perf}}{\text{Watt}}$ sweet spots) to prevent thermal degradation.
+- **SurfaceFlinger Frame Lag Hook (`SfAnalysis`):** Hooks into `SurfaceFlinger` to detect rendering delays (`SfLag`), boosting frequencies only when a frame drop is imminent and immediately dropping clock speeds upon frame completion.
+- **Broad Root Support:** Fully compatible with **KernelSU**, **KernelSU-Next**, **Magisk**, and **APatch** on Android 14 and Android 15 (SELinux Enforcing preserved).
+
 ---
 
-## 📥 Tải về & Cài đặt
+## 📥 Download & Installation
 
-### Cách 1: Cài đặt qua KernelSU / Magisk / APatch (Khuyên dùng)
-1. Tải file module zip từ mục [Releases](https://github.com/Sushiba2ker/Uperf/releases).
-2. Mở trình quản lý **KernelSU Manager / Magisk / APatch** -> Chọn **Install from storage**.
-3. Chọn file zip và tiến hành flash.
-4. Khởi động lại thiết bị.
-5. Sau khi khởi động, kiểm tra log hoạt động tại `/sdcard/Android/yc/uperf/uperf_log.txt` hoặc `/data/powercfg.log`.
+### Method 1: KernelSU / Magisk / APatch Manager (Recommended)
+1. Download the flashable module ZIP from [Releases](https://github.com/Sushiba2ker/Uperf/releases).
+2. Open **KernelSU Manager**, **Magisk**, or **APatch** -> Navigate to **Modules** -> Select **Install from storage**.
+3. Select the downloaded ZIP file and proceed with flashing.
+4. Reboot your device.
+5. After reboot, check operational logs at `/sdcard/Android/yc/uperf/uperf_log.txt` or through the WebUI.
 
-### Cách 2: Cài đặt thủ công (Không qua Module Manager)
-1. Thiết bị đã có quyền Root.
-2. Giải nén module vào thư mục `/data/uperf`.
-3. Cấp quyền thực thi:
+### Method 2: Manual Installation (Root Terminal)
+1. Ensure root permissions are granted.
+2. Extract the module archive into `/data/uperf`.
+3. Grant executable permissions:
    ```bash
    chmod 755 /data/uperf/service.sh /data/uperf/script/*.sh
    ```
-4. Khởi tạo cấu hình và chạy module:
+4. Initialize configuration and run the module:
    ```bash
    sh /data/uperf/script/setup.sh
    sh /data/uperf/script/initsvc.sh
    ```
 
-## Điều khiển tính năng runtime
-WebUI cho phép bật/tắt từng tính năng. Cấu hình được lưu tại `/sdcard/Android/yc/uperf/features.conf` và được giữ lại khi cập nhật module.
+---
 
-Các khóa runtime gồm: `module_enabled`, `uperf`, `powercfg`, `powercfg_once`, `kernel_tweaks`, `system_tweaks`, `gms_freeze`, `gms_doze`, `thermal_guard`, `ram_clean`, `zram_compact`, `google_jobs`.
+## ⚙️ Runtime Feature Controls
 
-Ví dụ bật/tắt bằng ADB hoặc Termux:
+The module provides granular control over individual optimization subsystems. Your configuration is preserved across module upgrades in `/sdcard/Android/yc/uperf/features.conf`.
+
+You can toggle individual features via the **WebUI** or through the CLI controller via Termux / ADB Shell:
+
+| Feature Key | Default | Description |
+| :--- | :---: | :--- |
+| `module_enabled` | `1` | Master switch for all runtime scripts and daemons. |
+| `uperf` | `1` | Core Uperf userspace scheduler and touch response engine. |
+| `powercfg` | `1` | Hardware power profiles (GPU, LPDDR5X RAM, DSU bus clamping). |
+| `powercfg_once` | `1` | Boot CPU safety script ensuring all 9 cores are online. |
+| `kernel_tweaks` | `1` | Kernel, virtual memory (VM), and UFS 3.1 I/O queue optimizations. |
+| `system_tweaks` | `1` | Framework tracing and background telemetry suppression. |
+| `gms_freeze` | `1` | Surgical disablement of GMS analytics and ads services. |
+| `gms_doze` | `1` | Smart Deep Doze, memory compaction, and F2FS GC on screen-off. |
+| `thermal_guard` | `1` | Battery thermal charging current protection (~40.5°C). |
+| `ram_clean` | `1` | Permission to execute manual RAM & PageCache cleanup. |
+| `zram_compact` | `1` | Permission to trigger immediate ZRAM compression. |
+| `google_jobs` | `1` | Permission to cancel pending Google background jobs. |
+
+### CLI Usage Examples:
 ```bash
+# Check current feature status
 su -c "sh /data/adb/modules/uperf/script/feature_ctl.sh status"
+
+# Disable Thermal Charging Guard
 su -c "sh /data/adb/modules/uperf/script/feature_ctl.sh set thermal_guard 0"
+
+# Re-enable Thermal Charging Guard
 su -c "sh /data/adb/modules/uperf/script/feature_ctl.sh set thermal_guard 1"
 ```
 
-Tắt `thermal_guard` chỉ tắt giới hạn dòng sạc theo nhiệt độ; không tắt việc sạc. Các giá trị sysfs, kernel và overlay đã áp dụng cần khởi động lại để hoàn nguyên hoàn toàn.
-
-Workflow release yêu cầu tag khớp với version trong `magisk/module.prop`: `version=2.3.0` dùng tag `v2.3.0`.
+*Note: Disabling `thermal_guard` stops thermal throttling of charging speed; it never stops charging. Applied sysfs, kernel, and overlay configurations require a device reboot to completely revert.*
 
 ---
 
-## ⚡ Các chế độ hiệu năng (Performance Modes)
+## ⚡ Performance Modes
 
-### 1. Thay đổi chế độ mặc định khi khởi động
-Mở file `/sdcard/Android/yc/uperf/cur_powermode.txt` (hoặc `/data/cur_powermode.txt`) và điền tên chế độ mong muốn:
+### 1. Change Default Boot Mode
+Edit `/sdcard/Android/yc/uperf/cur_powermode.txt` (or `/data/cur_powermode.txt`) and set your desired mode:
 
-| Chế độ | Đặc tính hoạt động | Phù hợp cho |
+| Mode | Operating Characteristics | Best For |
 | :--- | :--- | :--- |
-| `auto` | Tự động thích ứng thông minh theo từng ứng dụng | Sử dụng hỗn hợp hàng ngày |
-| `balance` | Cân bằng: Mượt mà, mát mẻ, tiết kiệm điện hơn cấu hình gốc của hãng | Sử dụng đa tác vụ, lướt web, MXH |
-| `powersave` | Tiết kiệm pin tối đa: Ghim xung ở vùng `sweetFreq`, triệt tiêu nhiệt ngoài trời | Dùng 4G/5G, môi trường nóng, pin yếu |
-| `performance` | Ưu tiên độ mượt: Giữ xung nhịp phản hồi nhanh, chấp nhận tiêu hao thêm pin | Tác vụ nặng, đa nhiệm liên tục |
-| `fast` | Hiệu năng cao: Phản hồi xung cực nhanh, phù hợp chơi game tải nặng | Gaming nặng, giả lập |
+| `auto` | Dynamically adapts per application based on Per-App rules | Daily mixed usage |
+| `balance` | Optimal $\frac{\text{Perf}}{\text{Watt}}$, smooth UI, lower temperatures than stock | Social media, browsing, multitasking |
+| `powersave` | Clamps CPU to `sweetFreq`, GPU 580MHz, RAM 2288MHz | Outdoor use, 4G/5G, low battery |
+| `performance` | Instantaneous touch response, unconstrained core scaling | Heavy productivity, intensive multitasking |
+| `fast` | Maximum CPU clocks, GPU 890MHz, RAM 3744MHz | Competitive 3D gaming, emulators |
 
-### 2. Chuyển đổi nhanh chế độ qua dòng lệnh
-Chạy lệnh trực tiếp qua Termux hoặc ADB Shell (yêu cầu root):
+### 2. Quick Mode Switching via Terminal
+Execute directly via Termux or ADB Shell (root required):
 ```bash
+# Switch to Balance mode
 su -c "sh /data/powercfg.sh balance"
-# Hoặc chuyển sang chế độ siêu mát:
+
+# Switch to Powersave mode
 su -c "sh /data/powercfg.sh powersave"
+
+# Switch to Gaming Turbo mode
+su -c "sh /data/powercfg.sh fast"
 ```
 
 ---
 
-## 📊 So sánh các giải pháp điều phối hiệu năng
+## 📊 Architecture Comparison
 
-| Tính năng | Project WIPE | Perfd-opt (CAF) | libperfmgr (Google) | Uperf Game Turbo |
+| Feature | Project WIPE | Perfd-opt (CAF) | libperfmgr (Google) | Uperf Sushiba |
 | :--- | :---: | :---: | :---: | :---: |
 | **HMP + interactive** | ✔️ | ❌ | ❌ | ✔️ |
 | **EAS + schedutil** | ❌ | ✔️ | ✔️ | ✔️ |
-| **Tối ưu chuyên sâu Tensor G3 (Pixel 8 Series)** | ✔️ | ❌ | Một phần | ✔️ |
-| **Ghim CPU Affinity cho UI Thread** | ❌ | ❌ | ❌ | ✔️ |
-| **Bắt sự kiện cảm ứng Linux cấp thấp** | ❌ | ❌ | ✔️ | ✔️ |
-| **Hook SurfaceFlinger (`SfAnalysis`)** | ❌ | ❌ | ❌ | ✔️ |
-| **Tối ưu năng lượng khi tắt màn hình** | ❌ | ❌ | ❌ | ✔️ |
-| **Nhiều profile hiệu năng linh hoạt** | ✔️ | ✔️ | ❌ | ✔️ |
+| **Deep Tensor G3 Hardware Focus** | ❌ | ❌ | Partial | ✔️ |
+| **GPU Mali-G715 Clamping** | ❌ | ❌ | ❌ | ✔️ |
+| **LPDDR5X & DSU Devfreq Clamping** | ❌ | ❌ | ❌ | ✔️ |
+| **SurfaceFlinger Frame Lag Hook (`SfAnalysis`)** | ❌ | ❌ | ❌ | ✔️ |
+| **Surgical GMS Telemetry Freeze** | ❌ | ❌ | ❌ | ✔️ |
+| **Screen-Off Deep Doze & F2FS GC** | ❌ | ❌ | ❌ | ✔️ |
+| **Battery Thermal Charging Guard** | ❌ | ❌ | ❌ | ✔️ |
+| **Interactive WebUI & Granular Toggles** | ❌ | ❌ | ❌ | ✔️ |
 
 ---
 
-## 🧠 Cơ chế hoạt động chi tiết
+## 🧠 Deep Technical Architecture
 
-### 1. Nhận diện thao tác cảm ứng (`Input Monitor`)
-Lắng nghe trực tiếp luồng tín hiệu từ thiết bị tại `/dev/input`. Dựa trên chuỗi tọa độ và vận tốc nhả ngón tay, Uperf phân biệt chính xác thao tác **Click (Tap)**, **Nhấn giữ (Pressed)** hay **Cuộn lướt (Swipe)** để cấp mức xung phù hợp với thời gian cuộn dự tính của ứng dụng.
+### 1. Low-Level Touch Input Monitor (`Input Monitor`)
+Listens directly to raw input event streams at `/dev/input`. Analyzing release coordinates and swipe velocity, Uperf accurately differentiates between **Tap**, **Hold (Pressed)**, and **Swipe (Fling)** gestures to allocate optimal clock frequencies matched precisely to the expected scroll duration.
 
-### 2. Quản lý tải nặng tức thời & ngắt sớm (`HeavyLoad Management`)
-Khi ứng dụng khởi động hoặc tải dữ liệu nặng, Uperf chủ động lấy mẫu tải toàn hệ thống:
+### 2. HeavyLoad Predictive Governance
+When an application launches or initiates heavy computation, Uperf continuously samples total system load:
 $$\text{System Load} = \sum \left( \text{Efficiency}_i \times \frac{\text{Load}_i}{100} \times \frac{\text{Freq}_i}{1000} \right)$$
-Nếu tải vượt ngưỡng `heavyLoad`, Uperf kích hoạt profile tăng tốc tức thời. Ngay khi ứng dụng hoàn tất quá trình tải, Uperf lập tức ngắt trạng thái tải nặng sớm hơn nhiều so với cơ chế boost mặc định của Google/Qualcomm (vốn thường kéo dài 2-3 giây gây nóng máy).
+If system load surpasses the `heavyLoad` threshold, Uperf boosts frequencies instantly. Crucially, as soon as the load completes, Uperf terminates the boost immediately—unlike stock OEM governors which hold maximum clocks for 2–3 seconds and generate excess heat.
 
-### 3. Hook luồng dựng hình `SfAnalysis`
-Một module độc lập được nạp vào tiến trình `SurfaceFlinger` nhằm theo dõi sát sao chu kỳ xuất khung hình:
-- Bắt sự kiện bắt đầu render, trễ khung hình (`SfLag`) và hoàn tất render.
-- Thích ứng động với tần số quét màn hình (Dynamic Refresh Rate / Variable Vsync).
-- Hoạt động an toàn trong ranh giới quyền của SELinux.
+### 3. SurfaceFlinger Hook (`SfAnalysis`)
+An independent instrumentation module hooks into `SurfaceFlinger` to monitor frame presentation pipelines:
+- Intercepts frame draw dispatch, detect frame drop risks (`SfLag`), and confirms buffer submission.
+- Dynamically adapts to Variable Refresh Rates (60Hz / 120Hz Vsync).
+- Functions safely within standard SELinux enforcement boundaries.
 
 ---
 
-## 🛠️ Cấu hình Tensor G3 (`uperf.json`)
+## 🛠️ Tensor G3 Energy Model Configuration (`uperf.json`)
 
-Module sử dụng file cấu hình Energy Model tối ưu hóa chuẩn xác cho kiến trúc 9 nhân của Google Tensor G3 tại `config/gs301.json` (tự động nạp vào `/sdcard/Android/yc/uperf/uperf.json` khi cài đặt).
-### Ví dụ cấu hình Energy Model (Tensor G3):
+The module employs an Energy Model configuration specifically calibrated for Google Tensor G3's 9-core topology at `config/gs301.json` (deployed to `/sdcard/Android/yc/uperf/uperf.json` upon installation).
+
+### Energy Model Snapshot (Tensor G3):
 ```json
 "cpu": {
   "enable": true,
@@ -154,31 +185,31 @@ Module sử dụng file cấu hình Energy Model tối ưu hóa chuẩn xác cho
 
 ---
 
-## ❓ Câu hỏi thường gặp (FAQ)
+## ❓ Frequently Asked Questions (FAQ)
 
-**Q: Module này có làm hao pin ở chế độ chờ không?**  
-A: Hoàn toàn không. Uperf chạy Native C/C++ tiêu tốn tài nguyên cực thấp (<0.1% CPU). Khi tắt màn hình, module tự động chuyển sang chế độ ngủ sâu (`standby`), giảm số nhân hoạt động và ghim xung tối thiểu.
+**Q: Does this module drain battery during standby?**  
+A: No. Uperf executes compiled native C/C++ binaries consuming negligible CPU (<0.1%). When the display is turned off, the module immediately enters `standby`, drops CPU/GPU/RAM frequencies to absolute minimums, and triggers Smart Deep Doze.
 
-**Q: Tại sao dùng Uperf máy vẫn có thể ấm khi chơi game nặng?**  
-A: Khi chơi game 3D nặng liên tục, GPU và CPU đều phải làm việc ở công suất cao. Uperf giúp tối ưu để chip chạy ở tần số hiệu quả nhất thay vì nhảy loạn xạ, nhưng không thể vô hiệu hóa quy luật vật lý về tỏa nhiệt. Để giảm nhiệt tối đa khi chơi game, hãy chuyển sang chế độ `balance` hoặc `powersave`.
+**Q: Why does my device still warm up during heavy 3D gaming?**  
+A: Modern 3D gaming fully taxes both CPU and GPU. Uperf ensures the hardware operates at optimal frequency-to-power curves rather than wildly throttling, but thermodynamics cannot be defied. For cooler temperatures while gaming, select `balance` or `powersave` mode.
 
-**Q: Có cần tắt tính năng kiểm soát nhiệt (Thermal Engine) của hệ thống không?**  
-A: **Không nên tắt**. Thermal Engine là cơ chế an toàn phần cứng của nhà sản xuất. Uperf tối ưu hiệu năng và giữ mát bằng cách điều phối xung nhịp thông minh trước khi máy bị nóng, chứ không can thiệp phá vỡ giới hạn nhiệt an toàn của pin và chip.
-
----
-
-## 🤝 Lời cảm ơn & Tham chiếu (Credits)
-
-- Tác giả gốc: **Matt Yang (@yc9559)** - [Project Uperf](https://github.com/yc9559/uperf)
-- Tác giả bản Game Turbo: **@yinwanxi**
-- Đóng góp bổ sung Tensor G3 & Tối ưu hóa: **@Sushiba2ker**
-- Cộng đồng phát triển: [TinyInjector](https://github.com/shunix/TinyInjector), [xHook](https://github.com/iqiyi/xHook), [Scene Tool](https://www.coolapk.com/apk/com.omarea.vtools).
+**Q: Should I disable the system Thermal Engine?**  
+A: **Do not disable Thermal Engine.** The system thermal engine protects your hardware and battery from physical damage. Uperf optimizes performance proactively so your device remains cooler before heating up, without compromising critical thermal safety limits.
 
 ---
 
-## 📄 Giấy phép & Bản quyền (License)
+## 🤝 Credits & Acknowledgements
 
-- Toàn bộ mã nguồn dự án được phân phối theo giấy phép mã nguồn mở **Apache License 2.0**. Xem chi tiết tại file [LICENSE](LICENSE).
-- Bản quyền gốc thuộc về **Matt Yang (@yc9559)** và các tác giả đóng góp.
-- Bản nâng cấp chuyên sâu cho Tensor G3, WebUI và hệ thống tối ưu hóa được phát triển bởi **Sushiba (@Sushiba2ker)**.
-- Các thành phần phần mềm bên thứ ba được sử dụng trong dự án (`pcre2`, `nlohmann/json`, `scnlib`, `spdlog`, `android-busybox-ndk`) được ghi nhận chi tiết tại file [NOTICE](NOTICE).
+- Original Author: **Matt Yang (@yc9559)** - [Project Uperf](https://github.com/yc9559/uperf) (Apache 2.0)
+- Game Turbo Author: **@yinwanxi**
+- Google Tensor G3 Pure Focus, WebUI 2.3, Release Automation & Systems Engineering: **@Sushiba2ker**
+- Open Source Community: [TinyInjector](https://github.com/shunix/TinyInjector), [xHook](https://github.com/iqiyi/xHook), [Scene Tool](https://www.coolapk.com/apk/com.omarea.vtools).
+
+---
+
+## 📄 License & Copyright
+
+- The source code is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for complete terms.
+- Original copyright belongs to **Matt Yang (@yc9559)** and project contributors.
+- Google Tensor G3 optimizations, WebUI, and feature controller additions are developed and copyrighted by **Sushiba (@Sushiba2ker)**.
+- Third-party components (`pcre2`, `nlohmann/json`, `scnlib`, `spdlog`, `android-busybox-ndk`) are acknowledged in the [NOTICE](NOTICE) file.

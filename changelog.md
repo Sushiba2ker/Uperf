@@ -1,11 +1,15 @@
-# Nhật ký thay đổi Uperf Sushiba
+# Changelog / Nhật ký thay đổi Uperf Sushiba
 
+## [v1.0.0] - 2026-09-06 — FIRST OFFICIAL PUBLIC RELEASE
 
-## [v2.3.1] - 2026-09-06 — TỐI GIẢN LOG FLASH & ĐỒNG BỘ THƯƠNG HIỆU SUSHIBA
-
-- Chuẩn hóa toàn diện thông điệp flash trong KernelSU / Magisk: ngắn gọn, chuyên nghiệp, hiển thị tên tác giả Sushiba.
-- Loại bỏ toàn bộ log tiếng Trung, cảnh báo phím âm lượng và các hàm rác không sử dụng (`asoulopt`).
-- Cập nhật tài liệu `README.md`: làm rõ trọng tâm độc quyền cho Google Tensor G3 và bổ sung điều khoản giấy phép Apache 2.0.
+- **Official First Public Release:** Exclusively engineered and optimized for Google Tensor G3 (Pixel 8, Pixel 8 Pro, Pixel 8a).
+- **Interactive Bilingual WebUI 2.3:** Live 60FPS waveform telemetry, 12 granular runtime switches via `features.conf`, and instant **EN | VI** language switcher with English as default.
+- **Hardware Devfreq & DVFS Clamping:** Clamps LPDDR5X RAM bus and DSU L3-Cache (saves 1.2W–1.5W power) and Mali-G715 GPU to eliminate thermal throttling and stabilize gaming FPS.
+- **Frosty Deep Optimization Matrix:** Complete suppression of silent background logging, ANR dumps, live logcat, system telemetry, and ftrace.
+- **Surgical GMS Telemetry Freeze:** Safely disables 50+ background Google Play Services tracking & ads services while guaranteeing 100% instant FCM Push Notifications.
+- **Smart GMS Doze & F2FS GC Maintenance:** Enforces deep sleep within 15 seconds, memory compaction, and F2FS background maintenance when screen off.
+- **Battery Thermal Charging Guard:** Automatically throttles charging speed when battery temperature exceeds 40.5°C to protect battery health and prevent overheating.
+- **Streamlined Installation:** Clean, professional English flash terminal interface; removed all legacy/dead code and Chinese notices.
 ## [v2.3.0] - 2026-09-06 — ĐIỀU KHIỂN TỪNG TÍNH NĂNG RUNTIME & TỰ ĐỘNG HÓA PHÁT HÀNH
 
 - Thêm file cấu hình người dùng `features.conf` với các công tắc: `module_enabled`, `uperf`, `powercfg`, `powercfg_once`, `kernel_tweaks`, `system_tweaks`, `gms_freeze`, `gms_doze`, `thermal_guard`, `ram_clean`, `zram_compact`, `google_jobs`.

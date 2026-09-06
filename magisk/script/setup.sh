@@ -10,7 +10,7 @@ BASEDIR="$(dirname $(readlink -f "$0"))"
 
 abort() {
     echo "$1"
-    echo "! Cài đặt Uperf Sushiba thất bại."
+    echo "! Installation failed."
     exit 1
 }
 
@@ -42,10 +42,10 @@ install_uperf() {
     fi
 
     if [ "$cfgname" = "unsupported" ] || [ ! -f "$MODULE_PATH/config/$cfgname.json" ]; then
-        abort "! Thiết bị [$target] không được hỗ trợ (chỉ hỗ trợ Tensor G3)."
+        abort "! Target [$target] is unsupported (Tensor G3 only)."
     fi
 
-    echo "- Nhận diện: $target ($cfgname)"
+    echo "- Detected: $target ($cfgname)"
     mkdir -p "$USER_PATH"
     [ -f "$USER_PATH/uperf.json" ] && mv -f "$USER_PATH/uperf.json" "$USER_PATH/uperf.json.bak"
     cp -f "$MODULE_PATH/config/$cfgname.json" "$USER_PATH/uperf.json"
@@ -78,7 +78,7 @@ echo "          Author: Sushiba           "
 echo "************************************"
 install_uperf
 fix_module_prop
-echo "- Cài đặt hoàn tất."
-echo "- Khởi động lại máy để kích hoạt!"
+echo "- Installation completed."
+echo "- Reboot device to activate module!"
 echo "************************************"
 echo ""

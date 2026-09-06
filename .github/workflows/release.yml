@@ -97,4 +97,5 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --title "Uperf $GITHUB_REF_NAME" \
             --generate-notes \
-            --verify-tag
+            --verify-tag \
+            --latest

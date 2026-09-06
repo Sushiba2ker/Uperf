@@ -1,9 +1,9 @@
 id=uperf
-name=Uperf Sushiba
-version=2.3.1
-versionCode=240907
+name=Uperf Sushiba | Pixel 8 (Tensor G3) Optimizer
+version=1.0.0
+versionCode=260906
 author=Sushiba
-description=Bộ điều phối hiệu năng & phần cứng tối thượng cho Tensor G3: Granular Feature Matrix, Devfreq RAM/DSU, Surgical GMS Freeze, KTweak UFS 3.1 I/O, GPU Mali Clamping & WebUI 2.3.
+description=Tối ưu hiệu năng & pin độc quyền Google Tensor G3 (Pixel 8 / 8 Pro / 8a). Khóa trần GPU Mali-G715, điều phối RAM LPDDR5X/DSU, chống giật khung hình, bảo vệ sạc mát Thermal Guard, Deep Doze & WebUI 2.3. Tác giả: Sushiba.
 updateJson=https://github.com/Sushiba2ker/Uperf/raw/main/version.json
 web=true
 action=true
