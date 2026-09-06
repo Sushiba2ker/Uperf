@@ -1,5 +1,11 @@
 # Nhật ký thay đổi Uperf Sushiba
 
+
+## [v2.3.1] - 2026-09-06 — TỐI GIẢN LOG FLASH & ĐỒNG BỘ THƯƠNG HIỆU SUSHIBA
+
+- Chuẩn hóa toàn diện thông điệp flash trong KernelSU / Magisk: ngắn gọn, chuyên nghiệp, hiển thị tên tác giả Sushiba.
+- Loại bỏ toàn bộ log tiếng Trung, cảnh báo phím âm lượng và các hàm rác không sử dụng (`asoulopt`).
+- Cập nhật tài liệu `README.md`: làm rõ trọng tâm độc quyền cho Google Tensor G3 và bổ sung điều khoản giấy phép Apache 2.0.
 ## [v2.3.0] - 2026-09-06 — ĐIỀU KHIỂN TỪNG TÍNH NĂNG RUNTIME & TỰ ĐỘNG HÓA PHÁT HÀNH
 
 - Thêm file cấu hình người dùng `features.conf` với các công tắc: `module_enabled`, `uperf`, `powercfg`, `powercfg_once`, `kernel_tweaks`, `system_tweaks`, `gms_freeze`, `gms_doze`, `thermal_guard`, `ram_clean`, `zram_compact`, `google_jobs`.

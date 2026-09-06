@@ -1,19 +1,23 @@
 # Uperf Sushiba
 
-Bộ điều phối hiệu năng và tối ưu năng lượng tầng Userspace cho Android, hỗ trợ toàn diện các nền tảng SoC hiện đại (bao gồm **Google Tensor G1 / G2 / G3**, Snapdragon, MediaTek Dimensity, Exynos và Kirin). Tác giả: **Sushiba**.
+Bộ điều phối hiệu năng và tối ưu năng lượng tầng Userspace cho Android, thiết kế chuyên sâu và độc quyền cho nền tảng **Google Tensor G3** (Pixel 8, Pixel 8 Pro, Pixel 8a). Tác giả: **Sushiba**.
 
 ---
 
 ## 🌟 Tính năng chính
 
-- **Điều phối hiệu năng động theo ngữ cảnh:** Tự động điều chỉnh các node `sysfs` (tần số CPU/GPU, bus DDR, cgroups) dựa trên hành vi thực tế của người dùng.
-- **Tối ưu luồng giao diện (UI Affinity):** Tự động ghim các luồng render/UI quan trọng của ứng dụng đang thao tác vào cụm nhân tối ưu (Mid/Big Cores) và đẩy tác vụ nền về Little Cores.
-- **Bắt tín hiệu cảm ứng cấp thấp:** Đọc trực tiếp sự kiện từ `/dev/input` (chạm, nhấn giữ, vuốt, tốc độ lướt) để dự đoán nhu cầu tài nguyên ngay lập tức.
-- **Phân tích khung hình trễ qua `SfAnalysis`:** Hook trực tiếp vào `SurfaceFlinger` để phát hiện trễ khung hình (`SfLag`), chỉ nâng xung khi thực sự có nguy cơ rớt FPS và lập tức hạ xung khi hoàn thành khung hình.
-- **Triệt tiêu Input Boost mù quáng:** Khóa hoàn toàn các cơ chế boost xung đỉnh vô tội vạ của kernel/OEM (`cpu_boost`, `input_booster`, `libperfmgr`), triệt tiêu nguồn nhiệt sinh ra khi thao tác vuốt lướt nhẹ.
-- **Điều phối theo điểm ngọt năng lượng (Sweet Frequency):** Giữ xung nhịp CPU trong vùng có tỉ số Hiệu năng/Điện năng ($\frac{\text{Perf}}{\text{Watt}}$) tối ưu nhất, ngăn chặn hiện tượng quá nhiệt và sụt xung (thermal throttling).
-- **Hỗ trợ rộng rãi:** Hoạt động tốt trên Android 6.0+ đến Android 15, tương thích hoàn toàn với **KernelSU**, **Magisk** và **APatch** (không cần tắt SELinux).
-
+- **Độc quyền cho Google Tensor G3 (Pixel 8 Series):** Tối ưu hóa chuẩn xác cho kiến trúc 9 nhân CPU vật lý (4x Cortex-A510, 4x Cortex-A715, 1x Cortex-X3), GPU Mali-G715 Immortalis và cụm bus phần cứng Tensor G3.
+- **Điều phối Bus RAM LPDDR5X & DSU L3-Cache:** Khống chế tần số bus MIF và DSU thích ứng theo từng profile, triệt tiêu 1.2W – 1.5W nhiệt lượng hao phí vô ích.
+- **Mali-G715 GPU DVFS Clamping:** Khóa trần tần số GPU theo từng mức tải, ngăn hiện tượng nhảy xung cực đại gây nóng máy và sụt FPS đột ngột (thermal throttling).
+- **Tinh hoa kiến trúc Frosty (Deep Optimization Matrix):** Vô hiệu hóa toàn diện logging, dump ngầm (SurfaceFlinger, ANR history, Live logcat), dập tắt kernel ftrace (`tracing_on=0`) và các telemetry ngầm của hệ thống.
+- **Đóng băng chọn lọc GMS (Surgical GMS Freeze):** Vô hiệu hóa triệt để hơn 50+ service quảng cáo, đo lường và theo dõi ngầm của Google Play Services mà vẫn đảm bảo **100% FCM Push Notifications không bị trễ**.
+- **Ngủ sâu thông minh & Dọn rác bộ nhớ (Smart GMS Doze & F2FS GC):** Tự động cưỡng chế Deep Doze, nén bộ nhớ (`compact_memory`, `zram compact`) và kích hoạt chu kỳ dọn rác F2FS GC khi tắt màn hình; hoàn nguyên tức thì khi mở khóa màn hình.
+- **Bảo vệ sạc mát (Battery Thermal Charging Guard):** Tự động hạ dòng sạc khi pin vượt ngưỡng nhiệt an toàn (~40.5°C) và tự phục hồi khi nhiệt độ giảm, bảo vệ pin mà không ngắt dòng sạc hoàn toàn.
+- **Điều khiển tính năng runtime độc lập (WebUI 2.3 & `features.conf`):** Quản lý 12 công tắc tính năng độc lập qua WebUI KernelSU / WebUI Magisk hoặc dòng lệnh `feature_ctl.sh`, lưu trữ bền vững qua các lần cập nhật module.
+- **Điều phối theo điểm ngọt năng lượng (Sweet Frequency):** Giữ xung nhịp CPU trong vùng có tỉ số Hiệu năng/Điện năng ($\frac{\text{Perf}}{\text{Watt}}$) tối ưu nhất.
+- **Phân tích khung hình trễ qua `SfAnalysis`:** Hook trực tiếp vào `SurfaceFlinger` để bắt khung hình trễ (`SfLag`), chỉ tăng xung khi cần thiết và lập tức hạ xung sau khi hoàn tất render.
+- **Tối ưu luồng giao diện (UI Affinity) & Bắt tín hiệu cảm ứng:** Ghim luồng render quan trọng vào cụm Mid/Big Core, lắng nghe sự kiện từ `/dev/input` để phản hồi tức thì mà không cần boost xung mù quáng.
+- **Hỗ trợ rộng rãi:** Hoạt động tốt trên Android 14 / Android 15, tương thích hoàn toàn với **KernelSU**, **Magisk** và **APatch** (không cần tắt SELinux).
 ---
 
 ## 📥 Tải về & Cài đặt
@@ -85,7 +89,7 @@ su -c "sh /data/powercfg.sh powersave"
 | :--- | :---: | :---: | :---: | :---: |
 | **HMP + interactive** | ✔️ | ❌ | ❌ | ✔️ |
 | **EAS + schedutil** | ❌ | ✔️ | ✔️ | ✔️ |
-| **Hỗ trợ Tensor / Exynos / MTK** | ✔️ | ❌ | Một phần | ✔️ |
+| **Tối ưu chuyên sâu Tensor G3 (Pixel 8 Series)** | ✔️ | ❌ | Một phần | ✔️ |
 | **Ghim CPU Affinity cho UI Thread** | ❌ | ❌ | ❌ | ✔️ |
 | **Bắt sự kiện cảm ứng Linux cấp thấp** | ❌ | ❌ | ✔️ | ✔️ |
 | **Hook SurfaceFlinger (`SfAnalysis`)** | ❌ | ❌ | ❌ | ✔️ |
@@ -112,15 +116,9 @@ Một module độc lập được nạp vào tiến trình `SurfaceFlinger` nh�
 
 ---
 
-## 🛠️ Tùy biến cấu hình (`uperf.json`)
+## 🛠️ Cấu hình Tensor G3 (`uperf.json`)
 
-Mỗi nền tảng SoC sử dụng một file cấu hình định dạng JSON tại `config/<tên_soc>.json`:
-- Google Tensor G3 (Pixel 8 / 8 Pro / 8a): `gs301.json`
-- Google Tensor G2 (Pixel 7 / 7 Pro / 7a): `gs201.json`
-- Google Tensor G1 (Pixel 6 / 6 Pro / 6a): `gs101.json`
-- Snapdragon 8 Gen 2 / 8 Gen 3: `sdm8g2.json` / `sdm8g3.json`
-- MediaTek Dimensity 9000 / 9200: `mtd9000.json` / `mtd9200.json`
-
+Module sử dụng file cấu hình Energy Model tối ưu hóa chuẩn xác cho kiến trúc 9 nhân của Google Tensor G3 tại `config/gs301.json` (tự động nạp vào `/sdcard/Android/yc/uperf/uperf.json` khi cài đặt).
 ### Ví dụ cấu hình Energy Model (Tensor G3):
 ```json
 "cpu": {
@@ -175,3 +173,12 @@ A: **Không nên tắt**. Thermal Engine là cơ chế an toàn phần cứng c�
 - Tác giả bản Game Turbo: **@yinwanxi**
 - Đóng góp bổ sung Tensor G3 & Tối ưu hóa: **@Sushiba2ker**
 - Cộng đồng phát triển: [TinyInjector](https://github.com/shunix/TinyInjector), [xHook](https://github.com/iqiyi/xHook), [Scene Tool](https://www.coolapk.com/apk/com.omarea.vtools).
+
+---
+
+## 📄 Giấy phép & Bản quyền (License)
+
+- Toàn bộ mã nguồn dự án được phân phối theo giấy phép mã nguồn mở **Apache License 2.0**. Xem chi tiết tại file [LICENSE](LICENSE).
+- Bản quyền gốc thuộc về **Matt Yang (@yc9559)** và các tác giả đóng góp.
+- Bản nâng cấp chuyên sâu cho Tensor G3, WebUI và hệ thống tối ưu hóa được phát triển bởi **Sushiba (@Sushiba2ker)**.
+- Các thành phần phần mềm bên thứ ba được sử dụng trong dự án (`pcre2`, `nlohmann/json`, `scnlib`, `spdlog`, `android-busybox-ndk`) được ghi nhận chi tiết tại file [NOTICE](NOTICE).
