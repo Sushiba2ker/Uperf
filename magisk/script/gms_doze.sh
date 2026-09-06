@@ -11,15 +11,7 @@ BASEDIR="$(dirname $(readlink -f "$0"))"
 feature_enabled gms_doze || exit 0
 
 PID_FILE="$RUNTIME_PATH/gms_doze.pid"
-mkdir -p "$RUNTIME_PATH" 2>/dev/null || exit 1
-if [ -f "$PID_FILE" ]; then
-    old_pid="$(cat "$PID_FILE" 2>/dev/null)"
-    old_cmd="$(cat "/proc/$old_pid/cmdline" 2>/dev/null)"
-    case "$old_cmd" in
-        *gms_doze.sh*) exit 0 ;;
-    esac
-    rm -f "$PID_FILE"
-fi
+acquire_daemon_lock gms_doze || exit 0
 
 cleanup_f2fs() {
     for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
@@ -82,8 +74,7 @@ is_screen_off() {
             # Memory compaction and page cache cleanup.
             sync
             echo 3 > /proc/sys/vm/drop_caches 2>/dev/null
-            [ -f /proc/sys/vm/compact_memory ] && echo 1 > /proc/sys/vm/compact_memory 2>/dev/null
-            [ -f /sys/block/zram0/compact ] && echo 1 > /sys/block/zram0/compact 2>/dev/null
+            compact_memory_pools
 
             # Step deep doze force-idle.
             if ! dumpsys deviceidle force-idle deep 2>/dev/null; then

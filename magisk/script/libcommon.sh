@@ -166,6 +166,39 @@ stop_managed_process() {
     fi
 }
 
+# $1:name, safely acquire single-instance lock file for a background daemon
+acquire_daemon_lock() {
+    local name="$1"
+    local pid_file="${RUNTIME_PATH}/${name}.pid"
+    mkdir -p "$RUNTIME_PATH" 2>/dev/null || return 1
+    if [ -f "$pid_file" ]; then
+        local old_pid
+        old_pid="$(cat "$pid_file" 2>/dev/null)"
+        if [ -n "$old_pid" ] && [ -d "/proc/$old_pid" ]; then
+            local old_cmd
+            old_cmd="$(cat "/proc/$old_pid/cmdline" 2>/dev/null)"
+            case "$old_cmd" in
+                *"${name}.sh"*) return 2 ;;
+            esac
+        fi
+        rm -f "$pid_file"
+    fi
+    printf '%s\n' "$$" > "$pid_file"
+    return 0
+}
+
+# Unified ZRAM and kernel memory compaction
+compact_memory_pools() {
+    [ -f /sys/block/zram0/compact ] && echo 1 > /sys/block/zram0/compact 2>/dev/null
+    [ -f /proc/sys/vm/compact_memory ] && echo 1 > /proc/sys/vm/compact_memory 2>/dev/null
+}
+
+# Cancel queued Google Play Services and Play Store background sync/wake jobs
+cancel_google_jobs() {
+    cmd jobscheduler cancel -u 0 com.google.android.gms >/dev/null 2>&1
+    cmd jobscheduler cancel -u 0 com.android.vending >/dev/null 2>&1
+}
+
 # $1:content
 write_panel() {
     echo "$1" >>"$PANEL_FILE"

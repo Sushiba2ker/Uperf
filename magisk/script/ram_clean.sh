@@ -17,13 +17,7 @@ mem_before=$(awk '/MemAvailable/{print $2}' /proc/meminfo 2>/dev/null)
 sync
 echo 3 > /proc/sys/vm/drop_caches 2>/dev/null
 
-if [ -f /proc/sys/vm/compact_memory ]; then
-    echo 1 > /proc/sys/vm/compact_memory 2>/dev/null
-fi
-
-if [ -f /sys/block/zram0/compact ]; then
-    echo 1 > /sys/block/zram0/compact 2>/dev/null
-fi
+compact_memory_pools
 
 am kill-all 2>/dev/null
 

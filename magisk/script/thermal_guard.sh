@@ -10,16 +10,7 @@ BASEDIR="$(dirname $(readlink -f "$0"))"
 feature_enabled thermal_guard || exit 0
 
 PID_FILE="$RUNTIME_PATH/thermal_guard.pid"
-mkdir -p "$RUNTIME_PATH" 2>/dev/null || exit 1
-if [ -f "$PID_FILE" ]; then
-    old_pid="$(cat "$PID_FILE" 2>/dev/null)"
-    old_cmd="$(cat "/proc/$old_pid/cmdline" 2>/dev/null)"
-    case "$old_cmd" in
-        *thermal_guard.sh*) exit 0 ;;
-    esac
-    rm -f "$PID_FILE"
-fi
-printf '%s\n' "$$" > "$PID_FILE"
+acquire_daemon_lock thermal_guard || exit 0
 
 BAT_TEMP_NODE="/sys/class/power_supply/battery/temp"
 BAT_STATUS_NODE="/sys/class/power_supply/battery/status"

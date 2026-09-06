@@ -80,18 +80,9 @@ for pattern in debug_mask log_level debug_level enable_event_log; do
     done
 done
 
-# 6. Disable Intrusive OEM / Vendor Background Reclaim Daemon Loops
-for vnode in \
-    /sys/module/process_reclaim/parameters/enable_process_reclaim \
-    /sys/kernel/mi_reclaim/enable \
-    /sys/kernel/mi_reclaim/greclaim_enable \
-    /sys/kernel/low_free/low_free_enable \
-    /sys/module/memplus_core/parameters/memory_plus_enabled \
-    /proc/sys/vm/memory_plus \
-    /sys/module/perfmgr/parameters/perfmgr_enable \
-    /sys/module/opchain/parameters/opchain_enable; do
-    [ -f "$vnode" ] && echo 0 > "$vnode" 2>/dev/null
-done
+# 6. Disable Process Reclaim Jitter
+[ -f /sys/module/process_reclaim/parameters/enable_process_reclaim ] && \
+    echo 0 > /sys/module/process_reclaim/parameters/enable_process_reclaim 2>/dev/null
 
 # 7. Next-Gen Network Protocol & TCP Stack Tuning
 if [ -f /proc/sys/net/ipv4/tcp_congestion_control ] && [ -f /proc/sys/net/ipv4/tcp_available_congestion_control ]; then

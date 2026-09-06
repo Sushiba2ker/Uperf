@@ -80,13 +80,11 @@ run_action() {
             sh "$SCRIPT_PATH/ram_clean.sh"
             ;;
         zram_compact)
-            [ -f /sys/block/zram0/compact ] && echo 1 > /sys/block/zram0/compact 2>/dev/null
-            [ -f /proc/sys/vm/compact_memory ] && echo 1 > /proc/sys/vm/compact_memory 2>/dev/null
+            compact_memory_pools
             printf '{"status":"ok","action":"zram_compact"}\n'
             ;;
         google_jobs)
-            cmd jobscheduler cancel -u 0 com.google.android.gms >/dev/null 2>&1
-            cmd jobscheduler cancel -u 0 com.android.vending >/dev/null 2>&1
+            cancel_google_jobs
             printf '{"status":"ok","action":"google_jobs"}\n'
             ;;
     esac

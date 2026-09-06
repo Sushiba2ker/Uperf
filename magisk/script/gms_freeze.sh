@@ -114,8 +114,7 @@ else
     done
 
     # 3. Cancel Queued GMS Background Wakeup Jobs
-    cmd jobscheduler cancel -u 0 com.google.android.gms >/dev/null 2>&1
-    cmd jobscheduler cancel -u 0 com.android.vending >/dev/null 2>&1
+    cancel_google_jobs
 
     # 4. Restrict GMS Background Network Blacklist (While keeping FCM Push Whitelisted)
     _gms_uid=$(dumpsys package com.google.android.gms 2>/dev/null | grep -m1 "userId=" | grep -o 'userId=[0-9]*' | cut -d= -f2)
