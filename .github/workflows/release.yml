@@ -2,8 +2,11 @@ name: Build and publish release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,30 +20,40 @@ jobs:
     name: Build flashable module
     runs-on: ubuntu-latest
     steps:
-      - name: Check out tagged source
+      - name: Check out source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate release metadata and shell syntax
         shell: bash
         run: |
           set -euo pipefail
-          tag_version="${GITHUB_REF_NAME#v}"
           module_version="$(awk -F= '$1 == "version" { print $2; exit }' magisk/module.prop)"
-          if [ -z "$module_version" ] || [ "$module_version" != "$tag_version" ]; then
-            echo "::error::Tag ${GITHUB_REF_NAME} must match magisk/module.prop version (${module_version:-missing})."
+          if [ -z "$module_version" ]; then
+            echo "::error::magisk/module.prop is missing version."
             exit 1
           fi
 
-          while IFS= read -r file; do
-            sh -n "$file"
-          done < <(find magisk -type f -name '*.sh' -print)
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            tag_version="${GITHUB_REF_NAME#v}"
+            if [ "$module_version" != "$tag_version" ]; then
+              echo "::error::Tag ${GITHUB_REF_NAME} must match magisk/module.prop version (${module_version})."
+              exit 1
+            fi
+          fi
+
+          find magisk -type f -name '*.sh' -exec sh -n {} \;
 
       - name: Build module archive
         id: package
         shell: bash
         run: |
           set -euo pipefail
-          archive="Uperf-Sushiba-${GITHUB_REF_NAME}.zip"
+          module_version="$(awk -F= '$1 == "version" { print $2; exit }' magisk/module.prop)"
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            archive="Uperf-Sushiba-${GITHUB_REF_NAME}.zip"
+          else
+            archive="Uperf-Sushiba-v${module_version}-${GITHUB_SHA::7}.zip"
+          fi
           rm -f "$archive"
           (
             cd magisk
@@ -65,7 +78,15 @@ jobs:
           grep -q '^STARTUP_FEATURES=' "$runtime_registry"
           printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT"
 
+      - name: Upload module artifact
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: ${{ steps.package.outputs.archive }}
+          path: ${{ steps.package.outputs.archive }}
+          if-no-files-found: error
+
       - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
