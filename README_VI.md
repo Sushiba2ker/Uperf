@@ -25,7 +25,7 @@ Bộ điều phối hiệu năng và tối ưu năng lượng tầng Userspace c
 ## 📥 Tải về & Cài đặt
 
 ### Cách 1: Cài đặt qua KernelSU / Magisk / APatch (Khuyên dùng)
-1. Tải file module zip từ mục [Releases](https://github.com/Sushiba2ker/Uperf/releases).
+1. Tải file module zip từ mục [Releases](https://github.com/Sushiba2ker/uperf-pixel-8/releases).
 2. Mở trình quản lý **KernelSU Manager / Magisk / APatch** -> Chọn **Install from storage**.
 3. Chọn file zip và tiến hành flash.
 4. Khởi động lại thiết bị.

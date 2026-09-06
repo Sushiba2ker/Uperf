@@ -25,7 +25,7 @@ An advanced userspace performance governor and deep hardware optimization suite 
 ## 📥 Download & Installation
 
 ### Method 1: KernelSU / Magisk / APatch Manager (Recommended)
-1. Download the flashable module ZIP from [Releases](https://github.com/Sushiba2ker/Uperf/releases).
+1. Download the flashable module ZIP from [Releases](https://github.com/Sushiba2ker/uperf-pixel-8/releases).
 2. Open **KernelSU Manager**, **Magisk**, or **APatch** -> Navigate to **Modules** -> Select **Install from storage**.
 3. Select the downloaded ZIP file and proceed with flashing.
 4. Reboot your device.
