@@ -66,22 +66,18 @@ is_screen_off() {
         feature_enabled gms_doze || break
 
         if is_screen_off; then
-            # Screen is OFF: allow F2FS maintenance GC during idle sleep.
-            for f2fs_node in /sys/fs/f2fs/*/gc_urgent; do
-                [ -f "$f2fs_node" ] && echo 1 > "$f2fs_node" 2>/dev/null
-            done
+            if [ "$was_screen_off" = "false" ]; then
+                # Screen transition to OFF: trigger memory compaction and deep doze step once.
+                sync
+                compact_memory_pools
 
-            # Memory compaction and page cache cleanup.
-            sync
-            echo 3 > /proc/sys/vm/drop_caches 2>/dev/null
-            compact_memory_pools
+                # Step deep doze force-idle.
+                if ! dumpsys deviceidle force-idle deep 2>/dev/null; then
+                    for i in 1 2 3 4; do cmd deviceidle step deep 2>/dev/null; done
+                fi
 
-            # Step deep doze force-idle.
-            if ! dumpsys deviceidle force-idle deep 2>/dev/null; then
-                for i in 1 2 3 4; do cmd deviceidle step deep 2>/dev/null; done
+                was_screen_off=true
             fi
-
-            was_screen_off=true
         else
             # Screen is ON: disable GC to avoid frame drops and micro-stutter.
             cleanup_f2fs

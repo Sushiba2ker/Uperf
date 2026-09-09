@@ -22,7 +22,9 @@ fi
 stop traced 2>/dev/null
 stop traced_probes 2>/dev/null
 stop cnss_diag 2>/dev/null
-stop statsd 2>/dev/null
+# Retain statsd: stopping it breaks AIDL stats service used by core system
+# components (system_server, gpuservice, mediametrics), triggering IPC retry loops
+# that cause task freeze failures and abort kernel suspend (-EBUSY) on Android 14+.
 stop aplogd 2>/dev/null
 
 dmesg -n 1 2>/dev/null
