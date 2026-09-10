@@ -1,5 +1,10 @@
 # Changelog / Nhật ký thay đổi Uperf Sushiba
 
+## [v1.0.1] - 2026-09-10 — DEEP DOZE RETENTION & ZALO AD-LOOP ELIMINATION
+
+- **Eliminated Zalo Background Ad-Tracking Loop:** Removed automatic deviceidle whitelisting for `com.zing.zalo` in `gms_doze.sh`. This prevents Zalo from continuously scheduling background alarms (`AdsTrackingManager.SubmitBatch`) every 50 seconds, eliminating kernel suspend aborts (`alarmtimer.1.auto` error -16) and unlocking flawless deep sleep.
+- **Optimized Standby Power Management:** Enforced strict Doze state retention on screen-off transitions, allowing push notifications to arrive realtime via high-priority FCM while keeping background ad telemetry fully throttled.
+
 ## [v1.0.0] - 2026-09-06 — FIRST OFFICIAL PUBLIC RELEASE
 
 - **Official First Public Release:** Exclusively engineered and optimized for Google Tensor G3 (Pixel 8, Pixel 8 Pro, Pixel 8a).
